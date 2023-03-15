@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Tree {
     protected Node root;
-    protected boolean isInitialized = false;
+    protected boolean isInitialized;
     protected int numCandidates;
 
 
@@ -16,27 +16,28 @@ public class Tree {
         root.curDepth = 0;
         root.parent = null;
         isInitialized = true;
-        for(int i = 0; i < numCandidates; i++){
-            if(i != root.index){
-                root.children[i] = new Node();
-                root.children[i].index = i;
-                root.children[i].numVotes = 0;
-                root.children[i].curDepth = 1;
-            }
-        }
-        root.hasChildren = true;
+        root.hasChildren = false;
+    }
+    public Node initalizeNode(){
+        Node node = new Node();
+        node.curDepth = 0;
+        node.index = 0;
+        return node;
+
     }
     public ArrayList<ArrayList<Integer>> getNodes(Node node){
         ArrayList<ArrayList<Integer>> nodes = new ArrayList<ArrayList<Integer>>();
         Node hold = node;
-        if(node.curDepth > 0 && node.hasChildren == false){
+        if(hold.curDepth > 0 && hold.hasChildren == false){
 
             nodes.add(hold.ballot);
             return nodes;
         }
         else{
-            for(int i = 0; i < node.children.length; i++){
-                nodes.addAll(getNodes(node.children[i]));
+            for(int i = 0; i < hold.children.length; i++){
+                if(hold.children[i] != null){
+                    nodes.addAll(getNodes(hold.children[i]));
+                }
             }
             if(hold.curDepth > 0){
                 nodes.add(hold.ballot);
@@ -52,7 +53,9 @@ public class Tree {
             ArrayList<Integer> hold = nodes.get(i);
             int count = hold.get(hold.size() - 1);
             for(int j = 0; j < count; j++){
-                ballots[numBallots][j] = hold.get(j);
+                for(int k = 0; k < hold.size() - 1; k++){
+                    ballots[numBallots][k] = hold.get(k);
+                }
                 numBallots++;
             }
         }
@@ -67,14 +70,16 @@ public class Tree {
         int i = 0;
         int j = 0;
         while (j < ballot.length - 1){
-            i++;
             if(ballot[i] == j + 2){
+                i=0;
                 hold.hasChildren = true;
                 temp = hold;
+                hold.children = new Node[numCandidates];
+                hold.children[ballot[i]] = initalizeNode();
                 hold = hold.children[ballot[i]];
                 hold.numVotes += 1;
                 hold.parent = temp;
-                hold.curDepth = i + 1;
+                hold.curDepth = j + 1;
                 hold.index = ballot[i];
                 j++;
                 break;
@@ -82,8 +87,10 @@ public class Tree {
             else if(ballot[i] == 0){
                 j++;
             }
+            i++;
         }
         if(hold.ballot == null){
+            hold.ballot = new ArrayList<Integer>();
             for(int k = 0; k < ballot.length; k++){
                 hold.ballot.add(ballot[k]);
             }

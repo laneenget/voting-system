@@ -12,7 +12,23 @@ public class RunElection {
     private FileWriter audit;
     private BufferedReader br;
 
-    public void start(){System.out.println("Do stuff");}
+    public void start(){
+        System.out.println("Do stuff");
+        Tree tree = new Tree(3, 5);
+        int[] testbal = {3,1,5,2,4};
+        tree.insert(testbal);
+        int[] testbal2 = {3,1,2,5,4};
+        tree.insert(testbal2);
+        System.out.println(tree.root.numVotes);
+        int[][] ballots = tree.getBallots(tree.root);
+        for(int i = 0; i < ballots.length; i++){
+            for(int j = 0; j < ballots[i].length; j++){
+                System.out.print(ballots[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+}
     public RunElection(String filename){
         this.filename = filename;
     }
