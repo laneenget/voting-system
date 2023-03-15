@@ -19,6 +19,7 @@ public class RunElection {
         tree.insert(testbal);
         int[] testbal2 = {3,1,2,5,4};
         tree.insert(testbal2);
+        tree.insert(testbal);
         System.out.println(tree.root.numVotes);
         int[][] ballots = tree.getBallots(tree.root);
         for(int i = 0; i < ballots.length; i++){

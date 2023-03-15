@@ -31,30 +31,33 @@ public class Tree {
         if(hold.curDepth > 0 && hold.hasChildren == false){
 
             nodes.add(hold.ballot);
-            return nodes;
         }
         else{
             for(int i = 0; i < hold.children.length; i++){
                 if(hold.children[i] != null){
+                    System.out.println("39");
                     nodes.addAll(getNodes(hold.children[i]));
                 }
             }
             if(hold.curDepth > 0){
                 nodes.add(hold.ballot);
             }
-            return nodes;
         }
+        System.out.println(nodes.size());
+        return nodes;
     }
     public int[][] getBallots(Node node){
         ArrayList<ArrayList<Integer>> nodes = getNodes(node);
         int[][] ballots = new int[node.numVotes][numCandidates];
         int numBallots = 0;
         for(int i = 0; i < nodes.size(); i++){
+            System.out.println(nodes.size());
             ArrayList<Integer> hold = nodes.get(i);
             int count = hold.get(hold.size() - 1);
             for(int j = 0; j < count; j++){
                 for(int k = 0; k < hold.size() - 1; k++){
                     ballots[numBallots][k] = hold.get(k);
+                    System.out.println("test");
                 }
                 numBallots++;
             }
@@ -69,8 +72,13 @@ public class Tree {
         hold.numVotes += 1;
         int i = 0;
         int j = 0;
-        while (j < ballot.length - 1){
-            if(ballot[i] == j + 2){
+        int curr = 0;
+        while (i < ballot.length){
+            if(j == ballot.length){
+                break;
+            }
+            if(ballot[i] == curr + 2){
+                j++;
                 i=0;
                 hold.hasChildren = true;
                 temp = hold;
@@ -79,9 +87,9 @@ public class Tree {
                 hold = hold.children[ballot[i]];
                 hold.numVotes += 1;
                 hold.parent = temp;
-                hold.curDepth = j + 1;
+                hold.curDepth = curr + 1;
                 hold.index = ballot[i];
-                j++;
+                curr++;
                 break;
             }
             else if(ballot[i] == 0){
