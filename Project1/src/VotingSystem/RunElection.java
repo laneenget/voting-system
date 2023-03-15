@@ -5,9 +5,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.ArrayList;
 
 public class RunElection {
-    private String filename;
+    public String filename;
     private FileReader input;
     private FileWriter audit;
     private BufferedReader br;
@@ -15,19 +16,27 @@ public class RunElection {
     public void start(){
         System.out.println("Do stuff");
         Tree tree = new Tree(3, 5);
-        int[] testbal = {3,1,5,2,4};
+        ArrayList<Integer> test = new ArrayList<Integer>();
+        test.add(1);
+        test.add(2);
+        test.add(3);
+        test.add(4);
+        test.add(5);
+        tree.insert(test);
+        ArrayList<Integer> testbal = new ArrayList<Integer>();
+        testbal.add(3);
+        testbal.add(1);
+        testbal.add(2);
+        testbal.add(5);
+        testbal.add(4);
         tree.insert(testbal);
-        int[] testbal2 = {3,1,2,5,4};
-        tree.insert(testbal2);
-        tree.insert(testbal);
+        tree.insert(test);
         System.out.println(tree.root.numVotes);
-        int[][] ballots = tree.getBallots(tree.root);
-        for(int i = 0; i < ballots.length; i++){
-            for(int j = 0; j < ballots[i].length; j++){
-                System.out.print(ballots[i][j] + " ");
-            }
-            System.out.println();
+        ArrayList<ArrayList<Integer>> ballots = tree.getBallots(tree.root);
+        for(int i = 0; i < ballots.size(); i++){
+            System.out.println(ballots.get(i));
         }
+        
 
 }
     public RunElection(String filename){

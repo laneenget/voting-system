@@ -27,74 +27,98 @@ public class Tree {
     }
     public ArrayList<ArrayList<Integer>> getNodes(Node node){
         ArrayList<ArrayList<Integer>> nodes = new ArrayList<ArrayList<Integer>>();
+        ArrayList<Integer> ballot = new ArrayList<Integer>();
         Node hold = node;
+        System.out.println(hold.hasChildren);
         if(hold.curDepth > 0 && hold.hasChildren == false){
-
-            nodes.add(hold.ballot);
+            ballot = hold.ballot;
+            nodes.add(ballot);
         }
         else{
             for(int i = 0; i < numCandidates; i++){
                 if(hold.children[i] != null){
-                    System.out.println("39");
                     nodes.addAll(getNodes(hold.children[i]));
                 }
             }
-            if(hold.curDepth > 0){
-                nodes.add(hold.ballot);
+            if(hold.curDepth > 0 && hold.ballot != null){
+                ballot = hold.ballot;
+                nodes.add(ballot);
             }
         }
-        System.out.println(nodes.size());
         return nodes;
     }
     public ArrayList<ArrayList<Integer>> getBallots(Node node){
         ArrayList<ArrayList<Integer>> nodes = getNodes(node);
         ArrayList<ArrayList<Integer>> returnBals = new ArrayList<ArrayList<Integer>>();
         int numBallots = 0;
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        int size = nodes.size();
+        System.out.println(size + " is size");
         for(int i = 0; i < nodes.size(); i++){
-            System.out.println(nodes.size());
             ArrayList<Integer> hold = nodes.get(i);
-            int count = hold.get(hold.size() - 1);
+            System.out.println(hold.size());
+            int size2 = hold.size();
+            int count = hold.get(size2 - 1);
+            hold.remove(size2 - 1);
+            temp.clear();
+            for(int k = 0; k < size2 - 1; k++){
+                temp.add(hold.get(k));
+            }
             for(int j = 0; j < count; j++){
-                for(int k = 0; k < hold.size() - 1; k++){
-                    returnBals.get(numBallots).add(hold.get(k));
-                    System.out.println("test");
-                }
+                System.out.println(temp.size());
+                System.out.println("73");
+                returnBals.add(temp);
                 numBallots++;
             }
+        
         }
+        System.out.println(numBallots + " is numBallots");
         return returnBals;
 
 
     }
     public void insert(ArrayList<Integer> ballot){
         Node hold = root;
-        Node temp;
+        hold.curDepth = 0;
         hold.numVotes += 1;
         int index = 0;
         int rank = 2;
-        for(int i = 0; i < ballot.size(); i++){
+        int size = ballot.size();
+        for(int i = 0; i < size - 1; i++){
             index = ballot.indexOf(rank);
             if(index == -1){
                 break;
             }
             else{
-                hold.hasChildren = true;
-                hold.children = new Node[numCandidates];
-                temp = hold;
-                hold.children[index] = initalizeNode();
+                if(hold.hasChildren == false){
+                    hold.children = new Node[numCandidates];
+                    hold.hasChildren = true;
+                    System.out.println("89");
+                    System.out.println("New node " + index + " has Children");
+                }
+                if(hold.children[index] == null){
+                    hold.children[index] = initalizeNode();
+                }
                 hold = hold.children[index];
+                hold.curDepth = i + 1;
                 rank++;   
             }
 
         }
+
         if(hold.ballot == null){
+            hold.ballot = new ArrayList<Integer>();
             hold.ballot = ballot;
 
             hold.ballot.add(1);
+            System.out.println(hold.ballot.size());
+            System.out.println("100");
         }
         else {
             int x = hold.ballot.get(hold.ballot.size() - 1);
             x += 1;
+            System.out.println(hold.ballot.size());
+            System.out.println("104");
             hold.ballot.set(hold.ballot.size() - 1, x);
         }
 
