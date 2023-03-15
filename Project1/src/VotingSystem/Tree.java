@@ -33,7 +33,7 @@ public class Tree {
             nodes.add(hold.ballot);
         }
         else{
-            for(int i = 0; i < hold.children.length; i++){
+            for(int i = 0; i < numCandidates; i++){
                 if(hold.children[i] != null){
                     System.out.println("39");
                     nodes.addAll(getNodes(hold.children[i]));
@@ -46,9 +46,9 @@ public class Tree {
         System.out.println(nodes.size());
         return nodes;
     }
-    public int[][] getBallots(Node node){
+    public ArrayList<ArrayList<Integer>> getBallots(Node node){
         ArrayList<ArrayList<Integer>> nodes = getNodes(node);
-        int[][] ballots = new int[node.numVotes][numCandidates];
+        ArrayList<ArrayList<Integer>> returnBals = new ArrayList<ArrayList<Integer>>();
         int numBallots = 0;
         for(int i = 0; i < nodes.size(); i++){
             System.out.println(nodes.size());
@@ -56,52 +56,40 @@ public class Tree {
             int count = hold.get(hold.size() - 1);
             for(int j = 0; j < count; j++){
                 for(int k = 0; k < hold.size() - 1; k++){
-                    ballots[numBallots][k] = hold.get(k);
+                    returnBals.get(numBallots).add(hold.get(k));
                     System.out.println("test");
                 }
                 numBallots++;
             }
         }
-        return ballots;
+        return returnBals;
 
 
     }
-    public void insert(int [] ballot){
+    public void insert(ArrayList<Integer> ballot){
         Node hold = root;
         Node temp;
         hold.numVotes += 1;
-        int i = 0;
-        int j = 0;
-        int curr = 0;
-        while (i < ballot.length){
-            if(j == ballot.length){
+        int index = 0;
+        int rank = 2;
+        for(int i = 0; i < ballot.size(); i++){
+            index = ballot.indexOf(rank);
+            if(index == -1){
                 break;
             }
-            if(ballot[i] == curr + 2){
-                j++;
-                i=0;
+            else{
                 hold.hasChildren = true;
-                temp = hold;
                 hold.children = new Node[numCandidates];
-                hold.children[ballot[i]] = initalizeNode();
-                hold = hold.children[ballot[i]];
-                hold.numVotes += 1;
-                hold.parent = temp;
-                hold.curDepth = curr + 1;
-                hold.index = ballot[i];
-                curr++;
-                break;
+                temp = hold;
+                hold.children[index] = initalizeNode();
+                hold = hold.children[index];
+                rank++;   
             }
-            else if(ballot[i] == 0){
-                j++;
-            }
-            i++;
+
         }
         if(hold.ballot == null){
-            hold.ballot = new ArrayList<Integer>();
-            for(int k = 0; k < ballot.length; k++){
-                hold.ballot.add(ballot[k]);
-            }
+            hold.ballot = ballot;
+
             hold.ballot.add(1);
         }
         else {
