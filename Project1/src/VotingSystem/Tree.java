@@ -26,60 +26,33 @@ public class Tree {
         }
         root.hasChildren = true;
     }
-    public ArrayList<Integer> getPath(Node node){
+    public ArrayList<ArrayList<Integer>> getNodes(Node node){
+        ArrayList<ArrayList<Integer>> nodes = new ArrayList<ArrayList<Integer>>();
         Node hold = node;
-        ArrayList<Integer> path = new ArrayList<Integer>();
-        while(hold.parent != null){
-            path.add(node.index);
-            if(hold.parent != null){
-                hold = node.parent;
-            }
-            else {
-                return path;
-            }
-        }
-        return path;
-    }
-    public ArrayList<ArrayList<ArrayList<Integer>>> getNodes(Node node){
-        ArrayList<ArrayList<ArrayList<Integer>>> nodes = new ArrayList<ArrayList<ArrayList<Integer>>>();
         if(node.curDepth > 0 && node.hasChildren == false){
-            ArrayList<ArrayList<Integer>> hold = new ArrayList<ArrayList<Integer>>();
-            ArrayList<Integer> hold2 = new ArrayList<Integer>();
-            hold2.add(node.curDepth);
-            hold.add(getPath(node));
-            hold2.add(node.numVotes);
-            hold.add(hold2);
-            nodes.add(hold);
+
+            nodes.add(hold.ballot);
             return nodes;
         }
         else{
             for(int i = 0; i < node.children.length; i++){
-                node.numVotes -= node.children[i].numVotes;
                 nodes.addAll(getNodes(node.children[i]));
             }
-            ArrayList<ArrayList<Integer>> hold = new ArrayList<ArrayList<Integer>>();
-            ArrayList<Integer> hold2 = new ArrayList<Integer>();
-            if(node.curDepth > 0){
-                hold2.add(node.curDepth);
-                hold.add(getPath(node));
-                hold2.add(node.numVotes);
-                hold.add(hold2);
-                nodes.add(hold);
+            if(hold.curDepth > 0){
+                nodes.add(hold.ballot);
             }
             return nodes;
         }
     }
     public int[][] getBallots(Node node){
-        ArrayList<ArrayList<ArrayList<Integer>>> nodes = getNodes(node);
+        ArrayList<ArrayList<Integer>> nodes = getNodes(node);
         int[][] ballots = new int[node.numVotes][numCandidates];
         int numBallots = 0;
         for(int i = 0; i < nodes.size(); i++){
-            ArrayList<ArrayList<Integer>> hold = nodes.get(i);
-            int count = hold.get(1).get(1);
+            ArrayList<Integer> hold = nodes.get(i);
+            int count = hold.get(hold.size() - 1);
             for(int j = 0; j < count; j++){
-                for(int k = 0; k < hold.get(0).size(); k++){
-                    ballots[numBallots][hold.get(0).get(k)] = hold.get(1).get(0);
-                }
+                ballots[numBallots][j] = hold.get(j);
                 numBallots++;
             }
         }
@@ -110,6 +83,18 @@ public class Tree {
                 j++;
             }
         }
+        if(hold.ballot == null){
+            for(int k = 0; k < ballot.length; k++){
+                hold.ballot.add(ballot[k]);
+            }
+            hold.ballot.add(1);
+        }
+        else {
+            int x = hold.ballot.get(hold.ballot.size() - 1);
+            x += 1;
+            hold.ballot.set(hold.ballot.size() - 1, x);
+        }
+
 
     }
 

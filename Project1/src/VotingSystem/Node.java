@@ -1,5 +1,7 @@
 package VotingSystem;
 
+import java.util.ArrayList;
+
 public class Node {
     protected int numVotes;
     protected Node [] children;
@@ -7,4 +9,5 @@ public class Node {
     protected int index;
     protected Node parent;
     protected boolean hasChildren = false;
+    protected ArrayList<Integer> ballot = null;
 }
