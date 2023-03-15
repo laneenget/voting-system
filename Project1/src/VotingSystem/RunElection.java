@@ -31,12 +31,11 @@ public class RunElection {
         testbal.add(4);
         tree.insert(testbal);
         tree.insert(test);
-        System.out.println(tree.root.numVotes);
         ArrayList<ArrayList<Integer>> ballots = tree.getBallots(tree.root);
         for(int i = 0; i < ballots.size(); i++){
             System.out.println(ballots.get(i));
         }
-        
+
 
 }
     public RunElection(String filename){
