@@ -5,4 +5,6 @@ public class Node {
     protected Node [] children;
     protected int curDepth;
     protected int index;
+    protected Node parent;
+    protected boolean hasChildren = false;
 }
