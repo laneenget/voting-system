@@ -1,5 +1,4 @@
-package VotingSystem.Testing;
-
+package Testing;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Assert;

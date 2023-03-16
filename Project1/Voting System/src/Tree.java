@@ -1,4 +1,4 @@
-package VotingSystem;
+
 
 import java.util.ArrayList;
 

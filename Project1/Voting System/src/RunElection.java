@@ -1,11 +1,11 @@
-package VotingSystem;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.ArrayList;
+
+import java.util.Scanner;
 
 public class RunElection {
     public String filename;

@@ -1,10 +1,15 @@
-package VotingSystem;
+
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
+import java.lang.Object;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 
 public class IR extends Election{
     private Candidate [] candidates;
@@ -100,7 +105,41 @@ public class IR extends Election{
         }
         return highestCandidate;
     }
-    public void processFile(){}
+    public void processFile(){
+
+        CSVReader csvReader = new CSVReader(input);
+        String [] nextBallot;
+
+         try {
+            while ((nextBallot = csvReader.readNext()) != null) {
+                writeToAudit(nextBallot);
+                ArrayList<Integer> ballot = new ArrayList<Integer>();
+                int specialIndex =-1;
+                for(int i = 0; i < nextBallot.length; i++){
+                    int curRank = 0;
+                    if(!nextBallot[i].equals("")){
+                        curRank = Integer.parseInt(nextBallot[i]);
+                        if(curRank == 1){
+                            specialIndex = i;
+                        }
+                    }
+                    ballot.add(curRank);
+                }
+                Tree candidateTree = this.candidates[specialIndex].getBallots();
+                candidateTree.insert(ballot);
+            }
+        } catch (CsvValidationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+    }
     public void printResults(){}
     public void parseHeader() {
         BufferedReader br = new BufferedReader(input);
@@ -175,8 +214,8 @@ public class IR extends Election{
         }
         // A winner has been chosen.
         // format properly later (?)
-        String winnerAnnouncement = "Candidate" + winner.getName() + " has won with " +
-                winner.getNumVotes() + " votes.";
+        String [] winnerAnnouncement = { "Candidate" + winner.getName() + " has won with " +
+                winner.getNumVotes() + " votes."};
         writeToAudit(winnerAnnouncement);
         printResults();
         // TODO: change file permissions for audit file
