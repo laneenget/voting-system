@@ -53,6 +53,14 @@ public class IR extends Election{
         int j;
         int check;
         int i;
+
+        // This Implementation should work, insert can handle
+        // empty values in a ballot, and the new ballots will already
+        // contain the correct rankings
+        //for(i = 0; i < ballots.size(); i ++){
+        //    Tree candidateTree = this.candidates[index].getBallots();
+        //    candidateTree.insert(ballots.get(i));
+        //
         // There's no avoiding this ugliness (crying)
         for (i = 0; i < ballots.size(); i++) {
             for (j = 1; j < ballots.get(i).size(); j++) {
