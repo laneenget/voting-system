@@ -1,4 +1,4 @@
-package VotingSystem;
+
 
 public class Party {
     private String name;
