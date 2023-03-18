@@ -3,20 +3,21 @@ package Testing;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import VotingSystem.*;
 //import VotingSystem.Tree;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import VotingSystem.RunElection;
+//import VotingSystem.RunElection;
 
 import static org.junit.Assert.fail;
 
 public class IRtests {
     RunElection runElection;
     IR ir = new IR(null, null);
+    IR irReassign = new IR(null, null);
     String[] candidateNames = {"Rosen (D)", "Kleinberg (R)", "Chou (I)", "Royce (L)"};
 
     Tree ATree1;
@@ -25,6 +26,8 @@ public class IRtests {
     Tree BTree2;
     Tree CTree1;
     Tree ATree3;
+    Candidate reassign1 = new Candidate("A", "(A)", null);
+    Candidate reassign2;
 
     @Before
     public void setUp() {
@@ -34,13 +37,13 @@ public class IRtests {
         ir.initializeCandidates(candidateNames);
 
         FileReader input;
-        // try {
-        //     // input = new FileReader("Project1\\VotingSystem\\Testing\\IRHeader1.csv");
-        // } catch (FileNotFoundException e) {
-        //     throw new RuntimeException(e);
-        // }
-        //ir = new IR(input, null);
-        //ir.parseHeader();
+        try {
+            input = new FileReader("Project1/VotingSystem/Testing/IRHeader1.csv");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        ir = new IR(input, null);
+        ir.parseHeader();
 
         // Trees for tests
         // ATree1 ballots : [1, 0]  [1, 2]  [1, 2]  [1, 0]
@@ -134,6 +137,26 @@ public class IRtests {
         CTree1List4.add(1);
         CTree1.insert(CTree1List4);
 
+        // ----------------------- Reassignment -------------------------------
+
+        ArrayList<Integer> ballot1 = new ArrayList<>();
+        ballot1.add(0);
+        ballot1.add(1);
+        ArrayList<Integer> ballot2 = new ArrayList<>();
+        ballot2.add(0);
+        ballot2.add(1);
+        ArrayList<ArrayList<Integer>> toInsert = new ArrayList<>();
+        toInsert.add(ballot1);
+        toInsert.add(ballot2);
+        // reassign only for the reassignment test
+        // this interferes with the majority test for now (they both work tho)
+        // (I'll probably switch trees so we're not reusing the same tree)
+        Candidate[] candidatesList = new Candidate[2];
+        reassign2 = new Candidate("B", "(B)", BTree1);
+        candidatesList[0] = reassign1;
+        candidatesList[1] = reassign2;
+        irReassign.setCandidates(candidatesList);
+        irReassign.reassignVotes(toInsert, 1);
     }
 
     @Test
@@ -222,20 +245,20 @@ public class IRtests {
         Assert.assertTrue(ir.majorityCandidate() == null);
     }
 
-    //@Test
-    // public void test_parseHeader_1() {
-    //     Assert.assertTrue(ir.getCurNumCandidates() == 4);
-    // }
+    @Test
+    public void test_parseHeader_1() {
+        Assert.assertTrue(ir.getCurNumCandidates() == 4);
+    }
 
-    // @Test
-    // public void test_parseHeader_2() {
-    //     Assert.assertTrue(ir.getNumBallots() == 6);
-    // }
+    @Test
+    public void test_parseHeader_2() {
+        Assert.assertTrue(ir.getNumBallots() == 6);
+    }
 
-    // @Test
-    // public void test_parseHeader_3() {
-    //     Assert.assertTrue(ir.getCandidates()[2].getName().equals("Chou"));
-    // }
+    @Test
+    public void test_parseHeader_3() {
+        Assert.assertTrue(ir.getCandidates()[2].getName().equals("Chou"));
+    }
 
     @Test
     public void test_reassignVotes_1() {
@@ -245,17 +268,14 @@ public class IRtests {
         // BTree1:          [2, 1]  [0, 1]
         // (end) BTree1:    [2, 1]  [0, 1]  [0, 1]  [0, 1]
         // BTree1 numVotes: 4
+        Assert.assertTrue(reassign2.getNumVotes() == 4);
+    }
 
-        Candidate test2 = new Candidate("B", "(B)", BTree1);
-        ArrayList<Integer> ballot1 = new ArrayList<>();
-        ballot1.add(0);
-        ballot1.add(1);
-        ArrayList<Integer> ballot2 = new ArrayList<>();
-        ballot2.add(0);
-        ballot2.add(1);
-        ArrayList<ArrayList<Integer>> toInsert = new ArrayList<>();
-        toInsert.add(ballot1);
-        toInsert.add(ballot2);
-
+    @Test
+    public void test_reassignVotes_2() {
+        // Intermediate case where there is one previously eliminated candidate
+        //
+        //
+        //
     }
 }

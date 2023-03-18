@@ -27,9 +27,16 @@ public class IR extends Election{
         for (i = 0; i < this.candidates.length; i++) {
             if (!this.candidates[i].isEliminated()) {
                 Node secondPlace = this.candidates[index].getBallots().root.children[i];
-                ArrayList<ArrayList<Integer>> ballots = eliminatedTree.getBallots(secondPlace);
-                reassignVotes(ballots, i);
+                if (secondPlace != null) {
+                    ArrayList<ArrayList<Integer>> ballots = eliminatedTree.getBallots(secondPlace);
+                    reassignVotes(ballots, i);
+                }
             }
+            // need to still insert + check if the second place candidate was previously eliminated or not
+            // cuz when we call getBallots on that, it will show the rank as 1
+            // and we don't want to insert into the eliminated tree, instead we want to insert
+            // into the 3rd place tree and further down
+            // so ill edit the stuff later
         }
         this.candidates[index].setEliminated(true);
         this.curNumCandidates -= 1;
@@ -53,20 +60,35 @@ public class IR extends Election{
             }
         }
         else {
-            eliminated.sort(null);
             HashMap<Integer, Integer> ballotsMap = new HashMap<>();
             int j;
-            int curElimCount = 0;
-            for (j = 1; j < this.candidates.length + 1; j++) {
-                if (j == eliminated.get(curElimCount)) {
-                    curElimCount += 1;
-                }
-                else {
-                    ballotsMap.put(j, curElimCount);
-                }
-            }
+            int k;
+            int curElimCount;
+            // Loop over the ballots
             for (i = 0; i < ballots.size(); i++) {
+                ballotsMap.clear();
+                curElimCount = 0;
                 ArrayList<Integer> curBallot = ballots.get(i);
+                // Make a list of eliminated candidate ranks
+                ArrayList<Integer> eliminatedRanks = new ArrayList<>();
+                for (k = 0; k < eliminated.size(); k++) {
+                    if (curBallot.get(eliminated.get(k)) == 0) {
+                        eliminatedRanks.add(curBallot.get(eliminated.get(k)));
+                    }
+                }
+                // Sort the list
+                eliminatedRanks.sort(null);
+                // Fill in the ballotsMap
+                for (j = 1; j < this.candidates.length + 1; j++) {
+                    if (j == eliminatedRanks.get(curElimCount)) {
+                        curElimCount += 1;
+                    }
+                    else {
+                        ballotsMap.put(j, curElimCount);
+                    }
+                }
+                // Mutate the ballot, subtracting by how many eliminated
+                // candidates there were before each rank
                 for (j = 0; j < curBallot.size(); j++) {
                     if (this.candidates[j].isEliminated()) {
                         curBallot.set(j, 0);
@@ -210,10 +232,10 @@ public class IR extends Election{
             }
         }
         // A winner has been chosen.
-        // format properly later (?)
-//        String winnerAnnouncement = "Candidate" + winner.getName() + " has won with " +
-//                winner.getNumVotes() + " votes.";
-//        writeToAudit(winnerAnnouncement);
+        String winnerAnnouncement = "Candidate" + winner.getName() + " has won with " +
+                winner.getNumVotes() + " votes.";
+        String[] announcement = {winnerAnnouncement};
+        writeToAudit(announcement);
         printResults();
         // TODO: change file permissions for audit file
     }
