@@ -1,4 +1,4 @@
-
+package VotingSystem;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ public class Tree {
     protected int numCandidates;
 
 
-    Tree(int index, int numCandidates){
+    public Tree(int index, int numCandidates){
         root = new Node();
         this.numCandidates = numCandidates;
         root.index = index;
