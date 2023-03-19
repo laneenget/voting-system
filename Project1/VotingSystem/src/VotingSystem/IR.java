@@ -24,20 +24,13 @@ public class IR extends Election{
     public void eliminateCandidate(int index){
         int i;
         Tree eliminatedTree = this.candidates[index].getBallots();
-        for (i = 0; i < this.candidates.length; i++) {
-            if (!this.candidates[i].isEliminated()) {
-                Node secondPlace = this.candidates[index].getBallots().root.children[i];
+        for (i = 0; i < eliminatedTree.root.children.length; i++) {
+                Node secondPlace = eliminatedTree.root.children[i];
                 if (secondPlace != null) {
                     ArrayList<ArrayList<Integer>> ballots = eliminatedTree.getBallots(secondPlace);
                     reassignVotes(ballots, i);
                 }
             }
-            // need to still insert + check if the second place candidate was previously eliminated or not
-            // cuz when we call getBallots on that, it will show the rank as 1
-            // and we don't want to insert into the eliminated tree, instead we want to insert
-            // into the 3rd place tree and further down
-            // so ill edit the stuff later
-        }
         this.candidates[index].setEliminated(true);
         this.curNumCandidates -= 1;
     }
@@ -53,8 +46,8 @@ public class IR extends Election{
         // Check if one other candidate (not including the candidate
         // that is currently being eliminated) has already been eliminated
         // If not, then simply insert each ballot into the corresponding Tree
-        Tree toInsert = this.candidates[index].getBallots();
         if (eliminated.size() == 0) {
+            Tree toInsert = this.candidates[index].getBallots();
             for (i = 0; i < ballots.size(); i++) {
                 toInsert.insert(ballots.get(i));
             }
@@ -96,6 +89,8 @@ public class IR extends Election{
                         curBallot.set(j, curBallot.get(j) - ballotsMap.get(curBallot.get(j)));
                     }
                 }
+                int indexToInsert = curBallot.indexOf(1);
+                Tree toInsert = this.candidates[indexToInsert].getBallots();
                 toInsert.insert(curBallot);
             }
         }
