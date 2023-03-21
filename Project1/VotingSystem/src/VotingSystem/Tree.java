@@ -67,7 +67,7 @@ public class Tree {
             }
         
         }
-        System.out.println(numBallots + " is numBallots");
+//        System.out.println(numBallots + " is numBallots");
         return returnBals;
 
 
@@ -113,5 +113,10 @@ public class Tree {
         }
 
 
+    }
+
+    // Testing purposes
+    public Node getRoot() {
+        return this.root;
     }
 }
