@@ -1,13 +1,10 @@
 package VotingSystem;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -173,7 +170,24 @@ public class IR extends Election{
         }
         
     }
-    public void printResults(){}
+    public void printResults(){
+        System.out.println("-------------------------   ELECTION RESULTS   -------------------------");
+        ArrayList<Candidate> candidatesArrayList = new ArrayList<Candidate>();
+        for(int i = 0; i < this.candidates.length; i++){
+            candidatesArrayList.add(this.candidates[i]);
+        }
+        candidatesArrayList.sort(null);
+        for(int i = 0; i < candidatesArrayList.size(); i++){
+            System.out.println(candidatesArrayList.get(i).getName() + ": " + candidatesArrayList.get(i).getNumVotes());
+        }
+        Candidate winner = candidatesArrayList.get(0);
+        System.out.println("-----------------------------------------------------------------------\n\n");
+        System.out.println("The winner is: " + winner.getName() + " with " + winner.getNumVotes() + " votes."); 
+        System.out.printf(winner.getName() + " received " + 
+        "%.2f" + "% of the votes.\n\n", (double)winner.getNumVotes() / (double)this.numBallots * 100);
+
+
+    }
     public void parseHeader() {
         // Read the first 4 lines, which is the header, of the input file
         int i;
