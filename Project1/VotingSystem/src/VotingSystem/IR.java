@@ -74,15 +74,15 @@ public class IR extends Election{
                 // Sort the list
                 eliminatedRanks.sort(null);
                 // Fill in the ballotsMap
-                if (eliminatedRanks.size() > 0) {
-                    for (j = 1; j < this.candidates.length + 1; j++) {
-                        if (curElimCount < eliminatedRanks.size() && j == eliminatedRanks.get(curElimCount)) {
-                            curElimCount += 1;
-                        } else {
-                            ballotsMap.put(j, curElimCount);
-                        }
+
+                for (j = 1; j < this.candidates.length + 1; j++) {
+                    if (curElimCount < eliminatedRanks.size() && j == eliminatedRanks.get(curElimCount)) {
+                        curElimCount += 1;
+                    } else {
+                        ballotsMap.put(j, curElimCount);
                     }
                 }
+
                 // Mutate the ballot, subtracting by how many eliminated
                 // candidates there were before each rank
                 for (j = 0; j < curBallot.size(); j++) {

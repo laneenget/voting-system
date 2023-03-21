@@ -234,7 +234,7 @@ public class IRtests {
         //                               [0,0,1]  [0,2,1]  <--- when getting 2nd place for C
 
         // First, eliminate A. State of Candidate B, Candidate C after:
-        // Candidate B ballots: [0,1,0] [0,1,2] [2,1,3] [3,1,2]     [0,1,2]
+        // Candidate B ballots: [0,1,0] *[0,1,2] [2,1,3] [3,1,2]     [0,1,2]*
         // Candidate C ballots: [0,0,1] [2,3,1] [2,0,1] [3,0,1]     [0,0,1] [0,2,1]
         // Next, eliminate B. State of Candidate C after:
         // Candidate C ballots: [0,0,1] [2,3,1] [2,0,1] [3,0,1]     [0,0,1] [0,2,1]     [0,0,1] [0,0,1] [0,0,1] [0,0,1]
@@ -269,8 +269,6 @@ public class IRtests {
             System.out.println("checking B nodes from A's Tree");
         }
 
-
-
         Node CNode_wave1 = irReassign2
                 .getCandidates()[0]
                 .getBallots()
@@ -284,16 +282,6 @@ public class IRtests {
         irReassign2.reassignVotes(toInsert_C_wave1, 2);
         irReassign2.getCandidates()[0].setEliminated(true);
 
-//        B = irReassign2.getCandidates()[1].getBallots();
-//        allBallots = B.getBallots(B.getRoot());
-//        for (int i = 0; i < allBallots.size(); i++) {
-//            for (int j = 0; j < allBallots.get(i).size(); j++) {
-//                System.out.print(allBallots.get(i).get(j));
-//            }
-//            System.out.println();
-//        }
-
-
         // SECOND Reassignment wave (reassign B to C)
         Node CNode_wave2 = irReassign2
                 .getCandidates()[1]
@@ -304,8 +292,17 @@ public class IRtests {
                 .getCandidates()[1]
                 .getBallots()
                 .getBallots(CNode_wave2);
+        for (int i = 0; i < toInsert_C_wave2.size(); i++) {
+            for (int j = 0; j < toInsert_C_wave2.get(i).size(); j++) {
+                System.out.print(toInsert_C_wave2.get(i).get(j) + " ");
+            }
+            System.out.println("checking C nodes from B's Tree");
+        }
+
+
         irReassign2.reassignVotes(toInsert_C_wave2, 2);
-        Assert.assertTrue(irReassign1.getCandidates()[2].getNumVotes() == 10);
+        System.out.println(irReassign2.getCandidates()[2].getNumVotes());
+        Assert.assertTrue(irReassign2.getCandidates()[2].getNumVotes() == 10);
 
     }
 }
