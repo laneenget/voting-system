@@ -4,8 +4,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 
 public abstract class Election {
-    private FileWriter audit;
-    private FileReader input;
+    protected FileWriter audit;
+    protected FileReader input;
 
     abstract public void processFile();
     public int breakTie(int numCandidates){return -1;}

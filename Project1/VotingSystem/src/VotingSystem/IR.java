@@ -12,14 +12,12 @@ import com.opencsv.exceptions.CsvValidationException;
 public class IR extends Election{
     private Candidate [] candidates;
     private int numBallots;
-    private FileWriter audit;
-    private FileReader input;
     private CSVReader csvReader;
     private int curNumCandidates;
 
     public IR(FileReader input, FileWriter audit){
-        this.input = input;
-        this.audit = audit;
+        super.input = input;
+        super.audit = audit;
         this.csvReader = new CSVReader(input);
     }
     public void eliminateCandidate(int index){
