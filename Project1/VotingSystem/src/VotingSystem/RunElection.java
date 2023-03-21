@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.*;
 
 public class RunElection {
-    public String filename;
+    public String filename = "";
     private FileReader input;
     private FileWriter audit;
     private BufferedReader br;
@@ -20,9 +20,12 @@ public class RunElection {
         boolean validFile = false;
         while (!validFile) {
             validFile = true;
-            promptUser("Enter the name of the file containing the election data: ");
-            Scanner sc = new Scanner(System.in);
-            filename = sc.nextLine();
+            if(filename.equals("")){
+                promptUser("Enter the name of the file containing the election data: ");
+                Scanner sc = new Scanner(System.in);
+
+                filename = sc.nextLine();
+            }
             try {
                 input = new FileReader(filename);
             } catch (FileNotFoundException e) {
@@ -33,6 +36,13 @@ public class RunElection {
             }
         }
         String elecType = parseElectType();
+        String auditFileName = generateAuditFileName(elecType);
+        try {
+            audit = new FileWriter(auditFileName);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         if(elecType.equals("IR")){
             runIR();
         }
@@ -68,6 +78,12 @@ public class RunElection {
         return line;
 
     }
-    public void runIR(){}
+    public void runIR(){
+        IR Election = new IR(input, audit);
+        Election.parseHeader();
+        Election.processFile();
+        Election.conductAlgorithm();
+        Election.printResults();
+    }
     public void runCPL(){}
 }
