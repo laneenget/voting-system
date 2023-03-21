@@ -50,10 +50,6 @@ public class IR extends Election{
         if (eliminated.size() == 0) {
             Tree toInsert = this.candidates[index].getBallots();
             for (i = 0; i < ballots.size(); i++) {
-//                for (int j = 0; j < ballots.get(i).size(); j++) {
-//                    int AAAA = ballots.get(i).get(j);
-//                    System.out.println("HELP: " + AAAA);
-//                }
                 toInsert.insert(ballots.get(i));
             }
         }
@@ -80,14 +76,7 @@ public class IR extends Election{
                 // Fill in the ballotsMap
                 if (eliminatedRanks.size() > 0) {
                     for (j = 1; j < this.candidates.length + 1; j++) {
-                        if (curElimCount == 0) {
-                            if (j == eliminatedRanks.get(0)) {
-                                curElimCount += 1;
-                            } else {
-                                ballotsMap.put(j, curElimCount);
-                            }
-                        }
-                        else if (j == eliminatedRanks.get(curElimCount - 1)) {
+                        if (curElimCount < eliminatedRanks.size() && j == eliminatedRanks.get(curElimCount)) {
                             curElimCount += 1;
                         } else {
                             ballotsMap.put(j, curElimCount);
