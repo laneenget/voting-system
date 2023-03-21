@@ -1,12 +1,10 @@
 package VotingSystem;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.*;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -16,11 +14,13 @@ public class IR extends Election{
     private int numBallots;
     private FileWriter audit;
     private FileReader input;
+    private CSVReader csvReader;
     private int curNumCandidates;
 
     public IR(FileReader input, FileWriter audit){
         this.input = input;
         this.audit = audit;
+        this.csvReader = new CSVReader(input);
     }
     public void eliminateCandidate(int index){
         int i;
@@ -60,25 +60,27 @@ public class IR extends Election{
             int curElimCount;
             // Loop over the ballots
             for (i = 0; i < ballots.size(); i++) {
+
                 ballotsMap.clear();
                 curElimCount = 0;
                 ArrayList<Integer> curBallot = ballots.get(i);
                 // Make a list of eliminated candidate ranks
                 ArrayList<Integer> eliminatedRanks = new ArrayList<>();
                 for (k = 0; k < eliminated.size(); k++) {
-                    if (curBallot.get(eliminated.get(k)) == 0) {
+                    if (curBallot.get(eliminated.get(k)) != 0) {
                         eliminatedRanks.add(curBallot.get(eliminated.get(k)));
                     }
                 }
                 // Sort the list
                 eliminatedRanks.sort(null);
                 // Fill in the ballotsMap
-                for (j = 1; j < this.candidates.length + 1; j++) {
-                    if (j == eliminatedRanks.get(curElimCount)) {
-                        curElimCount += 1;
-                    }
-                    else {
-                        ballotsMap.put(j, curElimCount);
+                if (eliminatedRanks.size() > 0) {
+                    for (j = 1; j < this.candidates.length + 1; j++) {
+                        if (curElimCount < eliminatedRanks.size() && j == eliminatedRanks.get(curElimCount)) {
+                            curElimCount += 1;
+                        } else {
+                            ballotsMap.put(j, curElimCount);
+                        }
                     }
                 }
                 // Mutate the ballot, subtracting by how many eliminated
@@ -90,9 +92,12 @@ public class IR extends Election{
                         curBallot.set(j, curBallot.get(j) - ballotsMap.get(curBallot.get(j)));
                     }
                 }
+                // It's possible to end up with a ballot with all 0s (everything in ballot eliminated)
                 int indexToInsert = curBallot.indexOf(1);
-                Tree toInsert = this.candidates[indexToInsert].getBallots();
-                toInsert.insert(curBallot);
+                if (indexToInsert != -1) {
+                    Tree toInsert = this.candidates[indexToInsert].getBallots();
+                    toInsert.insert(curBallot);
+                }
             }
         }
     }
@@ -121,7 +126,7 @@ public class IR extends Election{
     }
     public void processFile(){
 
-        CSVReader csvReader = new CSVReader(input);
+//        CSVReader csvReader = new CSVReader(input);
         String [] nextBallot;
 
          try {
@@ -173,36 +178,39 @@ public class IR extends Election{
 
     }
     public void parseHeader() {
-        BufferedReader br = new BufferedReader(input);
         // Read the first 4 lines, which is the header, of the input file
         int i;
-        String nextRecord = "";
+        String[] nextRecord;
         for (i = 0; i < 4; i++) {
             try {
-                nextRecord = br.readLine();
+                nextRecord = csvReader.readNext();
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
+            } catch (CsvValidationException e) {
+                throw new RuntimeException(e);
             }
             // read the number of candidates
             if (i == 1) {
-                int numCandidates = Integer.parseInt(nextRecord);
+                int numCandidates = Integer.parseInt(nextRecord[0]);
                 this.candidates = new Candidate[numCandidates];
                 this.curNumCandidates = numCandidates ;
             }
             // create the candidate objects
             else if (i == 2) {
-                initializeCandidates(nextRecord.split(", "));
+                initializeCandidates(nextRecord);
             }
             else if (i == 3) {
-                this.numBallots = Integer.parseInt(nextRecord);
+                this.numBallots = Integer.parseInt(nextRecord[0]);
             }
         }
     }
     public void initializeCandidates(String[] candidatesList) {
         int i;
         for (i = 0; i < candidatesList.length; i++) {
+            candidatesList[i] = candidatesList[i].trim();
             String[] candidateInfo = candidatesList[i].split(" ");
-            Candidate newCandidate = new Candidate(candidateInfo[0], candidateInfo[1], null);
+            Tree newTree = new Tree(i, candidatesList.length);
+            Candidate newCandidate = new Candidate(candidateInfo[0], candidateInfo[1], newTree);
             this.candidates[i] = newCandidate;
         }
     }

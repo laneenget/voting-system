@@ -10,4 +10,9 @@ public class Node {
     protected Node parent;
     protected boolean hasChildren = false;
     protected ArrayList<Integer> ballot = null;
+
+    // Testing purposes
+    public Node[] getChildren() {
+        return this.children;
+    }
 }

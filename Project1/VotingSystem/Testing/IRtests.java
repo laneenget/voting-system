@@ -2,6 +2,9 @@ package Testing;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import VotingSystem.*;
@@ -16,147 +19,100 @@ import static org.junit.Assert.fail;
 
 public class IRtests {
     RunElection runElection;
-    IR ir = new IR(null, null);
-    IR irReassign = new IR(null, null);
+    IR ir;
     String[] candidateNames = {"Rosen (D)", "Kleinberg (R)", "Chou (I)", "Royce (L)"};
 
-    Tree ATree1;
-    Tree BTree1;
-    Tree ATree2;
-    Tree BTree2;
-    Tree CTree1;
-    Tree ATree3;
-    Candidate reassign1 = new Candidate("A", "(A)", null);
-    Candidate reassign2;
+    IR irMajority1;
+    IR irMajority2;
+    IR irMajority3;
+    IR irReassign1;
+    IR irReassign2;
+    IR SAVEUS;
 
     @Before
     public void setUp() {
         runElection = new RunElection("test.txt");
+        // Todo: add separate ir for initialize tests
         // Tests for initializing candidate
-        ir.setCandidates(new Candidate[4]);
-        ir.initializeCandidates(candidateNames);
-
+        //ir.setCandidates(new Candidate[4]);
+//        ir.initializeCandidates(candidateNames);
         FileReader input;
         try {
-            input = new FileReader("Project1/VotingSystem/Testing/IRHeader1.csv");
+            input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRHeader1.csv");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
         ir = new IR(input, null);
         ir.parseHeader();
 
-        // Trees for tests
-        // ATree1 ballots : [1, 0]  [1, 2]  [1, 2]  [1, 0]
-        ATree1 = new Tree(0,2);
-        ArrayList<Integer> ATree1List1 = new ArrayList<>();
-        ATree1List1.add(1);
-        ATree1List1.add(0);
-        ATree1.insert(ATree1List1);
-        ArrayList<Integer> ATree1List2 = new ArrayList<>();
-        ATree1List2.add(1);
-        ATree1List2.add(2);
-        ATree1.insert(ATree1List2);
-        ATree1.insert(ATree1List2);
-        ATree1.insert(ATree1List1);
+        FileReader majority1Input;
+        try {
+            majority1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority1.csv");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        // Candidate A ballots : [1, 0]  [1, 2]  [1, 2]  [1, 0]
+        // Candidate B ballots:  [2, 1]  [0, 1]
+        irMajority1 = new IR(majority1Input, null);
+        irMajority1.parseHeader();
+        irMajority1.processFile();
 
-        // BTree1 ballots : [2, 1]  [0, 1]
-        BTree1 = new Tree(1, 2);
-        ArrayList<Integer> BTree1List1 = new ArrayList<>();
-        BTree1List1.add(2);
-        BTree1List1.add(1);
-        BTree1.insert(BTree1List1);
+        FileReader majority2Input;
+        try {
+            majority2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority2.csv");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        // Inserted ballots for Candidate A: [1, 0]  [1, 2]
+        // Inserted ballots for Candidate B: [2, 1]  [0, 1]
+        irMajority2 = new IR(majority2Input, null);
+        irMajority2.parseHeader();
+        irMajority2.processFile();
 
-        ArrayList<Integer> BTree1List2 = new ArrayList<>();
-        BTree1List2.add(0);
-        BTree1List2.add(1);
-        BTree1.insert(BTree1List2);
+        FileReader majority3Input;
+        try {
+            majority3Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority3.csv");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        // Inserted ballots for Candidate A: [1, 0, 0]  [1, 2, 3]
+        // Inserted ballots for Candidate B: [2, 1, 3]  [3, 1, 2]
+        // Inserted ballots for Candidate C: [3, 2, 1]  [2, 3, 1]   [0, 0, 1]   [2, 0, 1]
+        irMajority3 = new IR(majority3Input, null);
+        irMajority3.parseHeader();
+        irMajority3.processFile();
 
-        // ATree2 ballots : [1, 0]  [1, 2]
-        ATree2 = new Tree(0, 2);
-        ArrayList<Integer> ATree2List1 = new ArrayList<>();
-        ATree2List1.add(1);
-        ATree2List1.add(0);
-        ATree2.insert(ATree2List1);
+        FileReader reassign1Input;
+        try {
+            reassign1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign1.csv");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        // Candidate A ballots: [1, 0]  [1, 2]  [1, 2]  [1, 0]
+        // Candidate B ballots: [2, 1]  [0, 1]
+        FileWriter reassign1InputAudit;
+        try {
+            reassign1InputAudit = new FileWriter("reassign2InputAudit.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        irReassign1 = new IR(reassign1Input, reassign1InputAudit);
+        irReassign1.parseHeader();
+        irReassign1.processFile();
 
-        ArrayList<Integer> ATree2List2 = new ArrayList<>();
-        ATree2List2.add(1);
-        ATree2List2.add(2);
-        ATree2.insert(ATree2List2);
+        FileReader reassign2Input;
+        try {
+            reassign2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign2.csv");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        // Candidate A ballots: [1,2,3]  [1,0,2]  [1,3,2]  [1,0,0]
+        // Candidate B ballots: [0,1,0]  [0,1,2]  [2,1,3]  [3,1,2]
+        // Candidate C ballots: [0,0,1]  [2,3,1]  [2,0,1]  [3,0,1]
+        irReassign2 = new IR(reassign2Input, null);
+        irReassign2.parseHeader();
+        irReassign2.processFile();
 
-        // ATree3 ballots : [1, 0, 0]  [1, 2, 3]
-        ATree3 = new Tree(0, 3);
-        ArrayList<Integer> ATree3List1 = new ArrayList<>();
-        ATree3List1.add(1);
-        ATree3List1.add(0);
-        ATree3List1.add(0);
-        ATree3.insert(ATree3List1);
-
-        ArrayList<Integer> ATree3List2 = new ArrayList<>();
-        ATree3List2.add(1);
-        ATree3List2.add(2);
-        ATree3List2.add(3);
-        ATree3.insert(ATree3List2);
-
-        // BTree2 ballots : [2, 1, 3]  [3, 1, 2]
-        BTree2 = new Tree(1, 3);
-        ArrayList<Integer> BTree2List1 = new ArrayList<>();
-        BTree2List1.add(2);
-        BTree2List1.add(1);
-        BTree2List1.add(3);
-        BTree2.insert(BTree2List1);
-
-        ArrayList<Integer> BTree2List2 = new ArrayList<>();
-        BTree2List2.add(3);
-        BTree2List2.add(1);
-        BTree2List2.add(2);
-        BTree2.insert(BTree2List2);
-
-        // CTree1 ballots : [3, 2, 1]  [2, 3, 1]   [0, 0, 1]   [2, 0, 1]
-        CTree1 = new Tree(2,3);
-        ArrayList<Integer> CTree1List1 = new ArrayList<>();
-        CTree1List1.add(3);
-        CTree1List1.add(2);
-        CTree1List1.add(1);
-        CTree1.insert(CTree1List1);
-
-        ArrayList<Integer> CTree1List2 = new ArrayList<>();
-        CTree1List2.add(2);
-        CTree1List2.add(3);
-        CTree1List2.add(1);
-        CTree1.insert(CTree1List2);
-
-        ArrayList<Integer> CTree1List3 = new ArrayList<>();
-        CTree1List3.add(0);
-        CTree1List3.add(0);
-        CTree1List3.add(1);
-        CTree1.insert(CTree1List3);
-
-        ArrayList<Integer> CTree1List4 = new ArrayList<>();
-        CTree1List4.add(2);
-        CTree1List4.add(0);
-        CTree1List4.add(1);
-        CTree1.insert(CTree1List4);
-
-        // ----------------------- Reassignment -------------------------------
-
-        ArrayList<Integer> ballot1 = new ArrayList<>();
-        ballot1.add(0);
-        ballot1.add(1);
-        ArrayList<Integer> ballot2 = new ArrayList<>();
-        ballot2.add(0);
-        ballot2.add(1);
-        ArrayList<ArrayList<Integer>> toInsert = new ArrayList<>();
-        toInsert.add(ballot1);
-        toInsert.add(ballot2);
-        // reassign only for the reassignment test
-        // this interferes with the majority test for now (they both work tho)
-        // (I'll probably switch trees so we're not reusing the same tree)
-        Candidate[] candidatesList = new Candidate[2];
-        reassign2 = new Candidate("B", "(B)", BTree1);
-        candidatesList[0] = reassign1;
-        candidatesList[1] = reassign2;
-        irReassign.setCandidates(candidatesList);
-        irReassign.reassignVotes(toInsert, 1);
     }
 
     @Test
@@ -182,19 +138,8 @@ public class IRtests {
         Assert.assertTrue(ir.getCandidates()[3].getParty().equals("(L)"));
     }
 
-//    @Test
-//    public void test_majority_candidate_1() {
-//        // Input: One Candidate
-//        // Simple Tree with one root node
-//        Tree zeroTree = new Tree(0,1);
-//        Candidate test1 = new Candidate("Zero", "(Zero)", zeroTree);
-//        Candidate[] lst = {test1};
-//        ir.setCandidates(lst);
-//        Assert.assertTrue(ir.majorityCandidate() == null);
-//    }
-
     @Test
-    public void test_majority_candidate_2() {
+    public void test_majority_candidate_1() {
         // Input: Two Candidates
         // Inserted ballots for Candidate A: [1, 0]  [1, 2]  [1, 2]  [1, 0]
         // Inserted ballots for Candidate B: [2, 1]  [0, 1]
@@ -202,15 +147,11 @@ public class IRtests {
         // Candidate B total first-place votes: 2
         // Non-Zero vote total
 
-        Candidate test1 = new Candidate("A", "(A)", ATree1);
-        Candidate test2 = new Candidate("B", "(B)", BTree1);
-        Candidate[] lst = {test1, test2};
-        ir.setCandidates(lst);
-        Assert.assertTrue(ir.majorityCandidate() == test1);
+        Assert.assertTrue(irMajority1.majorityCandidate() == irMajority1.getCandidates()[0]);
     }
 
     @Test
-    public void test_majority_candidate_3() {
+    public void test_majority_candidate_2() {
         // Testing when exact 50-50
         // Input: Two Candidates
         // Inserted ballots for Candidate A: [1, 0]  [1, 2]
@@ -219,15 +160,11 @@ public class IRtests {
         // Candidate B total first-place votes: 2
         // Non-Zero vote total
 
-        Candidate test1 = new Candidate("A", "(A)", ATree2);
-        Candidate test2 = new Candidate("B", "(B)", BTree1);
-        Candidate[] lst = {test1, test2};
-        ir.setCandidates(lst);
-        Assert.assertTrue(ir.majorityCandidate() == null);
+        Assert.assertTrue(irMajority2.majorityCandidate() == null);
     }
 
     @Test
-    public void test_majority_candidate_4() {
+    public void test_majority_candidate_3() {
         // Input: Three Candidates
         // Inserted ballots for Candidate A: [1, 0, 0]  [1, 2, 3]
         // Inserted ballots for Candidate B: [2, 1, 3]  [3, 1, 2]
@@ -236,13 +173,7 @@ public class IRtests {
         // Candidate B total first-place votes: 2
         // Candidate C total first-place votes: 4
         // Nobody wins majority
-
-        Candidate test1 = new Candidate("A", "(A)", ATree3);
-        Candidate test2 = new Candidate("B", "(B)", BTree2);
-        Candidate test3 = new Candidate("C", "(C)", CTree1);
-        Candidate[] lst = {test1, test2, test3};
-        ir.setCandidates(lst);
-        Assert.assertTrue(ir.majorityCandidate() == null);
+        Assert.assertTrue(irMajority3.majorityCandidate() == null);
     }
 
     @Test
@@ -263,19 +194,118 @@ public class IRtests {
     @Test
     public void test_reassignVotes_1() {
         // Simple case where no candidates have yet been eliminated
-        // Reassign ATree1 ballots to BTree1
-        // ATree1:          [1, 0]  [1, 2]  [1, 2]  [1, 0]
-        // BTree1:          [2, 1]  [0, 1]
-        // (end) BTree1:    [2, 1]  [0, 1]  [0, 1]  [0, 1]
+        // Reassign Candidate A ballots to Candidate B ballots
+        // Candidate A ballots:          [1, 0]  [1, 2]  [1, 2]  [1, 0]
+        // Candidate B ballots:          [2, 1]  [0, 1]
+        // Inserting:                            [0, 1]  [0, 1]
+        // (end) Candidate B Tree:       [2, 1]  [0, 1]  [0, 1]  [0, 1]
         // BTree1 numVotes: 4
-        Assert.assertTrue(reassign2.getNumVotes() == 4);
+        Tree A = irReassign1.getCandidates()[0].getBallots();
+        ArrayList<ArrayList<Integer>> allBallots = A.getBallots(A.getRoot());
+        for (int i = 0; i < allBallots.size(); i++) {
+            for (int j = 0; j < allBallots.get(i).size(); j++) {
+                System.out.print(allBallots.get(i).get(j));
+            }
+            System.out.println("End ballot, reassign1");
+        }
+        System.out.println();
+        Node BNode = irReassign1
+                .getCandidates()[0]
+                .getBallots()
+                .getRoot()
+                .getChildren()[1];
+        ArrayList<ArrayList<Integer>> toInsert = irReassign1
+                .getCandidates()[0]
+                .getBallots()
+                .getBallots(BNode);
+        irReassign1.reassignVotes(toInsert, 1);
+        Assert.assertTrue(irReassign1.getCandidates()[1].getNumVotes() == 4);
     }
 
     @Test
     public void test_reassignVotes_2() {
         // Intermediate case where there is one previously eliminated candidate
-        //
-        //
-        //
+        // Testing double reassignment
+        // ORIGINAL ballots:
+        // Candidate A ballots: [1,2,3]  [1,0,2]  [1,3,2]  [1,0,0]
+        // Candidate B ballots: [0,1,0]  [0,1,2]  [2,1,3]  [3,1,2]
+        // Candidate C ballots: [0,0,1]  [2,3,1]  [2,0,1]  [3,0,1]
+        //                      [0,1,2]  <--- when getting 2nd place for B
+        //                               [0,0,1]  [0,2,1]  <--- when getting 2nd place for C
+
+        // First, eliminate A. State of Candidate B, Candidate C after:
+        // Candidate B ballots: [0,1,0] [0,1,2] [2,1,3] [3,1,2]     [0,1,2]
+        // Candidate C ballots: [0,0,1] [2,3,1] [2,0,1] [3,0,1]     [0,0,1] [0,2,1]
+        // Next, eliminate B. State of Candidate C after:
+        // Candidate C ballots: [0,0,1] [2,3,1] [2,0,1] [3,0,1]     [0,0,1] [0,2,1]     [0,0,1] [0,0,1] [0,0,1] [0,0,1]
+        // Candidate C numVotes = 10
+        //                              [0,0,1]         [2,0,1]     [0,0,1] <-- when getting 2nd place C nodes
+        //                                      [1,0,2]                     <-- when getting 2nd place A nodes
+
+        // FIRST Reassignment wave
+        Tree B = irReassign2.getCandidates()[1].getBallots();
+        ArrayList<ArrayList<Integer>> allBallots = B.getBallots(B.getRoot());
+        for (int i = 0; i < allBallots.size(); i++) {
+            for (int j = 0; j < allBallots.get(i).size(); j++) {
+                System.out.print(allBallots.get(i).get(j));
+            }
+            System.out.println("End ballot, here");
+        }
+        // Doesn't seem to include 010, but that's ok
+        System.out.println();
+        Node BNode_wave1 = irReassign2
+                .getCandidates()[0]
+                .getBallots()
+                .getRoot()
+                .getChildren()[1];
+        ArrayList<ArrayList<Integer>> toInsert_B_wave1 = irReassign2
+                .getCandidates()[0]
+                .getBallots()               // A Tree
+                .getBallots(BNode_wave1);   // Should be the B ballot subtree
+        for (int i = 0; i < toInsert_B_wave1.size(); i++) {
+            for (int j = 0; j < toInsert_B_wave1.get(i).size(); j++) {
+                System.out.print(toInsert_B_wave1.get(i).get(j) + " ");
+            }
+            System.out.println("checking B nodes from A's Tree");
+        }
+
+
+
+        Node CNode_wave1 = irReassign2
+                .getCandidates()[0]
+                .getBallots()
+                .getRoot()
+                .getChildren()[2];
+        ArrayList<ArrayList<Integer>> toInsert_C_wave1 = irReassign2
+                .getCandidates()[0]
+                .getBallots()
+                .getBallots(CNode_wave1);
+        irReassign2.reassignVotes(toInsert_B_wave1, 1);
+        irReassign2.reassignVotes(toInsert_C_wave1, 2);
+        irReassign2.getCandidates()[0].setEliminated(true);
+
+//        B = irReassign2.getCandidates()[1].getBallots();
+//        allBallots = B.getBallots(B.getRoot());
+//        for (int i = 0; i < allBallots.size(); i++) {
+//            for (int j = 0; j < allBallots.get(i).size(); j++) {
+//                System.out.print(allBallots.get(i).get(j));
+//            }
+//            System.out.println();
+//        }
+
+
+        // SECOND Reassignment wave (reassign B to C)
+        Node CNode_wave2 = irReassign2
+                .getCandidates()[1]
+                .getBallots()
+                .getRoot()
+                .getChildren()[2];
+        ArrayList<ArrayList<Integer>> toInsert_C_wave2 = irReassign2
+                .getCandidates()[1]
+                .getBallots()
+                .getBallots(CNode_wave2);
+        irReassign2.reassignVotes(toInsert_C_wave2, 2);
+        Assert.assertTrue(irReassign1.getCandidates()[2].getNumVotes() == 10);
+
     }
 }
