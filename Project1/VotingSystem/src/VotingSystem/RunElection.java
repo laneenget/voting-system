@@ -32,9 +32,20 @@ public class RunElection {
         tree.insert(testbal);
         tree.insert(test);
         ArrayList<ArrayList<Integer>> ballots = tree.getBallots(tree.root);
+        ArrayList<ArrayList<Integer>> ballots2 = tree.getBallots(tree.root);
+        ArrayList<ArrayList<Integer>> ballots3 = tree.getBallots(tree.root);
         for(int i = 0; i < ballots.size(); i++){
             System.out.println(ballots.get(i));
         }
+        System.out.println("After1)");
+        for(int i = 0; i < ballots2.size(); i++){
+            System.out.println(ballots2.get(i));
+        }
+        System.out.println("After2)");
+        for(int i = 0; i < ballots3.size(); i++){
+            System.out.println(ballots3.get(i));
+        }
+        System.out.println("After3)");
 
 
 }

@@ -50,16 +50,17 @@ public class Tree {
         ArrayList<ArrayList<Integer>> nodes = getNodes(node);
         ArrayList<ArrayList<Integer>> returnBals = new ArrayList<ArrayList<Integer>>();
         int numBallots = 0;
-        ArrayList<Integer> temp = new ArrayList<Integer>();
+        ArrayList<Integer> temp;
+        ArrayList<Integer> hold;
         int size = nodes.size();
         for(int i = 0; i < nodes.size(); i++){
-            ArrayList<Integer> hold = nodes.get(i);
+            hold = new ArrayList<Integer>();
+            hold = nodes.get(i);
             int size2 = hold.size();
             int count = hold.get(size2 - 1);
-            hold.remove(size2 - 1);
             temp = new ArrayList<Integer>();
             for(int k = 0; k < size2 - 1; k++){
-                temp.add(hold.get(k) -1);
+                temp.add(hold.get(k) - 1);
             }
             for(int j = 0; j < count; j++){
                 returnBals.add(temp);
