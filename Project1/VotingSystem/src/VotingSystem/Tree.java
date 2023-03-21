@@ -59,7 +59,7 @@ public class Tree {
             hold.remove(size2 - 1);
             temp = new ArrayList<Integer>();
             for(int k = 0; k < size2 - 1; k++){
-                temp.add(hold.get(k));
+                temp.add(hold.get(k) -1);
             }
             for(int j = 0; j < count; j++){
                 returnBals.add(temp);
