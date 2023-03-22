@@ -2,13 +2,21 @@ package VotingSystem;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Random;
+
 
 public abstract class Election {
     protected FileWriter audit;
     protected FileReader input;
 
     abstract public void processFile();
-    public int breakTie(int numCandidates){return -1;}
+    public int breakTie(int numCandidates, int numToEliminate){
+        // with just 2 ppl
+        Random random = new Random();
+        int eliminated;
+        eliminated = random.nextInt(2) + 1;
+        return eliminated;
+    }
     abstract public void conductAlgorithm();
     abstract public void printResults();
     public void writeToAudit(String[] output){
