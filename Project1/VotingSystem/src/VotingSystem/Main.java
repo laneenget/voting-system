@@ -7,7 +7,7 @@ public class Main {
         if(args.length > 0){
             holder = args[0];
         }   
-        RunElection newElection = new RunElection(holder);
+        RunElection newElection = new RunElection(null);
         newElection.start();
 
     }
