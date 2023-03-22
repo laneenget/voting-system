@@ -164,7 +164,7 @@ public class IRtests {
         irConductAlgorithm1 = new IR(conductAlgorithm1Input, null);
         irConductAlgorithm1.parseHeader();
         irConductAlgorithm1.processFile();
-        ir.conductAlgorithm();
+        irConductAlgorithm1.conductAlgorithm();
     }
 
     @Test

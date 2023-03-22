@@ -23,13 +23,15 @@ public class IR extends Election{
     public void eliminateCandidate(int index){
         int i;
         Tree eliminatedTree = this.candidates[index].getBallots();
-        for (i = 0; i < eliminatedTree.root.children.length; i++) {
+        if (eliminatedTree.root.children != null) {
+            for (i = 0; i < eliminatedTree.root.children.length; i++) {
                 Node secondPlace = eliminatedTree.root.children[i];
                 if (secondPlace != null) {
                     ArrayList<ArrayList<Integer>> ballots = eliminatedTree.getBallots(secondPlace);
                     reassignVotes(ballots, i);
                 }
             }
+        }
         this.candidates[index].setEliminated(true);
         this.curNumCandidates -= 1;
     }
