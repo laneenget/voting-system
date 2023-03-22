@@ -82,11 +82,10 @@ public class IR extends Election{
                         ballotsMap.put(j, curElimCount);
                     }
                 }
-
                 // Mutate the ballot, subtracting by how many eliminated
                 // candidates there were before each rank
                 for (j = 0; j < curBallot.size(); j++) {
-                    if (this.candidates[j].isEliminated()) {
+                    if (this.candidates[j].isEliminated() || curBallot.get(j) <= 0) {
                         curBallot.set(j, 0);
                     } else {
                         curBallot.set(j, curBallot.get(j) - ballotsMap.get(curBallot.get(j)));
@@ -157,7 +156,7 @@ public class IR extends Election{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+
     }
     public void printResults(){
         System.out.println("-------------------------   ELECTION RESULTS   -------------------------");
@@ -215,8 +214,6 @@ public class IR extends Election{
         }
     }
     public void conductAlgorithm() {
-        this.parseHeader();
-        this.processFile();
         int smallestVotes;
         int toEliminate;
         Candidate winner;
@@ -234,7 +231,7 @@ public class IR extends Election{
                 }
             }
             if (tiedCandidates.size() > 1) {
-                toEliminate = breakTie(tiedCandidates.size() - 1);
+                toEliminate = breakTie(tiedCandidates.size() - 1, 1);
             } else {
                 toEliminate = tiedCandidates.get(0);
             }
@@ -257,7 +254,6 @@ public class IR extends Election{
                 winner.getNumVotes() + " votes.";
         String[] announcement = {winnerAnnouncement};
         writeToAudit(announcement);
-        printResults();
         // TODO: change file permissions for audit file
     }
 

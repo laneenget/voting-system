@@ -27,7 +27,11 @@ public class IRtests {
     IR irMajority3;
     IR irReassign1;
     IR irReassign2;
-    IR SAVEUS;
+    IR irEliminate1;
+
+    IR irReassign3;
+    IR irEliminate2;
+    IR irConductAlgorithm1;
 
     @Before
     public void setUp() {
@@ -113,6 +117,54 @@ public class IRtests {
         irReassign2.parseHeader();
         irReassign2.processFile();
 
+        FileReader eliminate1Input;
+        try {
+            eliminate1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate1.csv");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        // Same as reassign2Input
+        irEliminate1 = new IR(eliminate1Input, null);
+        irEliminate1.parseHeader();
+        irEliminate1.processFile();
+        irEliminate1.eliminateCandidate(0);
+        irEliminate1.eliminateCandidate(1);
+
+        FileReader reassign3Input;
+        try {
+            reassign3Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign3.csv");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        irReassign3 = new IR(reassign3Input, null);
+        irReassign3.parseHeader();
+        irReassign3.processFile();
+        irReassign3.getCandidates()[2].setEliminated(true);
+        irReassign3.getCandidates()[4].setEliminated(true);
+
+        FileReader eliminate2Input;
+        try {
+            eliminate2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate2.csv");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        irEliminate2 = new IR(eliminate2Input, null);
+        irEliminate2.parseHeader();
+        irEliminate2.processFile();
+        irEliminate2.getCandidates()[2].setEliminated(true);
+        irEliminate2.getCandidates()[4].setEliminated(true);
+        irEliminate2.eliminateCandidate(0);
+
+        FileReader conductAlgorithm1Input;
+        try {
+            conductAlgorithm1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRConductAlgorithm1.csv");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        irConductAlgorithm1 = new IR(conductAlgorithm1Input, null);
+        irConductAlgorithm1.parseHeader();
+        irConductAlgorithm1.processFile();
+        ir.conductAlgorithm();
     }
 
     @Test
@@ -200,15 +252,6 @@ public class IRtests {
         // Inserting:                            [0, 1]  [0, 1]
         // (end) Candidate B Tree:       [2, 1]  [0, 1]  [0, 1]  [0, 1]
         // BTree1 numVotes: 4
-        Tree A = irReassign1.getCandidates()[0].getBallots();
-        ArrayList<ArrayList<Integer>> allBallots = A.getBallots(A.getRoot());
-        for (int i = 0; i < allBallots.size(); i++) {
-            for (int j = 0; j < allBallots.get(i).size(); j++) {
-                System.out.print(allBallots.get(i).get(j));
-            }
-            System.out.println("End ballot, reassign1");
-        }
-        System.out.println();
         Node BNode = irReassign1
                 .getCandidates()[0]
                 .getBallots()
@@ -229,30 +272,18 @@ public class IRtests {
         // ORIGINAL ballots:
         // Candidate A ballots: [1,2,3]  [1,0,2]  [1,3,2]  [1,0,0]
         // Candidate B ballots: [0,1,0]  [0,1,2]  [2,1,3]  [3,1,2]
-        // Candidate C ballots: [0,0,1]  [2,3,1]  [2,0,1]  [3,0,1]
+        // Candidate C ballots: [0,0,1]  [2,3,1]  [2,0,1]  [2,0,1]
         //                      [0,1,2]  <--- when getting 2nd place for B
         //                               [0,0,1]  [0,2,1]  <--- when getting 2nd place for C
 
         // First, eliminate A. State of Candidate B, Candidate C after:
         // Candidate B ballots: [0,1,0] *[0,1,2] [2,1,3] [3,1,2]     [0,1,2]*
-        // Candidate C ballots: [0,0,1] [2,3,1] [2,0,1] [3,0,1]     [0,0,1] [0,2,1]
+        // Candidate C ballots: [0,0,1] [2,3,1] [2,0,1] [2,0,1]     [0,0,1] [0,2,1]
         // Next, eliminate B. State of Candidate C after:
-        // Candidate C ballots: [0,0,1] [2,3,1] [2,0,1] [3,0,1]     [0,0,1] [0,2,1]     [0,0,1] [0,0,1] [0,0,1] [0,0,1]
+        // Candidate C ballots: [0,0,1] [2,3,1] [2,0,1] [2,0,1]     [0,0,1] [0,2,1]     [0,0,1] [0,0,1] [0,0,1] [0,0,1]
         // Candidate C numVotes = 10
         //                              [0,0,1]         [2,0,1]     [0,0,1] <-- when getting 2nd place C nodes
         //                                      [1,0,2]                     <-- when getting 2nd place A nodes
-
-        // FIRST Reassignment wave
-        Tree B = irReassign2.getCandidates()[1].getBallots();
-        ArrayList<ArrayList<Integer>> allBallots = B.getBallots(B.getRoot());
-        for (int i = 0; i < allBallots.size(); i++) {
-            for (int j = 0; j < allBallots.get(i).size(); j++) {
-                System.out.print(allBallots.get(i).get(j));
-            }
-            System.out.println("End ballot, here");
-        }
-        // Doesn't seem to include 010, but that's ok
-        System.out.println();
         Node BNode_wave1 = irReassign2
                 .getCandidates()[0]
                 .getBallots()
@@ -262,12 +293,6 @@ public class IRtests {
                 .getCandidates()[0]
                 .getBallots()               // A Tree
                 .getBallots(BNode_wave1);   // Should be the B ballot subtree
-        for (int i = 0; i < toInsert_B_wave1.size(); i++) {
-            for (int j = 0; j < toInsert_B_wave1.get(i).size(); j++) {
-                System.out.print(toInsert_B_wave1.get(i).get(j) + " ");
-            }
-            System.out.println("checking B nodes from A's Tree");
-        }
 
         Node CNode_wave1 = irReassign2
                 .getCandidates()[0]
@@ -292,17 +317,72 @@ public class IRtests {
                 .getCandidates()[1]
                 .getBallots()
                 .getBallots(CNode_wave2);
-        for (int i = 0; i < toInsert_C_wave2.size(); i++) {
-            for (int j = 0; j < toInsert_C_wave2.get(i).size(); j++) {
-                System.out.print(toInsert_C_wave2.get(i).get(j) + " ");
-            }
-            System.out.println("checking C nodes from B's Tree");
-        }
-
+        Node ANode_wave2 = irReassign2
+                .getCandidates()[1]
+                .getBallots()
+                .getRoot()
+                .getChildren()[0];
+        ArrayList<ArrayList<Integer>> toInsert_A_wave2 = irReassign2
+                .getCandidates()[1]
+                .getBallots()
+                .getBallots(ANode_wave2);
 
         irReassign2.reassignVotes(toInsert_C_wave2, 2);
-        System.out.println(irReassign2.getCandidates()[2].getNumVotes());
+        irReassign2.reassignVotes((toInsert_A_wave2),2);
         Assert.assertTrue(irReassign2.getCandidates()[2].getNumVotes() == 10);
+    }
+
+    @Test
+    public void test_eliminate_1() {
+        // This tests out the exact same election as test_reassignVotes_2
+        // Except directly through elimination
+        Assert.assertTrue(irEliminate1.getCandidates()[2].getNumVotes() == 10);
+    }
+
+    @Test
+    public void test_reassignVotes_3() {
+        // Test reassignment with multiple eliminated candidates
+        // Five candidates total
+        // Candidate A ballots:     [1,3,2,5,4] [1,0,4,3,2]
+        // Candidate B ballots:     [0,1,0,0,0]
+        // Previously eliminated:   Candidates in indices 2, 4
+        // Reassign A to B:         [0,2,1,4,3]
+        // B afterwards:            [0,1,0,0,0] [0,1,0,2,0]
+        Node ballotNode = irReassign3
+                .getCandidates()[0]
+                .getBallots()
+                .getRoot()
+                .getChildren()[2];
+        ArrayList<ArrayList<Integer>> toInsert = irReassign3
+                .getCandidates()[0]
+                .getBallots()
+                .getBallots(ballotNode);
+        irReassign3.reassignVotes(toInsert, 1);
+        Assert.assertTrue(irReassign3.getCandidates()[1].getNumVotes() == 2);
+    }
+
+    @Test
+    public void test_eliminate_2() {
+        Assert.assertTrue(irEliminate2.getCandidates()[1].getNumVotes() == 2);
+    }
+
+   @Test
+   public void test_conductAlgorithm_1() {
+        // Simple case where there are 2 candidates
+       // Candidate A has 2 votes, Candidate B has 0 votes -- Candidate A wins
+
+   }
+    @Test
+    public void test_conductAlgorithm_2() {
+        // Test where there are no ties
+        // Simple election with 3 candidates
+    }
+
+    @Test
+    public void test_conductAlgorithm_3() {
+        // Test where there is one tie
+        // For purposes of testing, the first candidate in the tied list will be eliminated
 
     }
+
 }
