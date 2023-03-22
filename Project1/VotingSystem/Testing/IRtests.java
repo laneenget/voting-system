@@ -32,53 +32,34 @@ public class IRtests {
     IR irReassign3;
     IR irEliminate2;
     IR irConductAlgorithm1;
+    IR irConductAlgorithm2;
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         runElection = new RunElection("test.txt");
         // Todo: add separate ir for initialize tests
         // Tests for initializing candidate
         //ir.setCandidates(new Candidate[4]);
 //        ir.initializeCandidates(candidateNames);
-        FileReader input;
-        try {
-            input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRHeader1.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRHeader1.csv");
         ir = new IR(input, null);
         ir.parseHeader();
 
-        FileReader majority1Input;
-        try {
-            majority1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority1.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader majority1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority1.csv");
         // Candidate A ballots : [1, 0]  [1, 2]  [1, 2]  [1, 0]
         // Candidate B ballots:  [2, 1]  [0, 1]
         irMajority1 = new IR(majority1Input, null);
         irMajority1.parseHeader();
         irMajority1.processFile();
 
-        FileReader majority2Input;
-        try {
-            majority2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority2.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader majority2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority2.csv");
         // Inserted ballots for Candidate A: [1, 0]  [1, 2]
         // Inserted ballots for Candidate B: [2, 1]  [0, 1]
         irMajority2 = new IR(majority2Input, null);
         irMajority2.parseHeader();
         irMajority2.processFile();
 
-        FileReader majority3Input;
-        try {
-            majority3Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority3.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader majority3Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority3.csv");
         // Inserted ballots for Candidate A: [1, 0, 0]  [1, 2, 3]
         // Inserted ballots for Candidate B: [2, 1, 3]  [3, 1, 2]
         // Inserted ballots for Candidate C: [3, 2, 1]  [2, 3, 1]   [0, 0, 1]   [2, 0, 1]
@@ -86,30 +67,15 @@ public class IRtests {
         irMajority3.parseHeader();
         irMajority3.processFile();
 
-        FileReader reassign1Input;
-        try {
-            reassign1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign1.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader reassign1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign1.csv");
         // Candidate A ballots: [1, 0]  [1, 2]  [1, 2]  [1, 0]
         // Candidate B ballots: [2, 1]  [0, 1]
-        FileWriter reassign1InputAudit;
-        try {
-            reassign1InputAudit = new FileWriter("reassign2InputAudit.txt");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        FileWriter reassign1InputAudit = new FileWriter("reassign2InputAudit.txt");
         irReassign1 = new IR(reassign1Input, reassign1InputAudit);
         irReassign1.parseHeader();
         irReassign1.processFile();
 
-        FileReader reassign2Input;
-        try {
-            reassign2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign2.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader reassign2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign2.csv");
         // Candidate A ballots: [1,2,3]  [1,0,2]  [1,3,2]  [1,0,0]
         // Candidate B ballots: [0,1,0]  [0,1,2]  [2,1,3]  [3,1,2]
         // Candidate C ballots: [0,0,1]  [2,3,1]  [2,0,1]  [3,0,1]
@@ -117,12 +83,7 @@ public class IRtests {
         irReassign2.parseHeader();
         irReassign2.processFile();
 
-        FileReader eliminate1Input;
-        try {
-            eliminate1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate1.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader eliminate1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate1.csv");
         // Same as reassign2Input
         irEliminate1 = new IR(eliminate1Input, null);
         irEliminate1.parseHeader();
@@ -130,24 +91,14 @@ public class IRtests {
         irEliminate1.eliminateCandidate(0);
         irEliminate1.eliminateCandidate(1);
 
-        FileReader reassign3Input;
-        try {
-            reassign3Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign3.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader reassign3Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign3.csv");
         irReassign3 = new IR(reassign3Input, null);
         irReassign3.parseHeader();
         irReassign3.processFile();
         irReassign3.getCandidates()[2].setEliminated(true);
         irReassign3.getCandidates()[4].setEliminated(true);
 
-        FileReader eliminate2Input;
-        try {
-            eliminate2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate2.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader eliminate2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate2.csv");
         irEliminate2 = new IR(eliminate2Input, null);
         irEliminate2.parseHeader();
         irEliminate2.processFile();
@@ -155,16 +106,11 @@ public class IRtests {
         irEliminate2.getCandidates()[4].setEliminated(true);
         irEliminate2.eliminateCandidate(0);
 
-        FileReader conductAlgorithm1Input;
-        try {
-            conductAlgorithm1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRConductAlgorithm1.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        irConductAlgorithm1 = new IR(conductAlgorithm1Input, null);
-        irConductAlgorithm1.parseHeader();
-        irConductAlgorithm1.processFile();
-        irConductAlgorithm1.conductAlgorithm();
+        FileReader conductAlgorithm2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRConductAlgorithm2.csv");
+        irConductAlgorithm2 = new IR(conductAlgorithm2Input, null);
+        irConductAlgorithm2.parseHeader();
+        irConductAlgorithm2.processFile();
+        irConductAlgorithm2.conductAlgorithm();
     }
 
     @Test
@@ -369,13 +315,38 @@ public class IRtests {
    @Test
    public void test_conductAlgorithm_1() {
         // Simple case where there are 2 candidates
-       // Candidate A has 2 votes, Candidate B has 0 votes -- Candidate A wins
-
+        // Candidate A has 2 votes, Candidate B has 0 votes -- Candidate A wins
+        // TODO: Maybe this test can simply look at the output of the audit file
+       FileReader conductAlgorithm1Input = null;
+       try {
+           conductAlgorithm1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRConductAlgorithm1.csv");
+       } catch (FileNotFoundException e) {
+           throw new RuntimeException(e);
+       }
+       FileWriter conductAlgorithm1Audit = null;
+       try {
+           conductAlgorithm1Audit = new FileWriter("Project1/VotingSystem/Testing/IRTestsResources/Audit_IRConductAlgorithm1.txt");
+       } catch (IOException e) {
+           throw new RuntimeException(e);
+       }
+       irConductAlgorithm1 = new IR(conductAlgorithm1Input, conductAlgorithm1Audit);
+       irConductAlgorithm1.parseHeader();
+       irConductAlgorithm1.processFile();
+       irConductAlgorithm1.conductAlgorithm();
    }
     @Test
     public void test_conductAlgorithm_2() {
-        // Test where there are no ties
-        // Simple election with 3 candidates
+        // Test where there are no ties -- there is no immediate majority
+        // A candidate must be eliminated to determine the winner
+        // Simple election with 3 candidates -- Candidate B wins
+        // TODO: This can also just be a placeholder for a manual test
+        // Candidate A: [1,0,0] [1,2,3] [1,3,2]
+        // Candidate B: [0,1,2] [2,1,3] [0,1,0] [0,1,2]
+        // Candidate C: [0,2,1] [0,2,1]
+        // After C is eliminated:
+        // Candidate A: [1,0,0] [1,2,3] [1,3,2]
+        // Candidate B: [0,1,2] [2,1,3] [0,1,0] [0,1,2] [0,0,1] [0,0,1]
+        // Candidate B has 6/9 votes ---> has majority ---> wins
     }
 
     @Test
@@ -383,6 +354,17 @@ public class IRtests {
         // Test where there is one tie
         // For purposes of testing, the first candidate in the tied list will be eliminated
 
+    }
+
+    @Test
+    public void test_conductAlgorithm_4() {
+        // Test where there are multiple ties for elimination
+        // For purposes of testing, the first candidate in the tied list will be eliminated
+    }
+
+    @Test
+    public void test_conductAlgorithm_5() {
+        // Test a slightly larger election where there are multiple ties,
     }
 
 }
