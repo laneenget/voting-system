@@ -6,8 +6,8 @@ import java.util.Random;
 
 
 public abstract class Election {
-    private FileWriter audit;
-    private FileReader input;
+    protected FileWriter audit;
+    protected FileReader input;
 
     abstract public void processFile();
     public int breakTie(int numCandidates, int numToEliminate){
