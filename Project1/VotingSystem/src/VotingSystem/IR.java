@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-//import java.org.apache.commons.lang3.Objectutils;
 
 public class IR extends Election{
     private Candidate [] candidates;
@@ -25,12 +24,25 @@ public class IR extends Election{
         String[] eliminatingAnnouncement = {"Commence transferring of to-be eliminated candidate " +
                 this.candidates[index].getName() + " votes to other Candidates"};
         writeToAudit(eliminatingAnnouncement);
+
+        // Make a list of eliminated candidates
+        ArrayList<Integer> eliminated = new ArrayList<>();
+        for (i = 0; i < this.candidates.length; i++) {
+            if (this.candidates[i].isEliminated()) {
+                eliminated.add(i);
+            }
+        }
         if (eliminatedTree.root.children != null) {
             for (i = 0; i < eliminatedTree.root.children.length; i++) {
                 Node secondPlace = eliminatedTree.root.children[i];
                 if (secondPlace != null) {
                     ArrayList<ArrayList<Integer>> ballots = eliminatedTree.getBallots(secondPlace);
-                    reassignVotes(ballots, i);
+                    if (eliminated.size() == 0) {
+                        reassignVotesNoneEliminated(ballots, i);
+                    }
+                    else {
+                        reassignVotes(eliminated, ballots);
+                    }
                 }
             }
         }
@@ -40,87 +52,84 @@ public class IR extends Election{
         this.candidates[index].setEliminated(true);
         this.curNumCandidates -= 1;
     }
-    public void reassignVotes(ArrayList<ArrayList<Integer>> ballots, int index){
-        // First, make a list of the candidates eliminated so far
-        ArrayList<Integer> eliminated = new ArrayList<>();
+    public void reassignVotesNoneEliminated(ArrayList<ArrayList<Integer>> ballots, int index) {
+        Tree toInsert = this.candidates[index].getBallots();
         int i;
-        for (i = 0; i < this.candidates.length; i++) {
-            if (this.candidates[i].isEliminated()) {
-                eliminated.add(i);
+        for (i = 0; i < ballots.size(); i++) {
+            ArrayList<Integer> curBallot = ballots.get(i);
+            if (curBallot.size() > this.candidates.length) {
+                curBallot.remove(curBallot.size()-1);
             }
+            String ballotRepresentation = curBallot.toString();
+            String[] transferAnnouncement = {"Transferring ballot " + ballotRepresentation +
+                    " to candidate " + this.candidates[index].getName()};
+            writeToAudit(transferAnnouncement);
+            toInsert.insert(curBallot);
         }
+    }
+    public void reassignVotes(ArrayList<Integer> eliminated, ArrayList<ArrayList<Integer>> ballots){
         // Check if one other candidate (not including the candidate
         // that is currently being eliminated) has already been eliminated
         // If not, then simply insert each ballot into the corresponding Tree
-        if (eliminated.size() == 0) {
-            Tree toInsert = this.candidates[index].getBallots();
-            for (i = 0; i < ballots.size(); i++) {
-                ArrayList<Integer> curBallot = ballots.get(i);
+        int i;
+        HashMap<Integer, Integer> ballotsMap = new HashMap<>();
+        int j;
+        int k;
+        int curElimCount;
+        // Loop over the ballots
+        for (i = 0; i < ballots.size(); i++) {
+            ballotsMap.clear();
+            curElimCount = 0;
+            ArrayList<Integer> curBallot = ballots.get(i);
+            if (curBallot.size() > this.candidates.length) {
+                curBallot.remove(curBallot.size()-1);
+            }
+            // Make a list of eliminated candidate ranks
+            ArrayList<Integer> eliminatedRanks = new ArrayList<>();
+            for (k = 0; k < eliminated.size(); k++) {
+                if (curBallot.get(eliminated.get(k)) != 0) {
+                    eliminatedRanks.add(curBallot.get(eliminated.get(k)));
+                }
+            }
+            // Sort the list
+            eliminatedRanks.sort(null);
+            // Fill in the ballotsMap -- Each rank between 1 and the number of candidates in the election
+            // are mapped to a value that represents how many eliminated candidates precede them in the race
+            for (j = 1; j < this.candidates.length + 1; j++) {
+                if (curElimCount < eliminatedRanks.size() && j == eliminatedRanks.get(curElimCount)) {
+                    curElimCount += 1;
+                } else {
+                    ballotsMap.put(j, curElimCount);
+                }
+            }
+            // Mutate the ballot, subtracting by how many eliminated
+            // candidates there were before each rank, referring to the ballotsMap
+            for (j = 0; j < curBallot.size(); j++) {
+                if (this.candidates[j].isEliminated() || curBallot.get(j) <= 0) {
+                    curBallot.set(j, 0);
+                } else {
+                    curBallot.set(j, curBallot.get(j) - ballotsMap.get(curBallot.get(j)));
+                }
+            }
+            // It's possible to end up with a ballot with all 0s (everything in ballot eliminated)
+            // Insert into the Tree of the candidate that corresponds to the new number 1 ranking
+            int indexToInsert = curBallot.indexOf(1);
+            if (indexToInsert != -1) {
+                // Write this transfer of the ballot to the audit file
                 String ballotRepresentation = curBallot.toString();
                 String[] transferAnnouncement = {"Transferring ballot " + ballotRepresentation +
-                        " to candidate " + this.candidates[index].getName()};
+                        " to candidate " + this.candidates[indexToInsert].getName()};
                 writeToAudit(transferAnnouncement);
-                if (curBallot.size() > this.candidates.length) {
-                    curBallot.remove(curBallot.size()-1);
-                }
+                Tree toInsert = this.candidates[indexToInsert].getBallots();
                 toInsert.insert(curBallot);
             }
         }
-        else {
-            HashMap<Integer, Integer> ballotsMap = new HashMap<>();
-            int j;
-            int k;
-            int curElimCount;
-            // Loop over the ballots
-            for (i = 0; i < ballots.size(); i++) {
-                ballotsMap.clear();
-                curElimCount = 0;
-                ArrayList<Integer> curBallot = ballots.get(i);
-                if (curBallot.size() > this.candidates.length) {
-                    curBallot.remove(curBallot.size()-1);
-                }
-                // Make a list of eliminated candidate ranks
-                ArrayList<Integer> eliminatedRanks = new ArrayList<>();
-                for (k = 0; k < eliminated.size(); k++) {
-                    if (curBallot.get(eliminated.get(k)) != 0) {
-                        eliminatedRanks.add(curBallot.get(eliminated.get(k)));
-                    }
-                }
-                // Sort the list
-                eliminatedRanks.sort(null);
-                // Fill in the ballotsMap -- Each rank between 1 and the number of candidates in the election
-                // are mapped to a value that represents how many eliminated candidates precede them in the race
-                for (j = 1; j < this.candidates.length + 1; j++) {
-                    if (curElimCount < eliminatedRanks.size() && j == eliminatedRanks.get(curElimCount)) {
-                        curElimCount += 1;
-                    } else {
-                        ballotsMap.put(j, curElimCount);
-                    }
-                }
-                // Mutate the ballot, subtracting by how many eliminated
-                // candidates there were before each rank, referring to the ballotsMap
-                for (j = 0; j < curBallot.size(); j++) {
-                    if (this.candidates[j].isEliminated() || curBallot.get(j) <= 0) {
-                        curBallot.set(j, 0);
-                    } else {
-                        curBallot.set(j, curBallot.get(j) - ballotsMap.get(curBallot.get(j)));
-                    }
-                }
-                // It's possible to end up with a ballot with all 0s (everything in ballot eliminated)
-                // Insert into the Tree of the candidate that corresponds to the new number 1 ranking
-                int indexToInsert = curBallot.indexOf(1);
-                if (indexToInsert != -1) {
-                    Tree toInsert = this.candidates[indexToInsert].getBallots();
-                    toInsert.insert(curBallot);
-                    // Write this transfer of the ballot to the audit file
-                    String ballotRepresentation = curBallot.toString();
-                    String[] transferAnnouncement = {"Transferring ballot " + ballotRepresentation +
-                            " to candidate " + this.candidates[indexToInsert].getName()};
-                    writeToAudit(transferAnnouncement);
-                }
-            }
-        }
     }
+
+    /**
+     * Determines the candidate with a majority.
+     * @return null if no candidate has a majority, or the Candidate object that does.
+     */
     // It's a bit easier for isMajority to return the candidate that is majority
     // or null if no majority for audit file writing purposes (now called majorityCandidate)
     public Candidate majorityCandidate(){
@@ -191,6 +200,10 @@ public class IR extends Election{
 
 
     }
+
+    /**
+     * Parses the header of the input and stores election, candidate information.
+     */
     public void parseHeader() {
         // Read the first 4 lines, which is the header, of the input file
         int i;
@@ -221,6 +234,11 @@ public class IR extends Election{
                 this.numBallots + " number of ballots in this election."};
         writeToAudit(headerInformation);
     }
+
+    /**
+     * Initializes the candidates array with initialized Candidate objects.
+     * @param candidatesList a String array of candidate names and parties.
+     */
     public void initializeCandidates(String[] candidatesList) {
         String[] initializationAnnouncement = {"Commence initialization of candidate information: "};
         writeToAudit(initializationAnnouncement);
@@ -263,8 +281,7 @@ public class IR extends Election{
                     tiedCandidatesNames[i] = this.candidates[tiedCandidates.get(i)].getName() + " ";
                 }
                 writeToAudit(tiedCandidatesNames);
-
-                toEliminate = breakTie(tiedCandidates.size(), 1) - 1;
+                toEliminate = tiedCandidates.get(breakTie(tiedCandidates.size(), 1) - 1);
                 String[] tieBreakResult = {"Result of tie break: " +
                         this.candidates[toEliminate].getName()};
                 writeToAudit(tieBreakResult);
@@ -297,7 +314,6 @@ public class IR extends Election{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(winnerAnnouncement);
         // TODO: change file permissions for audit file
     }
 
