@@ -1,17 +1,22 @@
 package VotingSystem;
 
+import com.opencsv.exceptions.CsvValidationException;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import com.opencsv.*;
+import com.opencsv.exceptions.CsvValidationException;
 //import java.org.apache.commons.lang3.Objectutils;
 
 public class IR extends Election{
     private Candidate [] candidates;
     private int numBallots;
     private BufferedReader br;
+    private CSVReader csvReader;
     private int curNumCandidates;
 
     public IR(FileReader input, FileWriter audit){
@@ -34,7 +39,7 @@ public class IR extends Election{
                 }
             }
         }
-        String[] eliminatedAnnouncement = {"Candidate " + this.candidates[index].getName()
+        String[] eliminatedAnnouncement = {"\nCandidate " + this.candidates[index].getName()
                 + " has been eliminated."};
         writeToAudit(eliminatedAnnouncement);
         this.candidates[index].setEliminated(true);
@@ -60,6 +65,9 @@ public class IR extends Election{
                 String[] transferAnnouncement = {"Transferring ballot " + ballotRepresentation +
                         " to candidate " + this.candidates[index].getName()};
                 writeToAudit(transferAnnouncement);
+                if (curBallot.size() > this.candidates.length) {
+                    curBallot.remove(curBallot.size()-1);
+                }
                 toInsert.insert(curBallot);
             }
         }
@@ -73,6 +81,9 @@ public class IR extends Election{
                 ballotsMap.clear();
                 curElimCount = 0;
                 ArrayList<Integer> curBallot = ballots.get(i);
+                if (curBallot.size() > this.candidates.length) {
+                    curBallot.remove(curBallot.size()-1);
+                }
                 // Make a list of eliminated candidate ranks
                 ArrayList<Integer> eliminatedRanks = new ArrayList<>();
                 for (k = 0; k < eliminated.size(); k++) {
@@ -139,12 +150,11 @@ public class IR extends Election{
         return highestCandidate;
     }
     public void processFile(){
-
         String [] nextBallot;
         String ballotString;
-         try {
+        try {
             while ((ballotString = br.readLine()) != null) {
-                nextBallot = ballotString.split(",");
+                nextBallot = ballotString.split(",",-1);
                 writeToAudit(nextBallot);
                 ArrayList<Integer> ballot = new ArrayList<Integer>();
                 int specialIndex =-1;
@@ -156,19 +166,17 @@ public class IR extends Election{
                             specialIndex = i;
                         }
                     }
-                    ballot.add(curRank);
-                }
+                        ballot.add(curRank);
+                    }
+
                 Tree candidateTree = this.candidates[specialIndex].getBallots();
                 candidateTree.insert(ballot);
             }
-        } catch (NumberFormatException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
+        }
+        catch (NumberFormatException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
     public void printResults(){
         System.out.println("-------------------------   ELECTION RESULTS   -------------------------");
@@ -182,8 +190,8 @@ public class IR extends Election{
         }
         Candidate winner = candidatesArrayList.get(0);
         System.out.println("-----------------------------------------------------------------------\n\n");
-        System.out.println("The winner is: " + winner.getName() + " with " + winner.getNumVotes() + " votes."); 
-        System.out.printf(winner.getName() + " received " + 
+        System.out.println("The winner is: " + winner.getName() + " with " + winner.getNumVotes() + " votes.");
+        System.out.printf(winner.getName() + " received " +
         "%.2f" + "% of the votes.\n\n", (double)winner.getNumVotes() / (double)this.numBallots * 100);
 
 
@@ -202,7 +210,7 @@ public class IR extends Election{
             if (i == 1) {
                 int numCandidates = Integer.parseInt(nextRecord);
                 this.candidates = new Candidate[numCandidates];
-                this.curNumCandidates = numCandidates ;
+                this.curNumCandidates = numCandidates;
             }
             // create the candidate objects
             else if (i == 2) {
@@ -213,15 +221,24 @@ public class IR extends Election{
                 this.numBallots = Integer.parseInt(nextRecord);
             }
         }
+        String[] headerInformation = {"The header has been read. There are: " +
+                this.curNumCandidates + " candidates at the start of the election, " +
+                this.numBallots + " number of ballots in this election."};
+        writeToAudit(headerInformation);
     }
     public void initializeCandidates(String[] candidatesList) {
+        String[] initializationAnnouncement = {"Commence initialization of candidate information: "};
+        writeToAudit(initializationAnnouncement);
         int i;
         for (i = 0; i < candidatesList.length; i++) {
             candidatesList[i] = candidatesList[i].trim();
             String[] candidateInfo = candidatesList[i].split(" ");
-            Tree newTree = new Tree(i, candidatesList.length);
+            Tree newTree = new Tree(i, this.curNumCandidates);
             Candidate newCandidate = new Candidate(candidateInfo[0], candidateInfo[1], newTree);
             this.candidates[i] = newCandidate;
+            String[] candidateRecord = {"Candidate " + i + " name: " + candidateInfo[0] +
+                    " Party: " + candidateInfo[1]};
+            writeToAudit(candidateRecord);
         }
     }
     public void conductAlgorithm() {
@@ -234,10 +251,11 @@ public class IR extends Election{
             ArrayList<Integer> tiedCandidates = new ArrayList<>();
             smallestVotes = Integer.MAX_VALUE;
             for (int i = 0; i < this.candidates.length; i++) {
-                if (candidates[i].getNumVotes() < smallestVotes) {
+                if (!candidates[i].isEliminated() && candidates[i].getNumVotes() < smallestVotes) {
                     tiedCandidates.clear();
                     tiedCandidates.add(i);
-                } else if (candidates[i].getNumVotes() == smallestVotes) {
+                    smallestVotes = candidates[i].getNumVotes();
+                } else if (!candidates[i].isEliminated() && candidates[i].getNumVotes() == smallestVotes) {
                     tiedCandidates.add(i);
                 }
             }
@@ -250,7 +268,8 @@ public class IR extends Election{
                     tiedCandidatesNames[i] = this.candidates[tiedCandidates.get(i)].getName() + " ";
                 }
                 writeToAudit(tiedCandidatesNames);
-                toEliminate = breakTie(tiedCandidates.size(), 1);
+
+                toEliminate = breakTie(tiedCandidates.size(), 1) - 1;
                 String[] tieBreakResult = {"Result of tie break: " +
                         this.candidates[toEliminate].getName()};
                 writeToAudit(tieBreakResult);
@@ -283,7 +302,7 @@ public class IR extends Election{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-//        System.out.println(winnerAnnouncement);
+        System.out.println(winnerAnnouncement);
         // TODO: change file permissions for audit file
     }
 

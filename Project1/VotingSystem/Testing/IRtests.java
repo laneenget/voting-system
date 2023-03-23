@@ -33,6 +33,11 @@ public class IRtests {
     IR irEliminate2;
     IR irConductAlgorithm1;
     IR irConductAlgorithm2;
+    IR irConductAlgorithm3;
+    IR irConductAlgorithm4;
+    IR irConductAlgorithm5;
+    IR irConductAlgorithm6;
+    IR irConductAlgorithm7;
 
     @Before
     public void setUp() throws IOException {
@@ -105,12 +110,13 @@ public class IRtests {
         irEliminate2.getCandidates()[2].setEliminated(true);
         irEliminate2.getCandidates()[4].setEliminated(true);
         irEliminate2.eliminateCandidate(0);
-
-        FileReader conductAlgorithm2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRConductAlgorithm2.csv");
-        irConductAlgorithm2 = new IR(conductAlgorithm2Input, null);
-        irConductAlgorithm2.parseHeader();
-        irConductAlgorithm2.processFile();
-        irConductAlgorithm2.conductAlgorithm();
+//
+//        FileReader conductAlgorithm2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRConductAlgorithm2.csv");
+//        FileWriter conductAlgorithm2Audit = new FileWriter("Project1/VotingSystem/Testing/IRTestsResources/Audit_IRConductAlgorithm2.txt");
+//        irConductAlgorithm2 = new IR(conductAlgorithm2Input, conductAlgorithm2Audit);
+//        irConductAlgorithm2.parseHeader();
+//        irConductAlgorithm2.processFile();
+//        irConductAlgorithm2.conductAlgorithm();
     }
 
     @Test
@@ -339,7 +345,6 @@ public class IRtests {
         // Test where there are no ties -- there is no immediate majority
         // A candidate must be eliminated to determine the winner
         // Simple election with 3 candidates -- Candidate B wins
-        // TODO: This can also just be a placeholder for a manual test
         // Candidate A: [1,0,0] [1,2,3] [1,3,2]
         // Candidate B: [0,1,2] [2,1,3] [0,1,0] [0,1,2]
         // Candidate C: [0,2,1] [0,2,1]
@@ -347,13 +352,33 @@ public class IRtests {
         // Candidate A: [1,0,0] [1,2,3] [1,3,2]
         // Candidate B: [0,1,2] [2,1,3] [0,1,0] [0,1,2] [0,0,1] [0,0,1]
         // Candidate B has 6/9 votes ---> has majority ---> wins
+
+        FileReader conductAlgorithm2Input = null;
+        try {
+            conductAlgorithm2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRConductAlgorithm2.csv");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        FileWriter conductAlgorithm2Audit = null;
+        try {
+            conductAlgorithm2Audit = new FileWriter("Project1/VotingSystem/Testing/IRTestsResources/Audit_IRConductAlgorithm2.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        irConductAlgorithm2 = new IR(conductAlgorithm2Input, conductAlgorithm2Audit);
+        irConductAlgorithm2.parseHeader();
+        irConductAlgorithm2.processFile();
+        irConductAlgorithm2.conductAlgorithm();
     }
 
     @Test
     public void test_conductAlgorithm_3() {
-        // Test where there is one tie
+        // NOTE: This test ONLY works while in development
+        // As we need to change the breakTie method to return a predetermined number
+        // In order to predict exactly who the winner will be every time this test is run.
+        // Test where there is one tie,
         // For purposes of testing, the first candidate in the tied list will be eliminated
-
+        // Candidate A: [
     }
 
     @Test
@@ -364,7 +389,33 @@ public class IRtests {
 
     @Test
     public void test_conductAlgorithm_5() {
-        // Test a slightly larger election where there are multiple ties,
+        // Test where POPULARITY decides the winner
     }
+    @Test
+    public void test_conductAlgorithm_6() {
+        // Test a slightly larger election where there are multiple ties, and multiple eliminations
+    }
+
+    @Test
+    public void test_conductAlgorithm_7() {
+        // test ballots.csv
+        FileReader conductAlgorithm7Input = null;
+        try {
+            conductAlgorithm7Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/ballots.csv");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        FileWriter conductAlgorithm7Audit = null;
+        try {
+            conductAlgorithm7Audit = new FileWriter("Project1/VotingSystem/Testing/IRTestsResources/Audit_IRConductAlgorithm7.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        irConductAlgorithm7 = new IR(conductAlgorithm7Input, conductAlgorithm7Audit);
+        irConductAlgorithm7.parseHeader();
+        irConductAlgorithm7.processFile();
+        irConductAlgorithm7.conductAlgorithm();
+    }
+
 
 }
