@@ -99,13 +99,18 @@ public class IR extends Election{
         int j;
         int k;
         int curElimCount;
+        ArrayList<Integer> curBallot;
         // Loop over the ballots
         for (i = 0; i < ballots.size(); i++) {
             ballotsMap.clear();
             curElimCount = 0;
-            ArrayList<Integer> curBallot = ballots.get(i);
+            curBallot = new ArrayList<Integer>();
+            curBallot = ballots.get(i);
             if (curBallot.size() > this.candidates.length) {
-                curBallot.remove(curBallot.size()-1);
+               curBallot.remove(curBallot.size()-1);
+            }
+            else if(curBallot.size() < this.candidates.length) {
+                throw (new IllegalArgumentException("Ballot is not of the correct length, length = " + curBallot.size()));
             }
             // Make a list of eliminated candidate ranks
             ArrayList<Integer> eliminatedRanks = new ArrayList<>();

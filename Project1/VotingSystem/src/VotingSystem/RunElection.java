@@ -36,7 +36,7 @@ public class RunElection {
                 validFile = false;
                 promptUser("Error, File not found" + 
                     "\nPlease ensure the file is in the same directory as the program\n" +
-                    "The expected input is filename.csv, please try again");
+                    "The expected input is filename.csv, please try again\n");
                 filename = null;
             }
         }
@@ -57,7 +57,7 @@ public class RunElection {
             runCPL();
         }
         else{
-            promptUser("FILE READ ERROR");
+            promptUser("FILE READ ERROR\n");
             return;
         }
 
@@ -67,7 +67,7 @@ public class RunElection {
         this.filename = filename;
     }
     public void promptUser(String prompt){
-        System.out.println(prompt);
+        System.out.printf(prompt);
     }
     public String generateAuditFileName(String elecType){
         Date d1 = new Date();
