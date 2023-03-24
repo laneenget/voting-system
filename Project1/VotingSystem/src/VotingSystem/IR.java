@@ -208,6 +208,8 @@ public class IR extends Election{
     }
     public void printResults(){
         System.out.println("-------------------------   ELECTION RESULTS   -------------------------");
+        System.out.println("Total number of ballots: " + this.numBallots);
+        System.out.println("Final Vote Totals after candidate elimination and ballot transfers:");
         Arrays.sort(candidates, Comparator.comparingInt(Candidate::getNumVotes).reversed());
         for(Candidate c : candidates){
             System.out.println(c.getName() + ": " + c.getNumVotes());

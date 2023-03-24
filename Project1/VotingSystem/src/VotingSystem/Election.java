@@ -2,7 +2,7 @@ package VotingSystem;
 
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.Random;
+import java.util.SecureRandom;
 
 
 public abstract class Election {
@@ -10,11 +10,20 @@ public abstract class Election {
     protected FileReader input;
 
     abstract public void processFile();
-    public int breakTie(int numCandidates, int numToEliminate){
-        // with just 2 ppl
-        Random random = new Random();
-        int eliminated;
-        eliminated = random.nextInt(2) + 1;
+    public int [] breakTie(ArrayList<Integer> candidates, int numToEliminate){
+        if(candidates.size() <= numToEliminate){
+            Throw(new Exception("Error, not enough candidates to eliminate"));
+            return candidates;
+        }
+        int[] eliminated = new int[numToEliminate];
+        int n = numToEliminate;
+        while(n > 0){
+            SecureRandom rand = new SecureRandom();
+            int index = rand.nextInt(candidates.size());
+            eliminated[n - 1] = candidates.get(index);
+            candidates.remove(index);
+            n--;
+        }
         return eliminated;
     }
     abstract public void conductAlgorithm();
