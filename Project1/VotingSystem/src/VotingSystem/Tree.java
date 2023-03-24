@@ -58,9 +58,6 @@ public class Tree {
             hold = nodes.get(i);
             int size2 = hold.size();
             int count = hold.get(size2 - 1);
-            if(hold.size() > numCandidates){
-                hold.remove(size2 - 1);
-            }
             temp = new ArrayList<Integer>();
             for(int k = 0; k < size2 - 1; k++){
                 temp.add(hold.get(k) - 1);
@@ -77,7 +74,8 @@ public class Tree {
 
     }
     public void insert(ArrayList<Integer> ballot){
-        Node hold = root;
+        Node hold = new Node();
+        hold = root;
         hold.curDepth = 0;
         hold.numVotes += 1;
         int index = 0;
