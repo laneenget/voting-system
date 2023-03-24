@@ -1,5 +1,6 @@
-package Testing;
+package Testing.IRTestsResources;
 
+import java.net.URL;
 import java.io.*;
 import java.nio.Buffer;
 import java.util.ArrayList;
@@ -34,94 +35,94 @@ public class IRtests {
 
     @Before
     public void setUp() throws IOException {
-        runElection = new RunElection("test.txt");
+        // runElection = new RunElection("test.txt");
 
-        FileReader input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRHeader1.csv");
-        BufferedReader brIR = new BufferedReader(input);
-        brIR.readLine();
-        ir = new IR(input, null, brIR);
-        ir.parseHeader();
+        // FileReader input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRHeader1.csv");
+        // BufferedReader brIR = new BufferedReader(input);
+        // brIR.readLine();
+        // ir = new IR(input, null, brIR);
+        // ir.parseHeader();
 
-        irInitialize = new IR(input, null, brIR);
-        irInitialize.setCandidates(new Candidate[4]);
-        irInitialize.initializeCandidates(candidateNames);
+        // irInitialize = new IR(input, null, brIR);
+        // irInitialize.setCandidates(new Candidate[4]);
+        // irInitialize.initializeCandidates(candidateNames);
 
-        FileReader majority1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority1.csv");
-        // Candidate A ballots : [1, 0]  [1, 2]  [1, 2]  [1, 0]
-        // Candidate B ballots:  [2, 1]  [0, 1]
-        BufferedReader brMajority1Input = new BufferedReader(majority1Input);
-        brMajority1Input.readLine();
-        irMajority1 = new IR(majority1Input, null, brMajority1Input);
-        irMajority1.parseHeader();
-        irMajority1.processFile();
+        // FileReader majority1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority1.csv");
+        // // Candidate A ballots : [1, 0]  [1, 2]  [1, 2]  [1, 0]
+        // // Candidate B ballots:  [2, 1]  [0, 1]
+        // BufferedReader brMajority1Input = new BufferedReader(majority1Input);
+        // brMajority1Input.readLine();
+        // irMajority1 = new IR(majority1Input, null, brMajority1Input);
+        // irMajority1.parseHeader();
+        // irMajority1.processFile();
 
-        FileReader majority2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority2.csv");
-        // Inserted ballots for Candidate A: [1, 0]  [1, 2]
-        // Inserted ballots for Candidate B: [2, 1]  [0, 1]
-        BufferedReader brMajority2Input = new BufferedReader(majority2Input);
-        brMajority2Input.readLine();
-        irMajority2 = new IR(majority2Input, null, brMajority2Input);
-        irMajority2.parseHeader();
-        irMajority2.processFile();
+        // FileReader majority2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority2.csv");
+        // // Inserted ballots for Candidate A: [1, 0]  [1, 2]
+        // // Inserted ballots for Candidate B: [2, 1]  [0, 1]
+        // BufferedReader brMajority2Input = new BufferedReader(majority2Input);
+        // brMajority2Input.readLine();
+        // irMajority2 = new IR(majority2Input, null, brMajority2Input);
+        // irMajority2.parseHeader();
+        // irMajority2.processFile();
 
-        FileReader majority3Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority3.csv");
-        // Inserted ballots for Candidate A: [1, 0, 0]  [1, 2, 3]
-        // Inserted ballots for Candidate B: [2, 1, 3]  [3, 1, 2]
-        // Inserted ballots for Candidate C: [3, 2, 1]  [2, 3, 1]   [0, 0, 1]   [2, 0, 1]
-        BufferedReader brMajority3Input = new BufferedReader(majority3Input);
-        brMajority3Input.readLine();
-        irMajority3 = new IR(majority3Input, null, brMajority3Input);
-        irMajority3.parseHeader();
-        irMajority3.processFile();
+        // FileReader majority3Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority3.csv");
+        // // Inserted ballots for Candidate A: [1, 0, 0]  [1, 2, 3]
+        // // Inserted ballots for Candidate B: [2, 1, 3]  [3, 1, 2]
+        // // Inserted ballots for Candidate C: [3, 2, 1]  [2, 3, 1]   [0, 0, 1]   [2, 0, 1]
+        // BufferedReader brMajority3Input = new BufferedReader(majority3Input);
+        // brMajority3Input.readLine();
+        // irMajority3 = new IR(majority3Input, null, brMajority3Input);
+        // irMajority3.parseHeader();
+        // irMajority3.processFile();
 
-        FileReader reassignNoneEliminated1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassignNoneEliminated1.csv");
-        // Candidate A ballots: [1, 0]  [1, 2]  [1, 2]  [1, 0]
-        // Candidate B ballots: [2, 1]  [0, 1]
-        BufferedReader brReassignNoneEliminated1Input = new BufferedReader(reassignNoneEliminated1Input);
-        brReassignNoneEliminated1Input.readLine();
-        FileWriter reassignNoneEliminated1Audit = new FileWriter("Audit_IRReassignNoneEliminated1.txt");
-        irReassignNoneEliminated1 = new IR(reassignNoneEliminated1Input, reassignNoneEliminated1Audit, brReassignNoneEliminated1Input);
-        irReassignNoneEliminated1.parseHeader();
-        irReassignNoneEliminated1.processFile();
+        // FileReader reassignNoneEliminated1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassignNoneEliminated1.csv");
+        // // Candidate A ballots: [1, 0]  [1, 2]  [1, 2]  [1, 0]
+        // // Candidate B ballots: [2, 1]  [0, 1]
+        // BufferedReader brReassignNoneEliminated1Input = new BufferedReader(reassignNoneEliminated1Input);
+        // brReassignNoneEliminated1Input.readLine();
+        // FileWriter reassignNoneEliminated1Audit = new FileWriter("Audit_IRReassignNoneEliminated1.txt");
+        // irReassignNoneEliminated1 = new IR(reassignNoneEliminated1Input, reassignNoneEliminated1Audit, brReassignNoneEliminated1Input);
+        // irReassignNoneEliminated1.parseHeader();
+        // irReassignNoneEliminated1.processFile();
 
-        FileReader reassign1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign1.csv");
-        // Candidate A ballots: [1,2,3]  [1,0,2]  [1,3,2]  [1,0,0]
-        // Candidate B ballots: [0,1,0]  [0,1,2]  [2,1,3]  [3,1,2]
-        // Candidate C ballots: [0,0,1]  [2,3,1]  [2,0,1]  [3,0,1]
-        BufferedReader brReassign1Input = new BufferedReader(reassign1Input);
-        brReassign1Input.readLine();
-        irReassign1 = new IR(reassign1Input, null, brReassign1Input);
-        irReassign1.parseHeader();
-        irReassign1.processFile();
+        // FileReader reassign1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign1.csv");
+        // // Candidate A ballots: [1,2,3]  [1,0,2]  [1,3,2]  [1,0,0]
+        // // Candidate B ballots: [0,1,0]  [0,1,2]  [2,1,3]  [3,1,2]
+        // // Candidate C ballots: [0,0,1]  [2,3,1]  [2,0,1]  [3,0,1]
+        // BufferedReader brReassign1Input = new BufferedReader(reassign1Input);
+        // brReassign1Input.readLine();
+        // irReassign1 = new IR(reassign1Input, null, brReassign1Input);
+        // irReassign1.parseHeader();
+        // irReassign1.processFile();
 
-        FileReader eliminate1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate1.csv");
-        // Same as reassign2Input
-        BufferedReader brEliminate1Input = new BufferedReader(eliminate1Input);
-        brEliminate1Input.readLine();
-        irEliminate1 = new IR(eliminate1Input, null, brEliminate1Input);
-        irEliminate1.parseHeader();
-        irEliminate1.processFile();
-        irEliminate1.eliminateCandidate(0);
-        irEliminate1.eliminateCandidate(1);
+        // FileReader eliminate1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate1.csv");
+        // // Same as reassign2Input
+        // BufferedReader brEliminate1Input = new BufferedReader(eliminate1Input);
+        // brEliminate1Input.readLine();
+        // irEliminate1 = new IR(eliminate1Input, null, brEliminate1Input);
+        // irEliminate1.parseHeader();
+        // irEliminate1.processFile();
+        // irEliminate1.eliminateCandidate(0);
+        // irEliminate1.eliminateCandidate(1);
 
-        FileReader reassign2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign2.csv");
-        BufferedReader brReassign2Input = new BufferedReader(reassign2Input);
-        brReassign2Input.readLine();
-        irReassign2 = new IR(reassign2Input, null, brReassign2Input);
-        irReassign2.parseHeader();
-        irReassign2.processFile();
-        irReassign2.getCandidates()[2].setEliminated(true);
-        irReassign2.getCandidates()[4].setEliminated(true);
+        // FileReader reassign2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign2.csv");
+        // BufferedReader brReassign2Input = new BufferedReader(reassign2Input);
+        // brReassign2Input.readLine();
+        // irReassign2 = new IR(reassign2Input, null, brReassign2Input);
+        // irReassign2.parseHeader();
+        // irReassign2.processFile();
+        // irReassign2.getCandidates()[2].setEliminated(true);
+        // irReassign2.getCandidates()[4].setEliminated(true);
 
-        FileReader eliminate2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate2.csv");
-        BufferedReader brEliminate2Input = new BufferedReader(eliminate2Input);
-        brEliminate2Input.readLine();
-        irEliminate2 = new IR(eliminate2Input, null, brEliminate2Input);
-        irEliminate2.parseHeader();
-        irEliminate2.processFile();
-        irEliminate2.getCandidates()[2].setEliminated(true);
-        irEliminate2.getCandidates()[4].setEliminated(true);
-        irEliminate2.eliminateCandidate(0);
+        // FileReader eliminate2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate2.csv");
+        // BufferedReader brEliminate2Input = new BufferedReader(eliminate2Input);
+        // brEliminate2Input.readLine();
+        // irEliminate2 = new IR(eliminate2Input, null, brEliminate2Input);
+        // irEliminate2.parseHeader();
+        // irEliminate2.processFile();
+        // irEliminate2.getCandidates()[2].setEliminated(true);
+        // irEliminate2.getCandidates()[4].setEliminated(true);
+        // irEliminate2.eliminateCandidate(0);
     }
 
     @Test
@@ -489,16 +490,16 @@ public class IRtests {
         // test ballots.csv
         FileReader conductAlgorithm6Input = null;
         try {
-            conductAlgorithm6Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/ballots.csv");
+            conductAlgorithm6Input = new FileReader((IRtests.class.getResource("ballots.csv")).getFile());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
         FileWriter conductAlgorithm6Audit = null;
-        try {
-            conductAlgorithm6Audit = new FileWriter("Project1/VotingSystem/Testing/IRTestsResources/Audit_IRConductAlgorithm6.txt");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        // try {
+        //     conductAlgorithm6Audit = new FileWriter("Project1/VotingSystem/Testing/IRTestsResources/Audit_IRConductAlgorithm6.txt");
+        // } catch (IOException e) {
+        //     throw new RuntimeException(e);
+        // }
         BufferedReader brConductAlgorithm6Input = new BufferedReader(conductAlgorithm6Input);
         brConductAlgorithm6Input.readLine();
         irConductAlgorithm6 = new IR(conductAlgorithm6Input, conductAlgorithm6Audit, brConductAlgorithm6Input);

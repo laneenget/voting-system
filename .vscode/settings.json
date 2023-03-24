@@ -1,6 +1,12 @@
 {
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "c:\\Users\\haakj\\Downloads\\opencsv-5.7.1.jar"
-    ]
+    "java.project.referencedLibraries": {
+        "include": [
+            "lib/**/*.jar",
+            "c:\\Users\\haakj\\Downloads\\opencsv-5.7.1.jar",
+            "test-lib\\**\\*.jar"
+        ],
+        "exclude": [
+            "lib/junit-4.13.2.jar"
+        ]
+    }
 }
