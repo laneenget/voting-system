@@ -32,7 +32,7 @@ public class RunElection {
                 URL path = RunElection.class.getResource(filename);
                 File f = new File(path.getFile());
                 input = new FileReader(f);
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
                 validFile = false;
                 promptUser("Error, File not found" + 
                     "\nPlease ensure the file is in the same directory as the program\n" +

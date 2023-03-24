@@ -11,12 +11,11 @@ public abstract class Election {
 
     abstract public void processFile();
     public int breakTie(int numCandidates, int numToEliminate){
-//        // with just 2 ppl
-//        Random random = new Random();
-//        int eliminated;
-//        eliminated = random.nextInt(2) + 1;
-//        return eliminated;
-        return 1;
+        // with just 2 ppl
+        Random random = new Random();
+        int eliminated;
+        eliminated = random.nextInt(2) + 1;
+        return eliminated;
     }
     abstract public void conductAlgorithm();
     abstract public void printResults();
