@@ -2,7 +2,8 @@ package VotingSystem;
 
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.SecureRandom;
+import java.util.ArrayList;
+import java.security.SecureRandom;
 
 
 public abstract class Election {
@@ -12,8 +13,9 @@ public abstract class Election {
     abstract public void processFile();
     public int [] breakTie(ArrayList<Integer> candidates, int numToEliminate){
         if(candidates.size() <= numToEliminate){
-            Throw(new Exception("Error, not enough candidates to eliminate"));
-            return candidates;
+            return candidates.stream()
+                    .mapToInt(Integer::intValue)
+                    .toArray();
         }
         int[] eliminated = new int[numToEliminate];
         int n = numToEliminate;

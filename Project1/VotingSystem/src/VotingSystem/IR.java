@@ -311,7 +311,7 @@ public class IR extends Election{
                     tiedCandidatesNames[i] = this.candidates[tiedCandidates.get(i)].getName() + " ";
                 }
                 writeToAudit(tiedCandidatesNames);
-                toEliminate = tiedCandidates.get(breakTie(tiedCandidates.size(), 1) - 1);
+                toEliminate = tiedCandidates.get(breakTie(tiedCandidates, 1)[0]);
                 String[] tieBreakResult = {"Result of tie break: " +
                         this.candidates[toEliminate].getName()};
                 writeToAudit(tieBreakResult);
