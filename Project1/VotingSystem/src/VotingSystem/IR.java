@@ -6,7 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.Comparator;
+import java.util.Arrays;
 public class IR extends Election{
     private Candidate [] candidates;
     private int numBallots;
@@ -207,19 +208,15 @@ public class IR extends Election{
     }
     public void printResults(){
         System.out.println("-------------------------   ELECTION RESULTS   -------------------------");
-        ArrayList<Candidate> candidatesArrayList = new ArrayList<Candidate>();
-        for(int i = 0; i < this.candidates.length; i++){
-            candidatesArrayList.add(this.candidates[i]);
+        Arrays.sort(candidates, Comparator.comparingInt(Candidate::getNumVotes).reversed());
+        for(Candidate c : candidates){
+            System.out.println(c.getName() + ": " + c.getNumVotes());
         }
-        candidatesArrayList.sort(null);
-        for(int i = 0; i < candidatesArrayList.size(); i++){
-            System.out.println(candidatesArrayList.get(i).getName() + ": " + candidatesArrayList.get(i).getNumVotes());
-        }
-        Candidate winner = candidatesArrayList.get(0);
+        Candidate winner = candidates[0];
         System.out.println("-----------------------------------------------------------------------\n\n");
         System.out.println("The winner is: " + winner.getName() + " with " + winner.getNumVotes() + " votes.");
-        System.out.printf(winner.getName() + " received " +
-        "%.2f" + "% of the votes.\n\n", (double)winner.getNumVotes() / (double)this.numBallots * 100);
+        System.out.printf("%s received %.2f%% of the votes.\n\n", winner.getName(), (double)winner.getNumVotes() / (double)this.numBallots * 100);
+
 
 
     }

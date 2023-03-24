@@ -19,7 +19,6 @@ public class RunElection {
     private BufferedReader br;
 
     public void start(){
-        System.out.println("Do stuff");
         boolean validFile = false;
         while (!validFile) {
             validFile = true;
@@ -28,7 +27,6 @@ public class RunElection {
                 Scanner sc = new Scanner(System.in);
 
                 filename = sc.nextLine();
-                System.out.println(filename);
             }
             try {
                 URL path = RunElection.class.getResource(filename);
