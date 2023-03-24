@@ -1,9 +1,7 @@
 package Testing;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.Buffer;
 import java.util.ArrayList;
 
 import VotingSystem.*;
@@ -39,24 +37,30 @@ public class IRtests {
         runElection = new RunElection("test.txt");
 
         FileReader input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRHeader1.csv");
-        ir = new IR(input, null);
+        BufferedReader brIR = new BufferedReader(input);
+        brIR.readLine();
+        ir = new IR(input, null, brIR);
         ir.parseHeader();
 
-        irInitialize = new IR(input, null);
+        irInitialize = new IR(input, null, brIR);
         irInitialize.setCandidates(new Candidate[4]);
         irInitialize.initializeCandidates(candidateNames);
 
         FileReader majority1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority1.csv");
         // Candidate A ballots : [1, 0]  [1, 2]  [1, 2]  [1, 0]
         // Candidate B ballots:  [2, 1]  [0, 1]
-        irMajority1 = new IR(majority1Input, null);
+        BufferedReader brMajority1Input = new BufferedReader(majority1Input);
+        brMajority1Input.readLine();
+        irMajority1 = new IR(majority1Input, null, brMajority1Input);
         irMajority1.parseHeader();
         irMajority1.processFile();
 
         FileReader majority2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority2.csv");
         // Inserted ballots for Candidate A: [1, 0]  [1, 2]
         // Inserted ballots for Candidate B: [2, 1]  [0, 1]
-        irMajority2 = new IR(majority2Input, null);
+        BufferedReader brMajority2Input = new BufferedReader(majority2Input);
+        brMajority2Input.readLine();
+        irMajority2 = new IR(majority2Input, null, brMajority2Input);
         irMajority2.parseHeader();
         irMajority2.processFile();
 
@@ -64,15 +68,19 @@ public class IRtests {
         // Inserted ballots for Candidate A: [1, 0, 0]  [1, 2, 3]
         // Inserted ballots for Candidate B: [2, 1, 3]  [3, 1, 2]
         // Inserted ballots for Candidate C: [3, 2, 1]  [2, 3, 1]   [0, 0, 1]   [2, 0, 1]
-        irMajority3 = new IR(majority3Input, null);
+        BufferedReader brMajority3Input = new BufferedReader(majority3Input);
+        brMajority3Input.readLine();
+        irMajority3 = new IR(majority3Input, null, brMajority3Input);
         irMajority3.parseHeader();
         irMajority3.processFile();
 
         FileReader reassignNoneEliminated1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassignNoneEliminated1.csv");
         // Candidate A ballots: [1, 0]  [1, 2]  [1, 2]  [1, 0]
         // Candidate B ballots: [2, 1]  [0, 1]
+        BufferedReader brReassignNoneEliminated1Input = new BufferedReader(reassignNoneEliminated1Input);
+        brReassignNoneEliminated1Input.readLine();
         FileWriter reassignNoneEliminated1Audit = new FileWriter("Audit_IRReassignNoneEliminated1.txt");
-        irReassignNoneEliminated1 = new IR(reassignNoneEliminated1Input, reassignNoneEliminated1Audit);
+        irReassignNoneEliminated1 = new IR(reassignNoneEliminated1Input, reassignNoneEliminated1Audit, brReassignNoneEliminated1Input);
         irReassignNoneEliminated1.parseHeader();
         irReassignNoneEliminated1.processFile();
 
@@ -80,27 +88,35 @@ public class IRtests {
         // Candidate A ballots: [1,2,3]  [1,0,2]  [1,3,2]  [1,0,0]
         // Candidate B ballots: [0,1,0]  [0,1,2]  [2,1,3]  [3,1,2]
         // Candidate C ballots: [0,0,1]  [2,3,1]  [2,0,1]  [3,0,1]
-        irReassign1 = new IR(reassign1Input, null);
+        BufferedReader brReassign1Input = new BufferedReader(reassign1Input);
+        brReassign1Input.readLine();
+        irReassign1 = new IR(reassign1Input, null, brReassign1Input);
         irReassign1.parseHeader();
         irReassign1.processFile();
 
         FileReader eliminate1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate1.csv");
         // Same as reassign2Input
-        irEliminate1 = new IR(eliminate1Input, null);
+        BufferedReader brEliminate1Input = new BufferedReader(eliminate1Input);
+        brEliminate1Input.readLine();
+        irEliminate1 = new IR(eliminate1Input, null, brEliminate1Input);
         irEliminate1.parseHeader();
         irEliminate1.processFile();
         irEliminate1.eliminateCandidate(0);
         irEliminate1.eliminateCandidate(1);
 
         FileReader reassign2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign2.csv");
-        irReassign2 = new IR(reassign2Input, null);
+        BufferedReader brReassign2Input = new BufferedReader(reassign2Input);
+        brReassign2Input.readLine();
+        irReassign2 = new IR(reassign2Input, null, brReassign2Input);
         irReassign2.parseHeader();
         irReassign2.processFile();
         irReassign2.getCandidates()[2].setEliminated(true);
         irReassign2.getCandidates()[4].setEliminated(true);
 
         FileReader eliminate2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate2.csv");
-        irEliminate2 = new IR(eliminate2Input, null);
+        BufferedReader brEliminate2Input = new BufferedReader(eliminate2Input);
+        brEliminate2Input.readLine();
+        irEliminate2 = new IR(eliminate2Input, null, brEliminate2Input);
         irEliminate2.parseHeader();
         irEliminate2.processFile();
         irEliminate2.getCandidates()[2].setEliminated(true);
@@ -312,7 +328,7 @@ public class IRtests {
     }
 
    @Test
-   public void test_conductAlgorithm_1() {
+   public void test_conductAlgorithm_1() throws IOException {
         // Simple case where there are 2 candidates
         // Candidate A has 2 votes, Candidate B has 0 votes -- Candidate A wins
         // TODO: Maybe this test can simply look at the output of the audit file
@@ -328,13 +344,15 @@ public class IRtests {
        } catch (IOException e) {
            throw new RuntimeException(e);
        }
-       irConductAlgorithm1 = new IR(conductAlgorithm1Input, conductAlgorithm1Audit);
+       BufferedReader brConductAlgorithm1Input = new BufferedReader(conductAlgorithm1Input);
+       brConductAlgorithm1Input.readLine();
+       irConductAlgorithm1 = new IR(conductAlgorithm1Input, conductAlgorithm1Audit, brConductAlgorithm1Input);
        irConductAlgorithm1.parseHeader();
        irConductAlgorithm1.processFile();
        irConductAlgorithm1.conductAlgorithm();
    }
     @Test
-    public void test_conductAlgorithm_2() {
+    public void test_conductAlgorithm_2() throws IOException {
         // Test where there are no ties -- there is no immediate majority
         // A candidate must be eliminated to determine the winner
         // Simple election with 3 candidates -- Candidate B wins
@@ -358,14 +376,16 @@ public class IRtests {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        irConductAlgorithm2 = new IR(conductAlgorithm2Input, conductAlgorithm2Audit);
+        BufferedReader brConductAlgorithm2Input = new BufferedReader(conductAlgorithm2Input);
+        brConductAlgorithm2Input.readLine();
+        irConductAlgorithm2 = new IR(conductAlgorithm2Input, conductAlgorithm2Audit, brConductAlgorithm2Input);
         irConductAlgorithm2.parseHeader();
         irConductAlgorithm2.processFile();
         irConductAlgorithm2.conductAlgorithm();
     }
 
     @Test
-    public void test_conductAlgorithm_3() {
+    public void test_conductAlgorithm_3() throws IOException {
         // NOTE: This test ONLY works while in development
         // As we need to change the breakTie method to return a predetermined number
         // In order to predict exactly who the winner will be every time this test is run.
@@ -390,14 +410,16 @@ public class IRtests {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        irConductAlgorithm3 = new IR(conductAlgorithm3Input, conductAlgorithm3Audit);
+        BufferedReader brConductAlgorithm3Input = new BufferedReader(conductAlgorithm3Input);
+        brConductAlgorithm3Input.readLine();
+        irConductAlgorithm3 = new IR(conductAlgorithm3Input, conductAlgorithm3Audit, brConductAlgorithm3Input);
         irConductAlgorithm3.parseHeader();
         irConductAlgorithm3.processFile();
         irConductAlgorithm3.conductAlgorithm();
     }
 
     @Test
-    public void test_conductAlgorithm_4() {
+    public void test_conductAlgorithm_4() throws IOException {
         // Test where there are multiple ties for elimination
         // First, tie between B & C & D -> B Eliminated
         // Next, tie between C & D -> C Eliminated
@@ -428,14 +450,16 @@ public class IRtests {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        irConductAlgorithm4 = new IR(conductAlgorithm4Input, conductAlgorithm4Audit);
+        BufferedReader brConductAlgorithm4Input = new BufferedReader(conductAlgorithm4Input);
+        brConductAlgorithm4Input.readLine();
+        irConductAlgorithm4 = new IR(conductAlgorithm4Input, conductAlgorithm4Audit, brConductAlgorithm4Input);
         irConductAlgorithm4.parseHeader();
         irConductAlgorithm4.processFile();
         irConductAlgorithm4.conductAlgorithm();
     }
 
     @Test
-    public void test_conductAlgorithm_5() {
+    public void test_conductAlgorithm_5() throws IOException {
         // Test where POPULARITY decides the winner
         // Candidate A: [1,2] [1,0] [1,2]
         // Candidate B: [2,1] [2,1]
@@ -452,14 +476,16 @@ public class IRtests {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        irConductAlgorithm5 = new IR(conductAlgorithm5Input, conductAlgorithm5Audit);
+        BufferedReader brConductAlgorithm5Input = new BufferedReader(conductAlgorithm5Input);
+        brConductAlgorithm5Input.readLine();
+        irConductAlgorithm5 = new IR(conductAlgorithm5Input, conductAlgorithm5Audit, brConductAlgorithm5Input);
         irConductAlgorithm5.parseHeader();
         irConductAlgorithm5.processFile();
         irConductAlgorithm5.conductAlgorithm();
     }
 
     @Test
-    public void test_conductAlgorithm_6() {
+    public void test_conductAlgorithm_6() throws IOException {
         // test ballots.csv
         FileReader conductAlgorithm6Input = null;
         try {
@@ -473,7 +499,9 @@ public class IRtests {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        irConductAlgorithm6 = new IR(conductAlgorithm6Input, conductAlgorithm6Audit);
+        BufferedReader brConductAlgorithm6Input = new BufferedReader(conductAlgorithm6Input);
+        brConductAlgorithm6Input.readLine();
+        irConductAlgorithm6 = new IR(conductAlgorithm6Input, conductAlgorithm6Audit, brConductAlgorithm6Input);
         irConductAlgorithm6.parseHeader();
         irConductAlgorithm6.processFile();
         irConductAlgorithm6.conductAlgorithm();
