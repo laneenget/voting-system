@@ -19,11 +19,12 @@ public abstract class Election {
         }
         int[] eliminated = new int[numToEliminate];
         int n = numToEliminate;
+        ArrayList<Integer> c = new ArrayList<Integer>(candidates);
         while(n > 0){
             SecureRandom rand = new SecureRandom();
-            int index = rand.nextInt(candidates.size());
-            eliminated[n - 1] = candidates.get(index);
-            candidates.remove(index);
+            int index = rand.nextInt(c.size());
+            eliminated[n - 1] = c.get(index);
+            c.remove(index);
             n--;
         }
         return eliminated;
