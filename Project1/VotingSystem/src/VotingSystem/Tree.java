@@ -102,8 +102,7 @@ public class Tree {
         }
 
         if(hold.ballot == null){
-            hold.ballot = new ArrayList<Integer>();
-            hold.ballot = ballot;
+            hold.ballot = new ArrayList<Integer>(ballot);
 
             hold.ballot.add(1);
 

@@ -2,14 +2,12 @@ package VotingSystem;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
-
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class RunElection {
@@ -70,8 +68,9 @@ public class RunElection {
         System.out.printf(prompt);
     }
     public String generateAuditFileName(String elecType){
-        Date d1 = new Date();
-        String d2 = "dummy";
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String d2 = now.format(f);
         return elecType + d2 + ".txt";
     }
     public String parseElectType(){
