@@ -78,7 +78,7 @@ public class RunElection {
     }
     public String parseElectType(){
         String line = "";
-        BufferedReader br = new BufferedReader(input);
+        this.br = new BufferedReader(input);
         try {
             line = br.readLine();
         } catch (IOException e) {
@@ -89,7 +89,7 @@ public class RunElection {
 
     }
     public void runIR(){
-        IR Election = new IR(input, audit);
+        IR Election = new IR(input, audit, br);
         Election.parseHeader();
         Election.processFile();
         Election.conductAlgorithm();

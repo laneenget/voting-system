@@ -13,11 +13,21 @@ public class IR extends Election{
     private BufferedReader br;
     private int curNumCandidates;
 
-    public IR(FileReader input, FileWriter audit){
+    /**
+     * This is the constructor for IR.
+     * @param input A FileReader that represents the election input file to process
+     * @param audit A FileWriter that represents the audit file to write to
+     */
+    public IR(FileReader input, FileWriter audit, BufferedReader br){
         super.input = input;
         super.audit = audit;
-        this.br = new BufferedReader(input);
+        this.br = br;
     }
+
+    /**
+     * Eliminates a single candidate and handles the distribution of ballots from the eliminated candidate.
+     * @param index an int that represents the index of the candidate to eliminate.
+     */
     public void eliminateCandidate(int index){
         int i;
         Tree eliminatedTree = this.candidates[index].getBallots();
@@ -52,11 +62,20 @@ public class IR extends Election{
         this.candidates[index].setEliminated(true);
         this.curNumCandidates -= 1;
     }
+
+    /**
+     * Handles reassignment of votes when no candidate has been eliminated thus far in the election.
+     * @param ballots an ArrayList<ArrayList<Integer>> of ballots to insert.
+     * @param index an int that represents the index of the candidate to transfer the votes to.
+     */
     public void reassignVotesNoneEliminated(ArrayList<ArrayList<Integer>> ballots, int index) {
+        // When there are no eliminated candidates yet, we do not need to mutate the ballot
+        // Instead, the ballots may all be directly inserted into the corresponding candidate's tree
         Tree toInsert = this.candidates[index].getBallots();
         int i;
         for (i = 0; i < ballots.size(); i++) {
             ArrayList<Integer> curBallot = ballots.get(i);
+            // Ensure that trailing 1's from insertion do not remain
             if (curBallot.size() > this.candidates.length) {
                 curBallot.remove(curBallot.size()-1);
             }
@@ -67,10 +86,13 @@ public class IR extends Election{
             toInsert.insert(curBallot);
         }
     }
+
+    /**
+     * Handles the reassignment of votes when at least one candidate has been eliminated already.
+     * @param eliminated an ArrayList<Integer> that represents the indices of the previously eliminated candidates.
+     * @param ballots an ArrayList<ArrayList<Integer>> that represents all the ballots to transfer.
+     */
     public void reassignVotes(ArrayList<Integer> eliminated, ArrayList<ArrayList<Integer>> ballots){
-        // Check if one other candidate (not including the candidate
-        // that is currently being eliminated) has already been eliminated
-        // If not, then simply insert each ballot into the corresponding Tree
         int i;
         HashMap<Integer, Integer> ballotsMap = new HashMap<>();
         int j;
@@ -91,10 +113,10 @@ public class IR extends Election{
                     eliminatedRanks.add(curBallot.get(eliminated.get(k)));
                 }
             }
-            // Sort the list
+            // Sort the list such that the eliminated ranks are sorted in increasing order
             eliminatedRanks.sort(null);
             // Fill in the ballotsMap -- Each rank between 1 and the number of candidates in the election
-            // are mapped to a value that represents how many eliminated candidates precede them in the race
+            // is mapped to a value that represents how many eliminated candidates precede them in the race
             for (j = 1; j < this.candidates.length + 1; j++) {
                 if (curElimCount < eliminatedRanks.size() && j == eliminatedRanks.get(curElimCount)) {
                     curElimCount += 1;
@@ -102,8 +124,9 @@ public class IR extends Election{
                     ballotsMap.put(j, curElimCount);
                 }
             }
-            // Mutate the ballot, subtracting by how many eliminated
-            // candidates there were before each rank, referring to the ballotsMap
+            // Mutate the ballot, subtracting by how many eliminated candidates there were
+            // before each rank, referring to the ballotsMap to calculate the difference
+            // This is to ensure that no ballots with eliminated candidates ranked are inserted
             for (j = 0; j < curBallot.size(); j++) {
                 if (this.candidates[j].isEliminated() || curBallot.get(j) <= 0) {
                     curBallot.set(j, 0);
@@ -111,8 +134,8 @@ public class IR extends Election{
                     curBallot.set(j, curBallot.get(j) - ballotsMap.get(curBallot.get(j)));
                 }
             }
-            // It's possible to end up with a ballot with all 0s (everything in ballot eliminated)
             // Insert into the Tree of the candidate that corresponds to the new number 1 ranking
+            // It's possible to end up with a ballot with all 0s, so only insert if a 1 exists in ballot
             int indexToInsert = curBallot.indexOf(1);
             if (indexToInsert != -1) {
                 // Write this transfer of the ballot to the audit file
@@ -130,14 +153,13 @@ public class IR extends Election{
      * Determines the candidate with a majority.
      * @return null if no candidate has a majority, or the Candidate object that does.
      */
-    // It's a bit easier for isMajority to return the candidate that is majority
-    // or null if no majority for audit file writing purposes (now called majorityCandidate)
     public Candidate majorityCandidate(){
         int i;
         int totalVotes = 0;
         int curMaxVotes = Integer.MIN_VALUE;
         Candidate curCandidate = null;
         Candidate highestCandidate = null;
+        // Get the total number of votes and the max votes a candidate has to see if there's a majority
         for (i = 0; i < this.candidates.length; i++) {
             curCandidate = candidates[i];
             if (!curCandidate.isEliminated()) {
@@ -148,6 +170,7 @@ public class IR extends Election{
                 highestCandidate = curCandidate;
             }
         }
+        // If there is no majority, reset the returned value back to null.
         if (curMaxVotes <= totalVotes / 2) {
             highestCandidate = null;
         }
@@ -202,30 +225,31 @@ public class IR extends Election{
     }
 
     /**
-     * Parses the header of the input and stores election, candidate information.
+     * Parses the header of the input and stores election and candidate information.
      */
     public void parseHeader() {
         // Read the first 4 lines, which is the header, of the input file
         int i;
         String nextRecord;
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < 3; i++) {
             try {
                 nextRecord = br.readLine();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             // read the number of candidates
-            if (i == 1) {
+            if (i == 0) {
                 int numCandidates = Integer.parseInt(nextRecord);
                 this.candidates = new Candidate[numCandidates];
                 this.curNumCandidates = numCandidates;
             }
             // create the candidate objects
-            else if (i == 2) {
+            else if (i == 1) {
                 String[] candidates = nextRecord.split(", ");
                 initializeCandidates(candidates);
             }
-            else if (i == 3) {
+            // set the numBallots field
+            else if (i == 2) {
                 this.numBallots = Integer.parseInt(nextRecord);
             }
         }
@@ -245,6 +269,7 @@ public class IR extends Election{
         int i;
         for (i = 0; i < candidatesList.length; i++) {
             candidatesList[i] = candidatesList[i].trim();
+            // Split the string by spaces, as the first word is the name and the second is the party
             String[] candidateInfo = candidatesList[i].split(" ");
             Tree newTree = new Tree(i, this.curNumCandidates);
             Candidate newCandidate = new Candidate(candidateInfo[0], candidateInfo[1], newTree);
@@ -254,12 +279,17 @@ public class IR extends Election{
             writeToAudit(candidateRecord);
         }
     }
+
+    /**
+     * Conducts the IR algorithm. Determines the winner of the election, deciding if there are ties and who
+     * to eliminate if necessary.
+     */
     public void conductAlgorithm() {
         int smallestVotes;
         int toEliminate;
         Candidate winner;
+        // Continue conducting eliminations as long as there is no majority and there are more than two candidates.
         while ((winner = majorityCandidate()) == null && this.curNumCandidates > 2) {
-            // (Finding the candidate to eliminate could be its own method if we wanted to)
             // Find the index of the candidate to eliminate
             ArrayList<Integer> tiedCandidates = new ArrayList<>();
             smallestVotes = Integer.MAX_VALUE;
@@ -273,6 +303,7 @@ public class IR extends Election{
                 }
             }
             if (tiedCandidates.size() > 1) {
+                // There is more than one candidate with the fewest number of votes
                 // Write tie status to audit file
                 String[] tieAnnouncement = {"There is currently a tie between candidates: "};
                 writeToAudit(tieAnnouncement);
@@ -286,6 +317,7 @@ public class IR extends Election{
                         this.candidates[toEliminate].getName()};
                 writeToAudit(tieBreakResult);
             } else {
+                // There is only one candidate with the fewest number of votes
                 toEliminate = tiedCandidates.get(0);
             }
             eliminateCandidate(toEliminate);
