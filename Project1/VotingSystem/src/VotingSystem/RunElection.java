@@ -90,7 +90,7 @@ public class RunElection {
 
     /**
      * Helper function for the start() function. Generates an appropriate filename for the audit file.
-     * @param prompt A String representing what type of election is taking place.
+     * @param elecType A String representing what type of election is taking place.
      * @return String that is the full name of the soon-to-be audit file.
      */
     public String generateAuditFileName(String elecType){
