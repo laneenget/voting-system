@@ -10,12 +10,30 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+* Class meant to handle information before running the actual elections. Establishes what elections takes place, and
+* establishes the name of the input and output (audit) files.
+* @author Jonathan Haak
+* @author Noreen Si
+*/
 public class RunElection {
     public String filename;
     private FileReader input;
     private FileWriter audit;
     private BufferedReader br;
 
+    /**
+     * Contructor for this class. The input can be null, as it will later be filled by the user in the start() function.
+     * @param filename String that represents the name of the file that contains the voting information.
+     */
+    public RunElection(String filename){
+        this.filename = filename;
+    }
+
+    /**
+     * Controller function that begins the program. Prompts the user for the name of the ballots file, and proceeds with
+     * creating the audit file, initializes the proper election class and runs it. Invoked in Main.java
+     */
     public void start(){
         boolean validFile = false;
         while (!validFile) {
@@ -61,18 +79,31 @@ public class RunElection {
 
 
     }
-    public RunElection(String filename){
-        this.filename = filename;
-    }
+
+    /**
+     * Helper function for the start() function. Simply writes to terminal a message, prompting the user.
+     * @param prompt String that represents the message desired to be prompted to the user.
+     */
     public void promptUser(String prompt){
         System.out.printf(prompt);
     }
+
+    /**
+     * Helper function for the start() function. Generates an appropriate filename for the audit file.
+     * @param prompt A String representing what type of election is taking place.
+     * @return String that is the full name of the soon-to-be audit file.
+     */
     public String generateAuditFileName(String elecType){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String d2 = now.format(f);
         return elecType + d2 + ".txt";
     }
+
+    /**
+     * Helper function for the start() function, used in conjunture with the generateAuditFileName(). Reads first line of input file.
+     * @return String that represents the type of election.
+     */
     public String parseElectType(){
         String line = "";
         this.br = new BufferedReader(input);
@@ -85,6 +116,10 @@ public class RunElection {
         return line;
 
     }
+
+    /**
+     * Helper function for the start() function. Creates an IR election and runs its main methods to complete the program.
+     */
     public void runIR(){
         IR Election = new IR(input, audit, br);
         Election.parseHeader();
@@ -92,5 +127,15 @@ public class RunElection {
         Election.conductAlgorithm();
         Election.printResults();
     }
-    public void runCPL(){}
+
+    /**
+     * Helper function for the start() function. Creates a CPL election and runs its main methods to complete the program.
+     */
+    public void runCPL(){
+        CPL Election = new CPL(input, audit, br);
+        Election.parseHeader();
+        Election.processFile();
+        Election.conductAlgorithm();
+        Election.printResults();
+    }
 }
