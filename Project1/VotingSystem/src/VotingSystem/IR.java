@@ -76,10 +76,6 @@ public class IR extends Election{
         int i;
         for (i = 0; i < ballots.size(); i++) {
             ArrayList<Integer> curBallot = ballots.get(i);
-            // Ensure that trailing 1's from insertion do not remain
-            if (curBallot.size() > this.candidates.length) {
-                curBallot.remove(curBallot.size()-1);
-            }
             String ballotRepresentation = curBallot.toString();
             String[] transferAnnouncement = {"Transferring ballot " + ballotRepresentation +
                     " to candidate " + this.candidates[index].getName()};
@@ -106,12 +102,6 @@ public class IR extends Election{
             curElimCount = 0;
             curBallot = new ArrayList<Integer>();
             curBallot = ballots.get(i);
-            if (curBallot.size() > this.candidates.length) {
-               curBallot.remove(curBallot.size()-1);
-            }
-            else if(curBallot.size() < this.candidates.length) {
-                throw (new IllegalArgumentException("Ballot is not of the correct length, length = " + curBallot.size()));
-            }
             // Make a list of eliminated candidate ranks
             ArrayList<Integer> eliminatedRanks = new ArrayList<>();
             for (k = 0; k < eliminated.size(); k++) {
@@ -316,7 +306,7 @@ public class IR extends Election{
                     tiedCandidatesNames[i] = this.candidates[tiedCandidates.get(i)].getName() + " ";
                 }
                 writeToAudit(tiedCandidatesNames);
-                toEliminate = tiedCandidates.get(breakTie(tiedCandidates, 1)[0]);
+                toEliminate = (breakTie(tiedCandidates, 1)[0]);
                 String[] tieBreakResult = {"Result of tie break: " +
                         this.candidates[toEliminate].getName()};
                 writeToAudit(tieBreakResult);

@@ -1,8 +1,6 @@
-package Testing.IRTestsResources;
+package IRTestsResources;
 
-import java.net.URL;
 import java.io.*;
-import java.nio.Buffer;
 import java.util.ArrayList;
 
 import VotingSystem.*;
@@ -35,94 +33,18 @@ public class IRtests {
 
     @Before
     public void setUp() throws IOException {
-        // runElection = new RunElection("test.txt");
+         runElection = new RunElection("test.txt");
 
-        // FileReader input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRHeader1.csv");
-        // BufferedReader brIR = new BufferedReader(input);
-        // brIR.readLine();
-        // ir = new IR(input, null, brIR);
-        // ir.parseHeader();
+         FileReader input = new FileReader((IRtests.class.getResource("IRHeader1.csv")).getFile());
+         BufferedReader brIR = new BufferedReader(input);
+         brIR.readLine();
+         ir = new IR(input, null, brIR);
+         ir.parseHeader();
 
-        // irInitialize = new IR(input, null, brIR);
-        // irInitialize.setCandidates(new Candidate[4]);
-        // irInitialize.initializeCandidates(candidateNames);
+         irInitialize = new IR(input, null, brIR);
+         irInitialize.setCandidates(new Candidate[4]);
+         irInitialize.initializeCandidates(candidateNames);
 
-        // FileReader majority1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority1.csv");
-        // // Candidate A ballots : [1, 0]  [1, 2]  [1, 2]  [1, 0]
-        // // Candidate B ballots:  [2, 1]  [0, 1]
-        // BufferedReader brMajority1Input = new BufferedReader(majority1Input);
-        // brMajority1Input.readLine();
-        // irMajority1 = new IR(majority1Input, null, brMajority1Input);
-        // irMajority1.parseHeader();
-        // irMajority1.processFile();
-
-        // FileReader majority2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority2.csv");
-        // // Inserted ballots for Candidate A: [1, 0]  [1, 2]
-        // // Inserted ballots for Candidate B: [2, 1]  [0, 1]
-        // BufferedReader brMajority2Input = new BufferedReader(majority2Input);
-        // brMajority2Input.readLine();
-        // irMajority2 = new IR(majority2Input, null, brMajority2Input);
-        // irMajority2.parseHeader();
-        // irMajority2.processFile();
-
-        // FileReader majority3Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRMajority3.csv");
-        // // Inserted ballots for Candidate A: [1, 0, 0]  [1, 2, 3]
-        // // Inserted ballots for Candidate B: [2, 1, 3]  [3, 1, 2]
-        // // Inserted ballots for Candidate C: [3, 2, 1]  [2, 3, 1]   [0, 0, 1]   [2, 0, 1]
-        // BufferedReader brMajority3Input = new BufferedReader(majority3Input);
-        // brMajority3Input.readLine();
-        // irMajority3 = new IR(majority3Input, null, brMajority3Input);
-        // irMajority3.parseHeader();
-        // irMajority3.processFile();
-
-        // FileReader reassignNoneEliminated1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassignNoneEliminated1.csv");
-        // // Candidate A ballots: [1, 0]  [1, 2]  [1, 2]  [1, 0]
-        // // Candidate B ballots: [2, 1]  [0, 1]
-        // BufferedReader brReassignNoneEliminated1Input = new BufferedReader(reassignNoneEliminated1Input);
-        // brReassignNoneEliminated1Input.readLine();
-        // FileWriter reassignNoneEliminated1Audit = new FileWriter("Audit_IRReassignNoneEliminated1.txt");
-        // irReassignNoneEliminated1 = new IR(reassignNoneEliminated1Input, reassignNoneEliminated1Audit, brReassignNoneEliminated1Input);
-        // irReassignNoneEliminated1.parseHeader();
-        // irReassignNoneEliminated1.processFile();
-
-        // FileReader reassign1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign1.csv");
-        // // Candidate A ballots: [1,2,3]  [1,0,2]  [1,3,2]  [1,0,0]
-        // // Candidate B ballots: [0,1,0]  [0,1,2]  [2,1,3]  [3,1,2]
-        // // Candidate C ballots: [0,0,1]  [2,3,1]  [2,0,1]  [3,0,1]
-        // BufferedReader brReassign1Input = new BufferedReader(reassign1Input);
-        // brReassign1Input.readLine();
-        // irReassign1 = new IR(reassign1Input, null, brReassign1Input);
-        // irReassign1.parseHeader();
-        // irReassign1.processFile();
-
-        // FileReader eliminate1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate1.csv");
-        // // Same as reassign2Input
-        // BufferedReader brEliminate1Input = new BufferedReader(eliminate1Input);
-        // brEliminate1Input.readLine();
-        // irEliminate1 = new IR(eliminate1Input, null, brEliminate1Input);
-        // irEliminate1.parseHeader();
-        // irEliminate1.processFile();
-        // irEliminate1.eliminateCandidate(0);
-        // irEliminate1.eliminateCandidate(1);
-
-        // FileReader reassign2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRReassign2.csv");
-        // BufferedReader brReassign2Input = new BufferedReader(reassign2Input);
-        // brReassign2Input.readLine();
-        // irReassign2 = new IR(reassign2Input, null, brReassign2Input);
-        // irReassign2.parseHeader();
-        // irReassign2.processFile();
-        // irReassign2.getCandidates()[2].setEliminated(true);
-        // irReassign2.getCandidates()[4].setEliminated(true);
-
-        // FileReader eliminate2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IREliminate2.csv");
-        // BufferedReader brEliminate2Input = new BufferedReader(eliminate2Input);
-        // brEliminate2Input.readLine();
-        // irEliminate2 = new IR(eliminate2Input, null, brEliminate2Input);
-        // irEliminate2.parseHeader();
-        // irEliminate2.processFile();
-        // irEliminate2.getCandidates()[2].setEliminated(true);
-        // irEliminate2.getCandidates()[4].setEliminated(true);
-        // irEliminate2.eliminateCandidate(0);
     }
 
     @Test
@@ -149,19 +71,24 @@ public class IRtests {
     }
 
     @Test
-    public void test_majority_candidate_1() {
+    public void test_majority_candidate_1() throws IOException {
         // Input: Two Candidates
         // Inserted ballots for Candidate A: [1, 0]  [1, 2]  [1, 2]  [1, 0]
         // Inserted ballots for Candidate B: [2, 1]  [0, 1]
         // Candidate A total first-place votes: 4
         // Candidate B total first-place votes: 2
         // Non-Zero vote total
-
+        FileReader majority1Input = new FileReader((IRtests.class.getResource("IRMajority1.csv")).getFile());
+        BufferedReader brMajority1Input = new BufferedReader(majority1Input);
+        brMajority1Input.readLine();
+        irMajority1 = new IR(majority1Input, null, brMajority1Input);
+        irMajority1.parseHeader();
+        irMajority1.processFile();
         Assert.assertTrue(irMajority1.majorityCandidate() == irMajority1.getCandidates()[0]);
     }
 
     @Test
-    public void test_majority_candidate_2() {
+    public void test_majority_candidate_2() throws IOException {
         // Testing when exact 50-50
         // Input: Two Candidates
         // Inserted ballots for Candidate A: [1, 0]  [1, 2]
@@ -169,12 +96,18 @@ public class IRtests {
         // Candidate A total first-place votes: 2
         // Candidate B total first-place votes: 2
         // Non-Zero vote total
+        FileReader majority2Input = new FileReader((IRtests.class.getResource("IRMajority2.csv")).getFile());
+        BufferedReader brMajority2Input = new BufferedReader(majority2Input);
+        brMajority2Input.readLine();
+        irMajority2 = new IR(majority2Input, null, brMajority2Input);
+        irMajority2.parseHeader();
+        irMajority2.processFile();
 
         Assert.assertTrue(irMajority2.majorityCandidate() == null);
     }
 
     @Test
-    public void test_majority_candidate_3() {
+    public void test_majority_candidate_3() throws IOException {
         // Input: Three Candidates
         // Inserted ballots for Candidate A: [1, 0, 0]  [1, 2, 3]
         // Inserted ballots for Candidate B: [2, 1, 3]  [3, 1, 2]
@@ -183,6 +116,12 @@ public class IRtests {
         // Candidate B total first-place votes: 2
         // Candidate C total first-place votes: 4
         // Nobody wins majority
+        FileReader majority3Input = new FileReader((IRtests.class.getResource("IRMajority3.csv")).getFile());
+        BufferedReader brMajority3Input = new BufferedReader(majority3Input);
+        brMajority3Input.readLine();
+        irMajority3 = new IR(majority3Input, null, brMajority3Input);
+        irMajority3.parseHeader();
+        irMajority3.processFile();
         Assert.assertTrue(irMajority3.majorityCandidate() == null);
     }
 
@@ -202,7 +141,7 @@ public class IRtests {
     }
 
     @Test
-    public void test_reassignVotesNoneEliminated_1() {
+    public void test_reassignVotesNoneEliminated_1() throws IOException {
         // Simple case where no candidates have yet been eliminated
         // Reassign Candidate A ballots to Candidate B ballots
         // Candidate A ballots:          [1, 0]  [1, 2]  [1, 2]  [1, 0]
@@ -210,6 +149,14 @@ public class IRtests {
         // Inserting:                            [0, 1]  [0, 1]
         // (end) Candidate B Tree:       [2, 1]  [0, 1]  [0, 1]  [0, 1]
         // BTree1 numVotes: 4
+        FileReader reassignNoneEliminated1Input = new FileReader((IRtests.class.getResource("IRReassignNoneEliminated1.csv")).getFile());
+        BufferedReader brReassignNoneEliminated1Input = new BufferedReader(reassignNoneEliminated1Input);
+        brReassignNoneEliminated1Input.readLine();
+        FileWriter reassignNoneEliminated1Audit = new FileWriter("Audit_IRReassignNoneEliminated1.txt");
+        irReassignNoneEliminated1 = new IR(reassignNoneEliminated1Input, reassignNoneEliminated1Audit, brReassignNoneEliminated1Input);
+        irReassignNoneEliminated1.parseHeader();
+        irReassignNoneEliminated1.processFile();
+
         Node BNode = irReassignNoneEliminated1
                 .getCandidates()[0]
                 .getBallots()
@@ -224,7 +171,7 @@ public class IRtests {
     }
 
     @Test
-    public void test_reassignVotes_1() {
+    public void test_reassignVotes_1() throws IOException {
         // Intermediate case where there is one previously eliminated candidate
         // Testing double reassignment
         // ORIGINAL ballots:
@@ -242,6 +189,14 @@ public class IRtests {
         // Candidate C numVotes = 10
         //                              [0,0,1]         [2,0,1]     [0,0,1] <-- when getting 2nd place C nodes
         //                                      [1,0,2]                     <-- when getting 2nd place A nodes
+
+        FileReader reassign1Input = new FileReader((IRtests.class.getResource("IRReassign1.csv")).getFile());
+        BufferedReader brReassign1Input = new BufferedReader(reassign1Input);
+        brReassign1Input.readLine();
+        irReassign1 = new IR(reassign1Input, null, brReassign1Input);
+        irReassign1.parseHeader();
+        irReassign1.processFile();
+
         ArrayList<Integer> eliminated = new ArrayList<>();
         Node BNode_wave1 = irReassign1
                 .getCandidates()[0]
@@ -292,14 +247,24 @@ public class IRtests {
     }
 
     @Test
-    public void test_eliminate_1() {
+    public void test_eliminate_1() throws IOException {
         // This tests out the exact same election as test_reassignVotes_2
         // Except directly through elimination
+        FileReader eliminate1Input = new FileReader((IRtests.class.getResource("IREliminate1.csv")).getFile());
+        // Same as reassign2Input
+        BufferedReader brEliminate1Input = new BufferedReader(eliminate1Input);
+        brEliminate1Input.readLine();
+        irEliminate1 = new IR(eliminate1Input, null, brEliminate1Input);
+        irEliminate1.parseHeader();
+        irEliminate1.processFile();
+        irEliminate1.eliminateCandidate(0);
+        irEliminate1.eliminateCandidate(1);
+
         Assert.assertTrue(irEliminate1.getCandidates()[2].getNumVotes() == 10);
     }
 
     @Test
-    public void test_reassignVotes_2() {
+    public void test_reassignVotes_2() throws IOException {
         // Test reassignment with multiple eliminated candidates
         // Five candidates total
         // Candidate A ballots:     [1,3,2,5,4] [1,0,4,3,2]
@@ -307,6 +272,16 @@ public class IRtests {
         // Previously eliminated:   Candidates in indices 2, 4
         // Reassign A to B:         [0,2,1,4,3]
         // B afterwards:            [0,1,0,0,0] [0,1,0,2,0]
+
+        FileReader reassign2Input = new FileReader((IRtests.class.getResource("IRReassign2.csv")).getFile());
+        BufferedReader brReassign2Input = new BufferedReader(reassign2Input);
+        brReassign2Input.readLine();
+        irReassign2 = new IR(reassign2Input, null, brReassign2Input);
+        irReassign2.parseHeader();
+        irReassign2.processFile();
+        irReassign2.getCandidates()[2].setEliminated(true);
+        irReassign2.getCandidates()[4].setEliminated(true);
+
         ArrayList<Integer> eliminated = new ArrayList<>();
         eliminated.add(2);
         eliminated.add(4);
@@ -324,7 +299,18 @@ public class IRtests {
     }
 
     @Test
-    public void test_eliminate_2() {
+    public void test_eliminate_2() throws IOException {
+        FileReader eliminate2Input = new FileReader((IRtests.class.getResource("IREliminate2.csv")).getFile());
+        BufferedReader brEliminate2Input = new BufferedReader(eliminate2Input);
+        brEliminate2Input.readLine();
+
+        irEliminate2 = new IR(eliminate2Input, null, brEliminate2Input);
+        irEliminate2.parseHeader();
+        irEliminate2.processFile();
+        irEliminate2.getCandidates()[2].setEliminated(true);
+        irEliminate2.getCandidates()[4].setEliminated(true);
+        irEliminate2.eliminateCandidate(0);
+
         Assert.assertTrue(irEliminate2.getCandidates()[1].getNumVotes() == 2);
     }
 
@@ -332,19 +318,13 @@ public class IRtests {
    public void test_conductAlgorithm_1() throws IOException {
         // Simple case where there are 2 candidates
         // Candidate A has 2 votes, Candidate B has 0 votes -- Candidate A wins
-        // TODO: Maybe this test can simply look at the output of the audit file
-       FileReader conductAlgorithm1Input = null;
-       try {
-           conductAlgorithm1Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRConductAlgorithm1.csv");
-       } catch (FileNotFoundException e) {
-           throw new RuntimeException(e);
-       }
-       FileWriter conductAlgorithm1Audit = null;
-       try {
-           conductAlgorithm1Audit = new FileWriter("Project1/VotingSystem/Testing/IRTestsResources/Audit_IRConductAlgorithm1.txt");
-       } catch (IOException e) {
-           throw new RuntimeException(e);
-       }
+       FileReader conductAlgorithm1Input = new FileReader((IRtests.class.getResource("IRConductAlgorithm1.csv")).getFile());
+
+       FileWriter conductAlgorithm1Audit;
+       String path = System.getProperty("user.dir");
+       File f = new File(path, "Audit_IRConductAlgorithm1.txt");
+       conductAlgorithm1Audit = new FileWriter(f);
+
        BufferedReader brConductAlgorithm1Input = new BufferedReader(conductAlgorithm1Input);
        brConductAlgorithm1Input.readLine();
        irConductAlgorithm1 = new IR(conductAlgorithm1Input, conductAlgorithm1Audit, brConductAlgorithm1Input);
@@ -365,18 +345,13 @@ public class IRtests {
         // Candidate B: [0,1,2] [2,1,3] [0,1,0] [0,1,2] [0,0,1] [0,0,1]
         // Candidate B has 6/9 votes ---> has majority ---> wins
 
-        FileReader conductAlgorithm2Input = null;
-        try {
-            conductAlgorithm2Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRConductAlgorithm2.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        FileWriter conductAlgorithm2Audit = null;
-        try {
-            conductAlgorithm2Audit = new FileWriter("Project1/VotingSystem/Testing/IRTestsResources/Audit_IRConductAlgorithm2.txt");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader conductAlgorithm2Input = new FileReader((IRtests.class.getResource("IRConductAlgorithm2.csv")).getFile());
+
+        FileWriter conductAlgorithm2Audit;
+        String path = System.getProperty("user.dir");
+        File f = new File(path, "Audit_IRConductAlgorithm2.txt");
+        conductAlgorithm2Audit = new FileWriter(f);
+
         BufferedReader brConductAlgorithm2Input = new BufferedReader(conductAlgorithm2Input);
         brConductAlgorithm2Input.readLine();
         irConductAlgorithm2 = new IR(conductAlgorithm2Input, conductAlgorithm2Audit, brConductAlgorithm2Input);
@@ -399,18 +374,13 @@ public class IRtests {
         // Candidate B: [3,1,2] [2,1,3] [0,1,0] [2,1,0]    [0,1,2]
         // Candidate C: [0,0,1] [2,0,1]
         // B wins with 5 votes
-        FileReader conductAlgorithm3Input = null;
-        try {
-            conductAlgorithm3Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRConductAlgorithm3.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        FileWriter conductAlgorithm3Audit = null;
-        try {
-            conductAlgorithm3Audit = new FileWriter("Project1/VotingSystem/Testing/IRTestsResources/Audit_IRConductAlgorithm3.txt");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader conductAlgorithm3Input = new FileReader((IRtests.class.getResource("IRConductAlgorithm3.csv")).getFile());
+
+        FileWriter conductAlgorithm3Audit;
+        String path = System.getProperty("user.dir");
+        File f = new File(path, "Audit_IRConductAlgorithm3.txt");
+        conductAlgorithm3Audit = new FileWriter(f);
+
         BufferedReader brConductAlgorithm3Input = new BufferedReader(conductAlgorithm3Input);
         brConductAlgorithm3Input.readLine();
         irConductAlgorithm3 = new IR(conductAlgorithm3Input, conductAlgorithm3Audit, brConductAlgorithm3Input);
@@ -439,21 +409,16 @@ public class IRtests {
         //             *[1,0,0,0] [1,0,0,0] [1,0,0,2] [1,0,0,2] [1,0,0,0]*
         // Candidate D: [4,3,2,1] [0,2,0,1] [2,0,0,1] [2,3,0,1] [2,0,3,1]
         // Candidate A wins with 11 votes (total votes: 16)
-        FileReader conductAlgorithm4Input = null;
-        try {
-            conductAlgorithm4Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRConductAlgorithm4.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        FileWriter conductAlgorithm4Audit = null;
-        try {
-            conductAlgorithm4Audit = new FileWriter("Project1/VotingSystem/Testing/IRTestsResources/Audit_IRConductAlgorithm4.txt");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader conductAlgorithm4Input = new FileReader((IRtests.class.getResource("IRConductAlgorithm4.csv")).getFile());
+        FileWriter conductAlgorithm4Audit;
+        String path = System.getProperty("user.dir");
+        File f = new File(path, "Audit_IRConductAlgorithm4.txt");
+        conductAlgorithm4Audit = new FileWriter(f);
+
         BufferedReader brConductAlgorithm4Input = new BufferedReader(conductAlgorithm4Input);
         brConductAlgorithm4Input.readLine();
         irConductAlgorithm4 = new IR(conductAlgorithm4Input, conductAlgorithm4Audit, brConductAlgorithm4Input);
+
         irConductAlgorithm4.parseHeader();
         irConductAlgorithm4.processFile();
         irConductAlgorithm4.conductAlgorithm();
@@ -465,21 +430,17 @@ public class IRtests {
         // Candidate A: [1,2] [1,0] [1,2]
         // Candidate B: [2,1] [2,1]
         // A wins
-        FileReader conductAlgorithm5Input = null;
-        try {
-            conductAlgorithm5Input = new FileReader("Project1/VotingSystem/Testing/IRTestsResources/IRConductAlgorithm5.csv");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        FileWriter conductAlgorithm5Audit = null;
-        try {
-            conductAlgorithm5Audit = new FileWriter("Project1/VotingSystem/Testing/IRTestsResources/Audit_IRConductAlgorithm5.txt");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader conductAlgorithm5Input = new FileReader((IRtests.class.getResource("IRConductAlgorithm5.csv")).getFile());
+
+        FileWriter conductAlgorithm5Audit;
+        String path = System.getProperty("user.dir");
+        File f = new File(path, "Audit_IRConductAlgorithm5.txt");
+        conductAlgorithm5Audit = new FileWriter(f);
+
         BufferedReader brConductAlgorithm5Input = new BufferedReader(conductAlgorithm5Input);
         brConductAlgorithm5Input.readLine();
         irConductAlgorithm5 = new IR(conductAlgorithm5Input, conductAlgorithm5Audit, brConductAlgorithm5Input);
+
         irConductAlgorithm5.parseHeader();
         irConductAlgorithm5.processFile();
         irConductAlgorithm5.conductAlgorithm();
@@ -488,21 +449,17 @@ public class IRtests {
     @Test
     public void test_conductAlgorithm_6() throws IOException {
         // test ballots.csv
-        FileReader conductAlgorithm6Input = null;
-        try {
-            conductAlgorithm6Input = new FileReader((IRtests.class.getResource("ballots.csv")).getFile());
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        FileReader conductAlgorithm6Input = new FileReader((IRtests.class.getResource("ballots.csv")).getFile());
+
         FileWriter conductAlgorithm6Audit = null;
-        // try {
-        //     conductAlgorithm6Audit = new FileWriter("Project1/VotingSystem/Testing/IRTestsResources/Audit_IRConductAlgorithm6.txt");
-        // } catch (IOException e) {
-        //     throw new RuntimeException(e);
-        // }
+        String path = System.getProperty("user.dir");
+        File f = new File(path, "Audit_IRConductAlgorithm6.txt");
+        conductAlgorithm6Audit = new FileWriter(f);
+
         BufferedReader brConductAlgorithm6Input = new BufferedReader(conductAlgorithm6Input);
         brConductAlgorithm6Input.readLine();
         irConductAlgorithm6 = new IR(conductAlgorithm6Input, conductAlgorithm6Audit, brConductAlgorithm6Input);
+
         irConductAlgorithm6.parseHeader();
         irConductAlgorithm6.processFile();
         irConductAlgorithm6.conductAlgorithm();
