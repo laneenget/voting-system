@@ -1,5 +1,10 @@
 package VotingSystem;
 
+/**
+ * This is what a user uses to run our Voting System program
+ * It then hands off control to the RunElection instance
+ * @author Jonathan Haak
+ */
 public class Main {
 /**
  * The main method of the program.

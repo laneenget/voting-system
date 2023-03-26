@@ -2,6 +2,7 @@ package VotingSystem;
 
 import java.io.*;
 
+import VotingSystem.Party;
 import org.junit.Assert;
 import org.junit.Test;
 
