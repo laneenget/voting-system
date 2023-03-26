@@ -5,7 +5,8 @@ Our project structure follows the structure provided in the handout. One additio
 
 
 ## Steps for Compilation
-Please navigate to the repo-Team18/Project1/VotingSystem/src directory.  
+Please navigate to the repo-Team18/Project1/src directory.  
+(To make sure you're in the right place, typing "ls" in terminal should show "VotingSytem" as the only listed file)
 Next, to compile type "javac VotingSystem/*.java"  
 Next, to run the Voting System program, type "java VotingSystem.Main" (if Java17)  
 For older versions, you may need to type "java VotingSystem/Main" instead.  
