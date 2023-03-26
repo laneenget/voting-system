@@ -8,6 +8,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Comparator;
 import java.util.Arrays;
+
+/**
+ * This is the IR Class that handles the reading of an input election file and conduction of the IR election
+ * The class conducts the IR algorithm to determine the winner of an IR election with provided information
+ * @author Noreen Si
+ * @author Jonathan Haak
+ */
 public class IR extends Election{
     private Candidate [] candidates;
     private int numBallots;
@@ -43,6 +50,7 @@ public class IR extends Election{
                 eliminated.add(i);
             }
         }
+        // For the eliminated candidate tree, reassign its second place spots to the appropriate candidates
         if (eliminatedTree.root.children != null) {
             for (i = 0; i < eliminatedTree.root.children.length; i++) {
                 Node secondPlace = eliminatedTree.root.children[i];
@@ -172,6 +180,11 @@ public class IR extends Election{
         }
         return highestCandidate;
     }
+
+    /**
+     * Processes the ballots in the election input file and stores them in the candidates' trees accordingly.
+     * Each ballot is inserted into the candidate's tree that corresponds with the number one ranking in the ballot.
+     */
     public void processFile(){
         String [] nextBallot;
         String ballotString;
@@ -201,6 +214,12 @@ public class IR extends Election{
             e.printStackTrace();
         }
     }
+
+    /**
+     * Prints the results of the election the screen.
+     * This includes information such as the total number of ballots, final vote totals for the candidates,
+     * and the winner with the percentage of votes received.
+     */
     public void printResults(){
         System.out.println("-------------------------   ELECTION RESULTS   -------------------------");
         System.out.println("Total number of ballots: " + this.numBallots);
@@ -284,7 +303,7 @@ public class IR extends Election{
         Candidate winner;
         // Continue conducting eliminations as long as there is no majority and there are more than two candidates.
         while ((winner = majorityCandidate()) == null && this.curNumCandidates > 2) {
-            // Find the index of the candidate to eliminate
+            // Find the index of the candidate to eliminate (the one with the fewest votes)
             ArrayList<Integer> tiedCandidates = new ArrayList<>();
             smallestVotes = Integer.MAX_VALUE;
             for (int i = 0; i < this.candidates.length; i++) {
@@ -340,7 +359,6 @@ public class IR extends Election{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        // TODO: change file permissions for audit file
     }
 
     // testing purposes
