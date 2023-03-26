@@ -16,6 +16,7 @@ You may also pass along the name of the input file if you wish.
 **Important**: Next, as our test files with the code for the tests are currently located in the src/VotingSystem directory, 
 please note that if there is a compilation error, it may be due to not being able to find JUnit.  
 This can be solved by moving the test files with the code to the Testing folder while you run the program.  
+(Moving the testing files out of the src folder will mean compiling and running the code WITHOUT tests. Package org.junit must exists in order to compile WITH the tests)
 
 Please refer to Misc. Notes below for dependency information.
 
