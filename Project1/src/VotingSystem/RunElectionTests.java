@@ -96,6 +96,8 @@ public class RunElectionTests {
 
     @Test
     public void testStartWithValidFile() throws IOException {
+        // Please be certain that your user directory set up is properly configured BEFORE running this test
+        // If it is not properly configured, this test does not work as expected -- otherwise it works properly
         file = new File("testStartWithValidFile.csv");
         election = new RunElection(file.getName());
         election.setInput(new FileReader(file));
