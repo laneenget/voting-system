@@ -1,10 +1,8 @@
 # Project 1 README
 
 ## Project Structure
-Our project structure follows the structure provided in the handout. The single difference
-is that we decided to put everything under Project1 in the handout under Project1/VotingSystem to be more
-clear in that everything involved is a part of the VotingSystem. In Project1/VotingSystem you will
-find everything related to Project1, such as src, Testing, etc.
+Our project structure follows the structure provided in the handout. One addition is that under src, the all the src files are under a VotingSystem package for easier grouping.
+
 
 ## Steps for Compilation
 Please navigate to the repo-Team18/Project1/VotingSystem/src directory.  
@@ -31,24 +29,19 @@ We have noticed that different IDEs may set up the classpath, configuration, etc
 This may cause trouble in configuring the tests such that they are runnable on your IDE.
 Next, please ensure that the user's directory is set such that the working directory is the one
 that contains the testing files. Occasionally, a person's default may be set to be repo-Team18 instead
-depending on their IDE. This may show an error that makes it seem like a test file cannot be accessed. As long as the user's
+depending on their IDE. This may show an error that makes it seem like a test file cannot be accessed in RunElectionTests and possibly other test classes. As long as the user's
 directory is set to the one that holds the test file, it should be able to find the test file. You may check the user directory by
-typing in "String path = System.getProperty("user.dir");" and then checking that path to make sure it's not just repo-Team18.
+typing in "String path = System.getProperty("user.dir");" and then checking that path to make sure it's not just repo-Team18 (otherwise the test WILL NOT work)
 Next, the program can only find JUnit and run tests involving JUnit if the test file
 is located in whichever directory is marked as the test sources root for IDEs like IntelliJ. Please ensure that if JUnit is giving an error that
 the test file can access JUnit in its directory.  
 Lastly, please note that the src files located in src will not allow access for the tests to certain
 protected fields or private fields, methods, etc. When running a test and if it gives an error depending on your setup,
-please ensure that it is not due to accessing a private or protected field that is not accessible in the test sources root directory.
-We have left getters that should provide access to these fields in their respective classes, which are currently commented out.
-Please uncomment them if you wish to run tests that involve accessing private or protected fields.
-Many of our tests currently rely on using these auto-generated getters.
+please ensure that it is not due to accessing a private or protected method that is not accessible in the test sources root directory.
+We have left getters that should provide access to these fields in their respective classes.
+Many of our tests currently rely on using these auto-generated getters. However, for private/protected methods, you must first publicize these.
 
-For instance, in IRtests, it is imperative to uncomment the getters and setters in the IR Class, Tree Class, Node Class.
-In RunElectionTests, it is important to uncomment the setters in RunElection.
-All of these are located at the bottom of their respective classes.
-It is easiest to re-publicize all methods in the beginning and comment back in related getters and setters for the class the tests
-are testing.
+It is easiest to re-publicize all methods in the beginning for testing.
 
 ## Misc Notes
 If you ever receive any error message that says that a dependency cannot be located, please click the rebuild option
