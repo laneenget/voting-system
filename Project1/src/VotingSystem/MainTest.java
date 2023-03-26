@@ -24,8 +24,6 @@ public class Maintests {
     @Test
     public void testCPL(){
         // Create new RunElection object with "france.csv" as the file name
-        // Please make sure france.csv is actually in the same directory as RunElection.java
-        // Before running this test
         RunElection newElec = new RunElection("france.csv");
         // Call start method of election
         newElec.start();
@@ -36,8 +34,6 @@ public class Maintests {
         // Create new RunElection object with "ballot.csv" as the file name
         RunElection newElec = new RunElection("ballot.csv");
         // Call start method of election
-        // Please make sure ballots.csv is actually in the same directory as RunElection.java
-        // Before running this test
         newElec.start();
     }
 }
