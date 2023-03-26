@@ -19,7 +19,6 @@ public class CPL extends Election {
     private FileReader input;
     private FileWriter output;
     private BufferedReader br;
-    private boolean flag;
 
     /**
     * This is the constructor for CPL.
@@ -34,6 +33,33 @@ public class CPL extends Election {
     }
 
     /**
+     * Getter method for the total votes of the CPL election, primarily used for testing
+     *
+     * @return The int representing the total amount of votes
+     */
+    public int getVoteTotal() {
+        return voteTotal;
+    }
+
+    /**
+     * Getter method for the total number of open seats of the CPL election, primarily used for testing
+     *
+     * @return The int representing the number of seats
+     */
+    public int getTotalSeats() {
+        return totalSeats;
+    }
+
+    /**
+     * Getter method for the array of parties, primarily used for testing
+     *
+     * @return The array of party objects representing all parties in the CPL election
+     */
+    public int getParties() {
+        return parties;
+    }
+
+    /**
      * Redistributes excess seats randomly to other parties that are NOT "index", that is when a party "index" has won more seats than it has candidates
      * @param index Int that represents the index of the party that has too mant seats
      * @param seats Int that represents the number of excess seats said party has earned
@@ -45,13 +71,15 @@ public class CPL extends Election {
                 subIndexes.add(i);
             }
         }
-        for(int i = 0; i < seats; i++) {
-            int[] party = breakTie(subIndexes, 1);
-            parties[party[0]].incrementSeatCount();
-        }
         String[] announcement = {"Drawing Lottery (redistributing) on " + seats +
             " extra seats from the party " + parties[index].getName()};
         writeToAudit(announcement);
+        for(int i = 0; i < seats; i++) {
+            int[] party = breakTie(subIndexes, 1);
+            parties[party[0]].incrementSeatCount();
+            String[] subannouncement = {"One lotto seat has been given to " + parties[party[0]].getName()};
+            writeToAudit(subannouncement);
+        }
     }
     
     public void processFile(){
@@ -84,8 +112,8 @@ public class CPL extends Election {
             }
             return;
         }
-
-        int quota = voteTotal/totalSeats;
+        int leftover = voteTotal%totalSeats
+        int quota = (voteTotal + (totalSeats - leftover))/totalSeats; //forces quota to round up
 
         // First allocation of seats
         for (int i = 0; i < parties.length; i++) {
@@ -123,7 +151,7 @@ public class CPL extends Election {
             if(maxIndexes.size() > 1) {
                 int[] party = breakTie(maxIndexes, 1);
                 String[] announcement = {parties[party[0]].getName() + " gets one extra seat in the second round thanks to their " +
-                    parties[party[0]].getNumVotes() + " extra votes. They won a tie break againsts:"};
+                    parties[party[0]].getNumVotes() + " extra votes. They won a tie break case involving"};
                 writeToAudit(announcement);
                 for(int j = 0; j < maxIndexes.size(); j++) {
                     String[] subAnnouncement = {parties[maxIndexes.get(j)].getName()};
@@ -151,6 +179,15 @@ public class CPL extends Election {
                 i=0; //restart loop
             }
         }
+
+        //Closing the audit file
+        try {
+            if (this.audit != null) {
+                audit.close();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -168,7 +205,7 @@ public class CPL extends Election {
             }
 
             if (i == 1) {
-                String[] partyNames = nextRecord.split(",");
+                String[] partyNames = nextRecord.split(", ");
                 initializeParty(partyNames);
             }
         }
@@ -179,12 +216,10 @@ public class CPL extends Election {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            this.parties[i].setCandidates(nextRecord.split(","));
-            String[] announcement = {"The candidates in the '" + parties[i].getName() + "' party are:"};
+            this.parties[i].setCandidates(nextRecord.split(", "));
+            String[] announcement = {"The candidates in the '" + parties[i].getName() + "' party are"};
             writeToAudit(announcement); 
             writeToAudit(parties[i].getCandidates()); 
-            String[] msg = {"hello"};
-            writeToAudit(msg);
         }
 
         for (int i = 0; i < 2; i++) {
