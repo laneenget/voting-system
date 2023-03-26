@@ -15,13 +15,17 @@ public class Maintests {
 
     @Test
     public void testCPL(){
+        // Please make sure france.csv is actually in the same directory as RunElection.java
+        // Before running this test
         RunElection newElec = new RunElection("france.csv");
         newElec.start();
     }
 
     @Test
     public void testIR(){
-        RunElection newElec = new RunElection("ballot.csv");
+        // Please make sure ballots.csv is actually in the same directory as RunElection.java
+        // Before running this test
+        RunElection newElec = new RunElection("ballots.csv");
         newElec.start();
     }
 }

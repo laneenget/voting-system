@@ -3,7 +3,7 @@ package VotingSystem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
-
+import org.junit.jupiter.api.Assertions;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -98,6 +98,8 @@ public class RunElectionTests {
     public void testStartWithValidFile() throws IOException {
         // Please be certain that your user directory set up is properly configured BEFORE running this test
         // If it is not properly configured, this test does not work as expected -- otherwise it works properly
+        // Additionally please put testStartWithValidFile.csv in the same directory as RunElection
+        // (Under src/VotingSystem) BEFORE running this test
         file = new File("testStartWithValidFile.csv");
         election = new RunElection(file.getName());
         election.setInput(new FileReader(file));

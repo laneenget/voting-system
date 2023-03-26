@@ -33,6 +33,7 @@ that contains the testing files. Occasionally, a person's default may be set to 
 depending on their IDE. This may show an error that makes it seem like a test file cannot be accessed in RunElectionTests and possibly other test classes. As long as the user's
 directory is set to the one that holds the test file, it should be able to find the test file. You may check the user directory by
 typing in "String path = System.getProperty("user.dir");" and then checking that path to make sure it's not just repo-Team18 (otherwise the test WILL NOT work)
+For RunElectionTests and Maintests, please ensure the test files described are located in the src/VotingSystem directory prior to running tests.  
 Next, the program can only find JUnit and run tests involving JUnit if the test file
 is located in whichever directory is marked as the test sources root for IDEs like IntelliJ. Please ensure that if JUnit is giving an error that
 the test file can access JUnit in its directory.  
