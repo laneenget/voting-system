@@ -12,7 +12,7 @@ public class Node {
     protected ArrayList<Integer> ballot = null;
 
     // Testing purposes
-//    public Node[] getChildren() {
-//        return this.children;
-//    }
+    public Node[] getChildren() {
+        return this.children;
+    }
 }

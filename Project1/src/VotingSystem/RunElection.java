@@ -140,7 +140,7 @@ public class RunElection {
     }
 
 //    // Only for running tests
-//    public void setInput(FileReader input) {this.input = input;}
-//    public void setAudit(FileWriter audit) {this.audit = audit;}
-//    public void setBr(BufferedReader br) {this.br = br;}
+    public void setInput(FileReader input) {this.input = input;}
+    public void setAudit(FileWriter audit) {this.audit = audit;}
+    public void setBr(BufferedReader br) {this.br = br;}
 }

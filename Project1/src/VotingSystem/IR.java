@@ -368,10 +368,10 @@ public class IR extends Election{
     }
 
     // testing purposes
-//    public Candidate[] getCandidates() {return this.candidates;}
-//    public void setCandidates(Candidate[] candidates) {this.candidates = candidates;}
-//
-//    public int getCurNumCandidates() {return this.curNumCandidates;}
-//
-//    public int getNumBallots() {return this.numBallots;}
+    public Candidate[] getCandidates() {return this.candidates;}
+    public void setCandidates(Candidate[] candidates) {this.candidates = candidates;}
+
+    public int getCurNumCandidates() {return this.curNumCandidates;}
+
+    public int getNumBallots() {return this.numBallots;}
 }
