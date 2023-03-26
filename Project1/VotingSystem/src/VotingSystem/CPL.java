@@ -64,7 +64,7 @@ public class CPL extends Election {
      * @param index Int that represents the index of the party that has too mant seats
      * @param seats Int that represents the number of excess seats said party has earned
      */
-    public void drawLotto(int index, int seats){
+    private void drawLotto(int index, int seats){
         ArrayList<Integer> subIndexes = new ArrayList<Integer>();
         for(int i = 0; i < parties.length; i++) {
             if(i != index) {
