@@ -8,5 +8,6 @@
         "exclude": [
             "lib/junit-4.13.2.jar"
         ]
-    }
+    },
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

@@ -84,7 +84,7 @@ public class RunElection {
      * Helper function for the start() function. Simply writes to terminal a message, prompting the user.
      * @param prompt String that represents the message desired to be prompted to the user.
      */
-    public void promptUser(String prompt){
+    private void promptUser(String prompt){
         System.out.printf(prompt);
     }
 
@@ -93,7 +93,7 @@ public class RunElection {
      * @param elecType A String representing what type of election is taking place.
      * @return String that is the full name of the soon-to-be audit file.
      */
-    public String generateAuditFileName(String elecType){
+    private String generateAuditFileName(String elecType){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String d2 = now.format(f);
@@ -104,7 +104,7 @@ public class RunElection {
      * Helper function for the start() function, used in conjunture with the generateAuditFileName(). Reads first line of input file.
      * @return String that represents the type of election.
      */
-    public String parseElectType(){
+    private String parseElectType(){
         String line = "";
         this.br = new BufferedReader(input);
         try {
@@ -120,7 +120,7 @@ public class RunElection {
     /**
      * Helper function for the start() function. Creates an IR election and runs its main methods to complete the program.
      */
-    public void runIR(){
+    private void runIR(){
         IR Election = new IR(input, audit, br);
         Election.parseHeader();
         Election.processFile();
@@ -131,7 +131,7 @@ public class RunElection {
     /**
      * Helper function for the start() function. Creates a CPL election and runs its main methods to complete the program.
      */
-    public void runCPL(){
+    private void runCPL(){
         CPL Election = new CPL(input, audit, br);
         Election.parseHeader();
         Election.processFile();

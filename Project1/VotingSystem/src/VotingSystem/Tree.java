@@ -26,7 +26,7 @@ public class Tree {
      * This method is used to initialize a node
      * @return Node
      */
-    public Node initalizeNode(){
+    private Node initalizeNode(){
         Node node = new Node();
         node.curDepth = 0;
         node.index = 0;
@@ -39,7 +39,7 @@ public class Tree {
      * @return ArrayList<ArrayList<Integer>> of ballot information
      * from each node
      */
-    public ArrayList<ArrayList<Integer>> getNodes(Node node){
+    private ArrayList<ArrayList<Integer>> getNodes(Node node){
         ArrayList<ArrayList<Integer>> nodes = new ArrayList<ArrayList<Integer>>();
         ArrayList<Integer> ballot = new ArrayList<Integer>();
         Node hold = node;
