@@ -20,6 +20,9 @@ public class CPL extends Election {
     private FileWriter output;
     private BufferedReader br;
 
+    private int[] globalVotes;
+    private int globalSeats;
+
     /**
     * This is the constructor for CPL.
     * @param input A FileReader that represents the election input file to process
@@ -94,6 +97,7 @@ public class CPL extends Election {
                 e.printStackTrace();
             }
             parties[ballot.indexOf("1")].incrementVoteCount();
+            globalVotes[ballot.indexOf("1")] = globalVotes[ballot.indexOf("1")] + 1;
             String[] announcement = {"Ballot " + ballot + " increments vote count of the '" + parties[ballot.indexOf("1")].getName() + "' party"};
             writeToAudit(announcement);
         }
@@ -210,6 +214,7 @@ public class CPL extends Election {
             if (i == 1) {
                 String[] partyNames = nextRecord.split(", ");
                 initializeParty(partyNames);
+                globalVotes = new int[parties.length];
             }
         }
 
@@ -233,6 +238,7 @@ public class CPL extends Election {
             }
             if (i == 0) {
                 this.totalSeats = Integer.parseInt(nextRecord);
+                this.globalSeats = totalSeats;
                 String[] announcement = {"Number of seats in this election is " + totalSeats};
                 writeToAudit(announcement); 
             } else if (i == 1) {
@@ -269,9 +275,10 @@ public class CPL extends Election {
             partyArrayList.add(this.parties[i]);
         }
 
-
         for (int i = 0; i < partyArrayList.size(); i++) {
-            System.out.println(partyArrayList.get(i).getName() + ": " + partyArrayList.get(i).getSeatsReceived() + "\n\n");
+            int percentSeats = (100 * partyArrayList.get(i).getSeatsReceived()) / globalSeats;
+            int percentVotes = (100 * globalVotes[i]) / voteTotal;
+            System.out.println(partyArrayList.get(i).getName() + "received: " + partyArrayList.get(i).getSeatsReceived() + "seats representing " + percentSeats + "% of the total seats from their " + percentVotes + "% of total vote share\n\n");
         }
 
         for (int i = 0; i < partyArrayList.size(); i++) {
