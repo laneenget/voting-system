@@ -1,3 +1,5 @@
+package VotingSystem;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;

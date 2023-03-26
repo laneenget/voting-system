@@ -166,9 +166,11 @@ public class IR extends Election{
         // Get the total number of votes and the max votes a candidate has to see if there's a majority
         for (i = 0; i < this.candidates.length; i++) {
             curCandidate = candidates[i];
+            // Add to the total number of votes only if the candidate is not eliminated
             if (!curCandidate.isEliminated()) {
                 totalVotes += curCandidate.getNumVotes();
             }
+            // This is finding the new maximum number of votes
             if (curCandidate.getNumVotes() > curMaxVotes) {
                 curMaxVotes = curCandidate.getNumVotes();
                 highestCandidate = curCandidate;
@@ -285,6 +287,7 @@ public class IR extends Election{
             // Split the string by spaces, as the first word is the name and the second is the party
             String[] candidateInfo = candidatesList[i].split(" ");
             Tree newTree = new Tree(i, this.curNumCandidates);
+            // Initialize a Candidate with name, party, and tree information
             Candidate newCandidate = new Candidate(candidateInfo[0], candidateInfo[1], newTree);
             this.candidates[i] = newCandidate;
             String[] candidateRecord = {"Candidate " + i + " name: " + candidateInfo[0] +
@@ -307,11 +310,14 @@ public class IR extends Election{
             ArrayList<Integer> tiedCandidates = new ArrayList<>();
             smallestVotes = Integer.MAX_VALUE;
             for (int i = 0; i < this.candidates.length; i++) {
+                // If there is a new minimum, clear the list of the smallest votes
+                // Add the candidate's index in our tiedCandidates to show how it has the fewest number so far
                 if (!candidates[i].isEliminated() && candidates[i].getNumVotes() < smallestVotes) {
                     tiedCandidates.clear();
                     tiedCandidates.add(i);
                     smallestVotes = candidates[i].getNumVotes();
                 } else if (!candidates[i].isEliminated() && candidates[i].getNumVotes() == smallestVotes) {
+                    // Add a candidate's index without clearing the list when there's a tie for the fewest number of votes
                     tiedCandidates.add(i);
                 }
             }

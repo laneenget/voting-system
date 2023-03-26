@@ -1,4 +1,4 @@
-package Testing;
+package VotingSystem;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,8 +46,8 @@ public class RunElectionTests {
         String actualIRName = election.generateAuditFileName("IR");
         String actualCPLName = election.generateAuditFileName("CPL");
         
-        assertEquals(expectedIRName, actualIRName);
-        assertEquals(expectedCPLName, actualCPLName);
+        Assertions.assertEquals(expectedIRName, actualIRName);
+        Assertions.assertEquals(expectedCPLName, actualCPLName);
     }
     
     @Test
@@ -55,7 +55,7 @@ public class RunElectionTests {
         election.input = new FileReader(file);
         String actualType = election.parseElectType();
         String expectedType = "IR";
-        assertEquals(expectedType, actualType);
+        Assertions.assertEquals(expectedType, actualType);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class RunElectionTests {
         election.input = new FileReader(f);
         String actualType = election.parseElectType();
         String expectedType = "CPL";
-        assertEquals(expectedType, actualType);
+        Assertions.assertEquals(expectedType, actualType);
     }
     
     @Test
@@ -118,7 +118,7 @@ public class RunElectionTests {
         election = new RunElection("invalid.csv");
         RunElection spyElection = org.mockito.Mockito.spy(election);
         
-        assertThrows(NullPointerException.class, () -> {
+        Assertions.assertThrows(NullPointerException.class, () -> {
             spyElection.start();
         });
     }
