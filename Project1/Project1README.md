@@ -1,5 +1,11 @@
 # Project 1 README
 
+## Project Structure
+Our project structure follows the structure provided in the handout. The single difference
+is that we decided to put everything under Project1 in the handout under Project1/VotingSystem to be more
+clear in that everything involved is a part of the VotingSystem. In Project1/VotingSystem you will
+find everything related to Project1, such as src, Testing, etc.
+
 ## Steps for Compilation
 Please navigate to the repo-Team18/Project1/VotingSystem/src directory.  
 Next, to compile type "javac VotingSystem/*.java"  
@@ -11,6 +17,7 @@ You may also pass along the name of the input file if you wish.
 please note that if there is a compilation error, it may be due to not being able to find JUnit.  
 This can be solved by moving the test files with the code to the Testing folder while you run the program.  
 
+Please refer to Misc. Notes below for dependency information.
 
 ## Notes on Testing
 Please note that for our final product, many of the methods that are used in tests are private, primarily in IR, CPL, etc. as there is no reason to use them
@@ -41,4 +48,8 @@ In RunElectionTests, it is important to uncomment the setters in RunElection.
 All of these are located at the bottom of their respective classes.
 It is easiest to re-publicize all methods in the beginning and comment back in related getters and setters for the class the tests
 are testing.
+
+## Misc Notes
+If you ever receive any error message that says that a dependency cannot be located, please click the rebuild option
+to rebuild the project with Maven to refresh.
 

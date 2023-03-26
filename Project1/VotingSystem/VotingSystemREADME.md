@@ -1,0 +1,1 @@
+The VotingSystem directory contains everything related to Project1, including src folder, Testing folder, etc.
