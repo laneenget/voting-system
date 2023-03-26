@@ -1,3 +1,5 @@
+package VotingSystem;
+
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ public class TreeTests {
         tree.insert(ballot2);
 
         ArrayList<ArrayList<Integer>> ballots = tree.getBallots(tree.getRoot());
-        assertEquals(2, ballots.size());
+        Assert.assertEquals(2, ballots.size());
 
         ArrayList<Integer> expected1 = new ArrayList<Integer>();
         expected1.add(0);
@@ -42,8 +44,8 @@ public class TreeTests {
         expected2.add(2);
         expected2.add(1);
 
-        assertTrue(ballots.contains(expected1));
-        assertTrue(ballots.contains(expected2));
+        Assert.assertTrue(ballots.contains(expected1));
+        Assert.assertTrue(ballots.contains(expected2));
     }
 
     @Test
@@ -61,7 +63,7 @@ public class TreeTests {
         tree.insert(ballot2);
 
         ArrayList<ArrayList<Integer>> nodes = tree.getNodes(tree.getRoot());
-        assertEquals(2, nodes.size());
+        Assert.assertEquals(2, nodes.size());
 
         ArrayList<Integer> expected1 = new ArrayList<Integer>();
         expected1.add(1);
@@ -75,8 +77,8 @@ public class TreeTests {
         expected2.add(2);
         expected2.add(1);
 
-        assertTrue(nodes.contains(expected1));
-        assertTrue(nodes.contains(expected2));
+        Assert.assertTrue(nodes.contains(expected1));
+        Assert.assertTrue(nodes.contains(expected2));
     }
 }
 

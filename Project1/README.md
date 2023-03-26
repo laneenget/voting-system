@@ -16,7 +16,7 @@ This can be solved by moving the test files with the code to the Testing folder 
 Please note that for our final product, many of the methods that are used in tests are private, primarily in IR, CPL, etc. as there is no reason to use them
 externally. This may further affect the tests as the tests were primarily used in development when these methods were not private. Please note
 that if the tests show you an error when you run them it may be due to the method being private now. You may be able to change them back to being public
-if you wish to run a specific test on that method.
+if you wish to run a specific test on that method. It may be easier to change all private methods to public to avoid going back and forth.
 All test resources (files) may be found in repo-Team18/Project1/VotingSystem/Testing  
 If you wish to run the tests, we strongly recommend using IntelliJ.
 We have noticed that different IDEs may set up the classpath, configuration, etc. differently.  
@@ -35,4 +35,10 @@ please ensure that it is not due to accessing a private or protected field that 
 We have left getters that should provide access to these fields in their respective classes, which are currently commented out.
 Please uncomment them if you wish to run tests that involve accessing private or protected fields.
 Many of our tests currently rely on using these auto-generated getters.
+
+For instance, in IRtests, it is imperative to uncomment the getters and setters in the IR Class, Tree Class, Node Class.
+In RunElectionTests, it is important to uncomment the setters in RunElection.
+All of these are located at the bottom of their respective classes.
+It is easiest to re-publicize all methods in the beginning and comment back in related getters and setters for the class the tests
+are testing.
 

@@ -1,9 +1,8 @@
-package IRTestsResources;
+package VotingSystem;
 
 import java.io.*;
 import java.util.ArrayList;
 
-import VotingSystem.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +42,9 @@ public class IRtests {
 
          irInitialize = new IR(input, null, brIR);
          irInitialize.setCandidates(new Candidate[4]);
+         // Please note that initializeCandidates is now Private
+        // Since this line runs before any test, please change initializeCandidates back to public for testing
+        // Many setters/getters should be uncommented in the IR class located at the very bottom, as well as Tree
          irInitialize.initializeCandidates(candidateNames);
 
     }
