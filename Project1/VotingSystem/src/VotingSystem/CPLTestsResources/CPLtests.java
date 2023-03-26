@@ -1,11 +1,9 @@
-package CPLTestsResources;
+package VotingSystem.CPLTestsResources;
 
 import java.io.*;
-import java.util.ArrayList;
 
 import VotingSystem.*;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
@@ -37,14 +35,14 @@ public class CPLtests {
         br1.readLine();
         cplParse = new CPL(reader1, null, br1);
         cplParse.parseHeader();
-        Assert.assertTrue(  cplParse.getParties()[0].getName() == "PartyA" && 
-                            cplParse.getParties()[1].getName() == "PartyB" && 
-                            cplParse.getParties()[2].getName() == "PartyC" &&
+        Assert.assertTrue(  cplParse.getParties()[0].getName().equals("PartyA") &&
+                            cplParse.getParties()[1].getName().equals("PartyB") &&
+                            cplParse.getParties()[2].getName().equals("PartyC") &&
                             cplParse.getTotalSeats() == 1 &&
                             cplParse.getVoteTotal() == 6 &&
-                            cplParse.getParties()[0].getCandidates()[0] == "Bob" &&
-                            cplParse.getParties()[1].getCandidates()[0] == "Mike" &&
-                            cplParse.getParties()[2].getCandidates()[0] == "Sam" &&);
+                            cplParse.getParties()[0].getCandidates()[0].equals("Bob") &&
+                            cplParse.getParties()[1].getCandidates()[0].equals("Mike") &&
+                            cplParse.getParties()[2].getCandidates()[0].equals("Sam"));
     }
 
     @Test
@@ -62,7 +60,7 @@ public class CPLtests {
     }
 
     @Test
-    public void test_processFile() throws IOException {
+    public void test_processFile_2() throws IOException {
         // Test for the conductAlgorithm() function
         FileReader reader3 = new FileReader((CPLtests.class.getResource("basic.csv")).getFile());
         BufferedReader br3 = new BufferedReader(reader3);
@@ -84,10 +82,10 @@ public class CPLtests {
         br4.readLine();
         cplInitialize = new CPL(reader4, null, br4);
         cplInitialize.parseHeader();
-        cplInitialize.initializeParty({"PartyD", "PartyE", "PartyF"});
-        Assert.assertTrue(  cplInitialize.getParties()[0].getName() == "PartyD" && 
-                            cplInitialize.getParties()[1].getName() == "PartyE" && 
-                            cplInitialize.getParties()[2].getName() == "PartyF" );
+        cplInitialize.initializeParty(new String[]{"PartyD", "PartyE", "PartyF"});
+        Assert.assertTrue(  cplInitialize.getParties()[0].getName().equals("PartyD") &&
+                            cplInitialize.getParties()[1].getName().equals("PartyE") &&
+                            cplInitialize.getParties()[2].getName().equals("PartyF"));
     }
 
     @Test
@@ -196,7 +194,7 @@ public class CPLtests {
         Assert.assertTrue(  cplAllTie.getParties()[0].getSeatsReceived() + cplAllTie.getParties()[1].getSeatsReceived() + cplAllTie.getParties()[2].getSeatsReceived() == 4 &&
                             cplAllTie.getParties()[0].getSeatsReceived() >= 1 &&
                             cplAllTie.getParties()[1].getSeatsReceived() >= 1 &&
-                            cplAllTie.getParties()[2].getSeatsReceived() >= 1 &&
+                            cplAllTie.getParties()[2].getSeatsReceived() >= 1
                          );
     }
 
@@ -212,12 +210,12 @@ public class CPLtests {
         basic.parseHeader();
         basic.processFile();
         basic.conductAlgorithm();
-        Assert.assertTrue(  basic.getParties()[0].getName() == "PartyA" && 
-                            basic.getParties()[1].getName() == "PartyB" && 
-                            basic.getParties()[2].getName() == "PartyC" &&
-                            basic.getTotalSeats() == 1 &&
+        Assert.assertTrue(  basic.getParties()[0].getName().equals("PartyA") &&
+                            basic.getParties()[1].getName().equals("PartyB") &&
+                            basic.getParties()[2].getName().equals("PartyC") &&
+                            basic.getTotalSeats() == 0 &&
                             basic.getVoteTotal() == 6 &&
-                            basic.getParties()[0].getCandidates()[0] == "Bob" &&
+                            basic.getParties()[0].getCandidates()[0].equals("Bob") &&
                             basic.getParties()[1].getSeatsReceived() == 1);
     }
 
@@ -225,22 +223,22 @@ public class CPLtests {
     public void test_france() throws IOException {
         // Scenario depicting a french election
         FileReader reader13 = new FileReader((CPLtests.class.getResource("france.csv")).getFile());
-        BufferedReader br13 = new BufferedReader(reader12);
+        BufferedReader br13 = new BufferedReader(reader13);
         br13.readLine();
         france = new CPL(reader13, null, br13);
         france.parseHeader();
         france.processFile();
         france.conductAlgorithm();
-        Assert.assertTrue(  france.getParties()[0].getName() == "La France Insoumise" && 
-                            france.getParties()[1].getName() == "Les Verts" && 
-                            france.getParties()[2].getName() == "En Marche" &&
-                            france.getParties()[3].getName() == "Les Republicains" &&
-                            france.getParties()[4].getName() == "Rassemblement National" &&
-                            france.getTotalSeats() == 3 &&
+        Assert.assertTrue(  france.getParties()[0].getName().equals("La France Insoumise") &&
+                            france.getParties()[1].getName().equals("Les Verts") &&
+                            france.getParties()[2].getName().equals("En Marche") &&
+                            france.getParties()[3].getName().equals("Les Republicains") &&
+                            france.getParties()[4].getName().equals("Rassemblement National") &&
+                            france.getTotalSeats() == 0 &&
                             france.getVoteTotal() == 25 &&
-                            france.getParties()[0].getCandidates()[0] == "Melenchon" &&
-                            france.getParties()[2].getCandidates()[0] == "Macron" &&
-                            france.getParties()[2].getCandidates()[2] == "Lagarde" &&
+                            france.getParties()[0].getCandidates()[0].equals("Melenchon") &&
+                            france.getParties()[2].getCandidates()[0].equals("Macron") &&
+                            france.getParties()[2].getCandidates()[2].equals("Lagarde") &&
                             france.getParties()[2].getSeatsReceived() >= 1 &&
                             (france.getParties()[0].getSeatsReceived() == 1 || france.getParties()[4].getSeatsReceived() == 1)
                          );

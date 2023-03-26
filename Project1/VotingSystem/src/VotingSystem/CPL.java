@@ -55,7 +55,7 @@ public class CPL extends Election {
      *
      * @return The array of party objects representing all parties in the CPL election
      */
-    public int getParties() {
+    public Party[] getParties() {
         return parties;
     }
 
@@ -112,7 +112,7 @@ public class CPL extends Election {
             }
             return;
         }
-        int leftover = voteTotal%totalSeats
+        int leftover = voteTotal%totalSeats;
         int quota = (voteTotal + (totalSeats - leftover))/totalSeats; //forces quota to round up
 
         // First allocation of seats

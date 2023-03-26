@@ -23,11 +23,11 @@ import VotingSystem.IR;
 import VotingSystem.RunElection;
 
 public class RunElectionTests {
-    
+
     private RunElection election;
     private File file;
     private FileWriter audit;
-    
+
     @BeforeEach
     public void setUp() throws IOException {
         String path = System.getProperty("user.dir");
@@ -35,21 +35,21 @@ public class RunElectionTests {
         audit = mock(FileWriter.class);
         election = new RunElection(file.getName());
     }
-    
+
     @Test
     public void testGenerateAuditFileName() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now();
         String expectedIRName = "IR" + now.format(formatter) + ".txt";
         String expectedCPLName = "CPL" + now.format(formatter) + ".txt";
-        
+
         String actualIRName = election.generateAuditFileName("IR");
         String actualCPLName = election.generateAuditFileName("CPL");
-        
+
         Assertions.assertEquals(expectedIRName, actualIRName);
         Assertions.assertEquals(expectedCPLName, actualCPLName);
     }
-    
+
     @Test
     public void testParseElectType_IR() throws IOException {
         election.input = new FileReader(file);
@@ -66,7 +66,7 @@ public class RunElectionTests {
         String expectedType = "CPL";
         Assertions.assertEquals(expectedType, actualType);
     }
-    
+
     @Test
     public void testRunIR() throws IOException {
         IR ir = mock(IR.class);
@@ -80,7 +80,7 @@ public class RunElectionTests {
         election.audit = fw;
         election.runIR();
     }
-    
+
     @Test
     public void testRunCPL() throws IOException {
         CPL cpl = mock(CPL.class);
@@ -94,7 +94,7 @@ public class RunElectionTests {
         election.audit = fw;
         election.runCPL();
     }
-    
+
     @Test
     public void testStartWithValidFile() throws IOException {
         file = new File("testStartWithValidFile.csv");
@@ -107,17 +107,17 @@ public class RunElectionTests {
         br.readLine();
         election.br = br;
         RunElection spyElection = org.mockito.Mockito.spy(election);
-        
+
         spyElection.start();
-        
+
         org.mockito.Mockito.verify(spyElection).runIR();
     }
-    
+
     @Test
     public void testStartWithInvalidFile() throws IOException {
         election = new RunElection("invalid.csv");
         RunElection spyElection = org.mockito.Mockito.spy(election);
-        
+
         Assertions.assertThrows(NullPointerException.class, () -> {
             spyElection.start();
         });
