@@ -30,8 +30,7 @@ public class RunElectionTests {
 
     @BeforeEach
     public void setUp() throws IOException {
-        String path = System.getProperty("user.dir");
-        file = new File(path, "/Project1/VotingSystem/Testing/RunElectionTest.csv");
+        file = new File("RunElectionTest.csv");
         audit = mock(FileWriter.class);
         election = new RunElection(file.getName());
     }
@@ -52,7 +51,7 @@ public class RunElectionTests {
 
     @Test
     public void testParseElectType_IR() throws IOException {
-        election.input = new FileReader(file);
+        election.setInput(new FileReader(file));
         String actualType = election.parseElectType();
         String expectedType = "IR";
         Assertions.assertEquals(expectedType, actualType);
@@ -61,7 +60,7 @@ public class RunElectionTests {
     @Test
     public void testParseElectType_CPL() throws IOException {
         File f = new File("RunElectionTestCPL.csv");
-        election.input = new FileReader(f);
+        election.setInput(new FileReader(f));
         String actualType = election.parseElectType();
         String expectedType = "CPL";
         Assertions.assertEquals(expectedType, actualType);
@@ -71,13 +70,13 @@ public class RunElectionTests {
     public void testRunIR() throws IOException {
         IR ir = mock(IR.class);
         file = new File("RunElectionTests1.csv");
-        election.input = new FileReader(file);
+        election.setInput(new FileReader(file));
         BufferedReader br = new BufferedReader(new FileReader(file));
-        election.br = br;
+        election.setBr(br);
         br.readLine();
-        File mockAudit = new File(path, "/Project1/VotingSystem/Testing/Audit_RunElectionTests1.csv");
+        File mockAudit = new File("Audit_RunElectionTests1.csv");
         FileWriter fw = new FileWriter(mockAudit);
-        election.audit = fw;
+        election.setAudit(fw);
         election.runIR();
     }
 
@@ -85,13 +84,13 @@ public class RunElectionTests {
     public void testRunCPL() throws IOException {
         CPL cpl = mock(CPL.class);
         file = new File("RunElectionTest2.csv");
-        election.input = new FileReader(file);
+        election.setInput(new FileReader(file));
         BufferedReader br = new BufferedReader(new FileReader(file));
-        election.br = br;
+        election.setBr(br);
         br.readLine();
         File mockAudit = new File("Audit_RunElectionTest2.csv");
         FileWriter fw = new FileWriter(mockAudit);
-        election.audit = fw;
+        election.setAudit(fw);
         election.runCPL();
     }
 
@@ -99,13 +98,13 @@ public class RunElectionTests {
     public void testStartWithValidFile() throws IOException {
         file = new File("testStartWithValidFile.csv");
         election = new RunElection(file.getName());
-        election.input(new FileReader(file));
+        election.setInput(new FileReader(file));
         File mockAudit = new File("Audit_testStartWithValidFile.csv");
         FileWriter fw = new FileWriter(mockAudit);
-        election.audit(fw);
+        election.setAudit(fw);
         BufferedReader br = new BufferedReader(new FileReader(file));
         br.readLine();
-        election.br = br;
+        election.setBr(br);
         RunElection spyElection = org.mockito.Mockito.spy(election);
 
         spyElection.start();

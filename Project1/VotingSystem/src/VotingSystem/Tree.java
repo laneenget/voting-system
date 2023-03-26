@@ -139,7 +139,7 @@ public class Tree {
     }
 
     // Testing purposes
-    public Node getRoot() {
-        return this.root;
-    }
+//    public Node getRoot() {
+//        return this.root;
+//    }
 }
