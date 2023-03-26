@@ -11,7 +11,7 @@ public abstract class Election {
     protected FileReader input;
 
     abstract public void processFile();
-    /*
+    /**
      * This method is used to break ties in the election. It takes in an arraylist of candidates
      * and the number of candidates to eliminate. It then randomly selects candidates to eliminate
      * @param candidates ArrayList of candidates to break the tie
