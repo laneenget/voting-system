@@ -193,26 +193,25 @@ public class IR extends Election{
         try {
             while ((ballotString = br.readLine()) != null) {
                 nextBallot = ballotString.split(",",-1);
-                writeToAudit(nextBallot);
-                ArrayList<Integer> ballot = new ArrayList<Integer>();
-                int specialIndex =-1;
-                for(int i = 0; i < nextBallot.length; i++){
-                    int curRank = 0;
-                    if(!nextBallot[i].equals("")){
-                        curRank = Integer.parseInt(nextBallot[i]);
+                writeToAudit(nextBallot); // Write the ballot to the audit file
+                ArrayList<Integer> ballot = new ArrayList<Integer>(); // Arraylist to hold ballot
+                int specialIndex =-1; // Variable to hold index of candidate with rank 1
+                for(int i = 0; i < nextBallot.length; i++){ // Loop through ballot
+                    int curRank = 0; // Set default rank to 0, will be overwritten if not empty
+                    if(!nextBallot[i].equals("")){ // If the rank is not empty
+                        curRank = Integer.parseInt(nextBallot[i]); // Parse the rank
                         if(curRank == 1){
                             specialIndex = i;
                         }
                     }
-                        ballot.add(curRank);
+                        ballot.add(curRank); // Add the rank to the ballot
                     }
 
-                Tree candidateTree = this.candidates[specialIndex].getBallots();
-                candidateTree.insert(ballot);
+                Tree candidateTree = this.candidates[specialIndex].getBallots(); // Get tree of candidate with rank 1
+                candidateTree.insert(ballot); // Insert the ballot into the tree
             }
         }
         catch (NumberFormatException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
