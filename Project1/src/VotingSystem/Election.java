@@ -23,32 +23,36 @@ public abstract class Election {
      * @return int[] of the candidates to eliminate
      */
     public int [] breakTie(ArrayList<Integer> candidates, int numToEliminate){
-        if(candidates.size() <= numToEliminate){
+        if(candidates.size() <= numToEliminate){ // If there are less candidates than the number to eliminate
             return candidates.stream()
                     .mapToInt(Integer::intValue)
                     .toArray();
         }
-        int[] eliminated = new int[numToEliminate];
-        int n = numToEliminate;
-        ArrayList<Integer> c = new ArrayList<Integer>(candidates);
-        while(n > 0){
-            SecureRandom rand = new SecureRandom();
-            int index = rand.nextInt(c.size());
-            eliminated[n - 1] = c.get(index);
-            c.remove(index);
-            n--;
+        int[] eliminated = new int[numToEliminate]; // Array to store the eliminated candidates
+        int n = numToEliminate; // Number of candidates to eliminate
+        ArrayList<Integer> c = new ArrayList<Integer>(candidates); // Copy of the candidates
+        while(n > 0){ // While there are still candidates to eliminate
+            SecureRandom rand = new SecureRandom(); // Random number generator
+            int index = rand.nextInt(c.size()); // Random index in range of the candidates
+            eliminated[n - 1] = c.get(index); // Add the candidate to the eliminated array
+            c.remove(index); // Remove the candidate from the candidates array
+            n--; // Decrement the number of candidates to eliminate
         }
-        return eliminated;
+        return eliminated; // Return the array of eliminated candidates
     }
     abstract public void conductAlgorithm();
     abstract public void printResults();
+    /**
+     * This method is used to write the output to the audit file
+     * @param output String[] of the output to write to the audit file
+     */
     public void writeToAudit(String[] output){
         try {
-            for (String s : output) {
-                audit.write(s);
+            for (String s : output) { // Write the output to the audit file
+                audit.write(s); 
                 audit.write(", ");
             }
-            audit.write("\n");
+            audit.write("\n"); // Write a new line to the audit file
         } catch (Exception e) {
             System.out.println("Error writing to audit file");
         }
