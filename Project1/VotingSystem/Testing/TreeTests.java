@@ -67,11 +67,13 @@ public class TreeTests {
         expected1.add(1);
         expected1.add(2);
         expected1.add(3);
+        expected1.add(1);
 
         ArrayList<Integer> expected2 = new ArrayList<Integer>();
         expected2.add(1);
         expected2.add(3);
         expected2.add(2);
+        expected2.add(1);
 
         assertTrue(nodes.contains(expected1));
         assertTrue(nodes.contains(expected2));
