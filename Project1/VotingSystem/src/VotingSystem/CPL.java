@@ -77,11 +77,14 @@ public class CPL extends Election {
         for(int i = 0; i < seats; i++) {
             int[] party = breakTie(subIndexes, 1);
             parties[party[0]].incrementSeatCount();
-            String[] subannouncement = {"One lotto seat has been given to " + parties[party[0]].getName()};
-            writeToAudit(subannouncement);
+            String[] subAnnouncement = {"One lotto seat has been given to " + parties[party[0]].getName()};
+            writeToAudit(subAnnouncement);
         }
     }
     
+    /**
+    * Processes the input file to count votes for each party and writes the record to the audit file
+    */
     public void processFile(){
         String ballot = "";
         for(int i = 0; i < voteTotal; i++) {
