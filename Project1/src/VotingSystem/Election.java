@@ -40,7 +40,15 @@ public abstract class Election {
         }
         return eliminated; // Return the array of eliminated candidates
     }
+
+    /**
+     * This is an abstract method meant to represent conducting an election
+     */
     abstract public void conductAlgorithm();
+
+    /**
+     * This is an abstract method meant to represent printing the results for an election
+     */
     abstract public void printResults();
     /**
      * This method is used to write the output to the audit file
@@ -58,6 +66,10 @@ public abstract class Election {
         }
 
     }
+
+    /**
+     * This is an abstract method meant to represent parsing the header
+     */
     abstract public void parseHeader();
 
 

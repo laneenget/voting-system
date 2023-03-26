@@ -16,7 +16,11 @@ public class Node {
     protected boolean hasChildren = false;
     protected ArrayList<Integer> ballot = null;
 
-    // Testing purposes
+    /**
+     * Getter for the children nodes
+     * @return a Node[] that is the children of the node
+     */
+    // Testing purposes ONLY
     public Node[] getChildren() {
         return this.children;
     }

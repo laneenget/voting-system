@@ -3,6 +3,7 @@ package VotingSystem;
 import java.io.*;
 import java.util.ArrayList;
 
+import VotingSystem.RunElection;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

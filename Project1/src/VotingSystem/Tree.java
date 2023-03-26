@@ -144,6 +144,10 @@ public class Tree {
 
     }
 
+    /**
+     * Getter for the root of the tree
+     * @return Node that is the root of the tree
+     */
     // Testing purposes
     public Node getRoot() {
         return this.root;

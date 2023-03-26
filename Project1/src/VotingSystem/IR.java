@@ -365,12 +365,28 @@ public class IR extends Election{
             throw new RuntimeException(e);
         }
     }
-
     // testing purposes
+    /**
+     * getter that returns Candidate array
+     * @return Candidate array of Candidate objects
+     */
     public Candidate[] getCandidates() {return this.candidates;}
+
+    /**
+     * setter for candidates
+     * @param candidates A Candidate Array to set
+     */
     public void setCandidates(Candidate[] candidates) {this.candidates = candidates;}
 
+    /**
+     * getter for curNumCandidates
+     * @return int that represents curNumCandidates
+     */
     public int getCurNumCandidates() {return this.curNumCandidates;}
 
+    /**
+     * getter for numBallots
+     * @return int that represents numBallots
+     */
     public int getNumBallots() {return this.numBallots;}
 }

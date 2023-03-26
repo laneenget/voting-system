@@ -139,8 +139,22 @@ public class RunElection {
         Election.printResults();
     }
 
-//    // Only for running tests
+    // Only for running tests
+    /**
+     * Setter for input
+     * @param input A FileReader that serves as the input
+     */
     public void setInput(FileReader input) {this.input = input;}
+
+    /**
+     * Setter for audit
+     * @param audit FileWriter that represents the audit
+     */
     public void setAudit(FileWriter audit) {this.audit = audit;}
+
+    /**
+     * setter for br
+     * @param br BufferedReader that represents the br to read the file
+     */
     public void setBr(BufferedReader br) {this.br = br;}
 }
