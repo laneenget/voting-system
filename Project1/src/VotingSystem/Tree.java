@@ -2,12 +2,18 @@ package VotingSystem;
 
 import java.util.ArrayList;
 
+/**
+ * This class represent the way we store the ballots for each candidate.
+ * Each pathway in the tree represents a ballot.
+ * We use this structure for storing votes and figuring out how to reassign them
+ * @author Jonathan Haak
+ */
 public class Tree {
     protected Node root;
     protected boolean isInitialized;
     protected int numCandidates;
 
-    /*
+    /**
      * This method is used to initialize a tree
      * @param index index of the root node
      * @param numCandidates number of candidates in the election
@@ -22,7 +28,7 @@ public class Tree {
         isInitialized = true;
         root.hasChildren = false;
     }
-    /*
+    /**
      * This method is used to initialize a node
      * @return Node
      */
@@ -33,7 +39,7 @@ public class Tree {
         return node;
 
     }
-    /*
+    /**
      * This method is used to help get the ballots from the tree
      * @param node node to start at
      * @return ArrayList<ArrayList<Integer>> of ballot information
@@ -60,7 +66,7 @@ public class Tree {
         }
         return nodes;
     }
-    /*
+    /**
      * This method is used to get the ballots from the tree
      * @param node node to start at
      * @return ArrayList<ArrayList<Integer>> of ballots
@@ -89,7 +95,7 @@ public class Tree {
 
 
     }
-    /*
+    /**
      * This method is used to insert a ballot into the tree
      * This method must be called by the Tree of the candidate
      * who is the first choice on the ballot

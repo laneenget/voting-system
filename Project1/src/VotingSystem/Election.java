@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.security.SecureRandom;
 
 
+/**
+ * This is an abstract class that represents what CPL and IR both have in common
+ * @author Jonathan Haak
+ */
 public abstract class Election {
     protected FileWriter audit;
     protected FileReader input;
