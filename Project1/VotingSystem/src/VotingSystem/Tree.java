@@ -7,7 +7,11 @@ public class Tree {
     protected boolean isInitialized;
     protected int numCandidates;
 
-
+    /*
+     * This method is used to initialize a tree
+     * @param index index of the root node
+     * @param numCandidates number of candidates in the election
+     */
     public Tree(int index, int numCandidates){
         root = new Node();
         this.numCandidates = numCandidates;
@@ -18,6 +22,10 @@ public class Tree {
         isInitialized = true;
         root.hasChildren = false;
     }
+    /*
+     * This method is used to initialize a node
+     * @return Node
+     */
     public Node initalizeNode(){
         Node node = new Node();
         node.curDepth = 0;
@@ -25,6 +33,12 @@ public class Tree {
         return node;
 
     }
+    /*
+     * This method is used to help get the ballots from the tree
+     * @param node node to start at
+     * @return ArrayList<ArrayList<Integer>> of ballot information
+     * from each node
+     */
     public ArrayList<ArrayList<Integer>> getNodes(Node node){
         ArrayList<ArrayList<Integer>> nodes = new ArrayList<ArrayList<Integer>>();
         ArrayList<Integer> ballot = new ArrayList<Integer>();
@@ -46,10 +60,14 @@ public class Tree {
         }
         return nodes;
     }
+    /*
+     * This method is used to get the ballots from the tree
+     * @param node node to start at
+     * @return ArrayList<ArrayList<Integer>> of ballots
+     */
     public ArrayList<ArrayList<Integer>> getBallots(Node node){
         ArrayList<ArrayList<Integer>> nodes = getNodes(node);
         ArrayList<ArrayList<Integer>> returnBals = new ArrayList<ArrayList<Integer>>();
-        int numBallots = 0;
         ArrayList<Integer> temp;
         ArrayList<Integer> hold;
         int size = nodes.size();
@@ -64,15 +82,19 @@ public class Tree {
             }
             for(int j = 0; j < count; j++){
                 returnBals.add(temp);
-                numBallots++;
             }
         
         }
-//        System.out.println(numBallots + " is numBallots");
         return returnBals;
 
 
     }
+    /*
+     * This method is used to insert a ballot into the tree
+     * This method must be called by the Tree of the candidate
+     * who is the first choice on the ballot
+     * @param ballot ballot to be inserted
+     */
     public void insert(ArrayList<Integer> ballot){
         Node hold = new Node();
         hold = root;
