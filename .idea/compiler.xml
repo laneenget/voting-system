@@ -9,8 +9,5 @@
         <module name="repo-Team18" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="repo-Team18" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>
