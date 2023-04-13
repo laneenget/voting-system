@@ -18,7 +18,7 @@ import static org.junit.Assert.fail;
  * output and validating the creation of
  * an accurate audit file.
  */
-public class Maintests {
+public class MainTests {
     
 
 

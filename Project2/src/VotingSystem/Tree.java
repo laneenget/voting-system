@@ -45,7 +45,7 @@ public class Tree {
      * @return ArrayList<ArrayList<Integer>> of ballot information
      * from each node
      */
-    private ArrayList<ArrayList<Integer>> getNodes(Node node){
+    ArrayList<ArrayList<Integer>> getNodes(Node node){
         ArrayList<ArrayList<Integer>> nodes = new ArrayList<ArrayList<Integer>>();
         ArrayList<Integer> ballot = new ArrayList<Integer>();
         Node hold = node;

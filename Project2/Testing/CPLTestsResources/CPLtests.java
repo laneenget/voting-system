@@ -1,7 +1,9 @@
-package VotingSystem;
+package CPLTestsResources;
 
 import java.io.*;
 
+import VotingSystem.CPL;
+import VotingSystem.RunElection;
 import org.junit.Assert;
 import org.junit.Test;
 

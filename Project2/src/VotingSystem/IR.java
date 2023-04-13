@@ -36,7 +36,7 @@ public class IR extends Election{
      * Eliminates a single candidate and handles the distribution of ballots from the eliminated candidate.
      * @param index an int that represents the index of the candidate to eliminate.
      */
-    private void eliminateCandidate(int index){
+    public void eliminateCandidate(int index){
         int i;
         Tree eliminatedTree = this.candidates[index].getBallots();
         String[] eliminatingAnnouncement = {"Commence transferring of to-be eliminated candidate " +
@@ -77,7 +77,7 @@ public class IR extends Election{
      * @param ballots an ArrayList<ArrayList<Integer>> of ballots to insert.
      * @param index an int that represents the index of the candidate to transfer the votes to.
      */
-    private void reassignVotesNoneEliminated(ArrayList<ArrayList<Integer>> ballots, int index) {
+    public void reassignVotesNoneEliminated(ArrayList<ArrayList<Integer>> ballots, int index) {
         // When there are no eliminated candidates yet, we do not need to mutate the ballot
         // Instead, the ballots may all be directly inserted into the corresponding candidate's tree
         Tree toInsert = this.candidates[index].getBallots();
@@ -97,7 +97,7 @@ public class IR extends Election{
      * @param eliminated an ArrayList<Integer> that represents the indices of the previously eliminated candidates.
      * @param ballots an ArrayList<ArrayList<Integer>> that represents all the ballots to transfer.
      */
-    private void reassignVotes(ArrayList<Integer> eliminated, ArrayList<ArrayList<Integer>> ballots){
+    public void reassignVotes(ArrayList<Integer> eliminated, ArrayList<ArrayList<Integer>> ballots){
         int i;
         HashMap<Integer, Integer> ballotsMap = new HashMap<>();
         int j;
@@ -157,7 +157,7 @@ public class IR extends Election{
      * Determines the candidate with a majority.
      * @return null if no candidate has a majority, or the Candidate object that does.
      */
-    private Candidate majorityCandidate(){
+    public Candidate majorityCandidate(){
         int i;
         int totalVotes = 0;
         int curMaxVotes = Integer.MIN_VALUE;
@@ -277,7 +277,7 @@ public class IR extends Election{
      * Initializes the candidates array with initialized Candidate objects.
      * @param candidatesList a String array of candidate names and parties.
      */
-    private void initializeCandidates(String[] candidatesList) {
+    public void initializeCandidates(String[] candidatesList) {
         String[] initializationAnnouncement = {"Commence initialization of candidate information: "};
         writeToAudit(initializationAnnouncement);
         int i;

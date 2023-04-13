@@ -1,8 +1,12 @@
-package VotingSystem;
+package IRTestsResources;
 
 import java.io.*;
 import java.util.ArrayList;
 
+import VotingSystem.Candidate;
+import VotingSystem.IR;
+import VotingSystem.Node;
+import VotingSystem.RunElection;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

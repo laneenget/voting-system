@@ -93,7 +93,7 @@ public class RunElection {
      * @param elecType A String representing what type of election is taking place.
      * @return String that is the full name of the soon-to-be audit file.
      */
-    private String generateAuditFileName(String elecType){
+    String generateAuditFileName(String elecType){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String d2 = now.format(f);
@@ -104,7 +104,7 @@ public class RunElection {
      * Helper function for the start() function, used in conjunture with the generateAuditFileName(). Reads first line of input file.
      * @return String that represents the type of election.
      */
-    private String parseElectType(){
+    String parseElectType(){
         String line = "";
         this.br = new BufferedReader(input);
         try {
@@ -120,7 +120,7 @@ public class RunElection {
     /**
      * Helper function for the start() function. Creates an IR election and runs its main methods to complete the program.
      */
-    private void runIR(){
+    void runIR(){
         IR Election = new IR(input, audit, br);
         Election.parseHeader();
         Election.processFile();
@@ -131,7 +131,7 @@ public class RunElection {
     /**
      * Helper function for the start() function. Creates a CPL election and runs its main methods to complete the program.
      */
-    private void runCPL(){
+    void runCPL(){
         CPL Election = new CPL(input, audit, br);
         Election.parseHeader();
         Election.processFile();
