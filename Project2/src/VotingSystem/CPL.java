@@ -16,8 +16,6 @@ public class CPL extends Election {
     private Party[] parties;
     private int voteTotal;
     private int totalSeats;
-    private FileReader input;
-    private FileWriter output;
     private BufferedReader br;
 
     private int[] globalVotes;
@@ -29,7 +27,7 @@ public class CPL extends Election {
     * @param audit A FileWriter that represents the audit file to write to
     * @param br Is the BufferReader that this class will use to parse the input file
     */
-    public CPL(FileReader input, FileWriter audit, BufferedReader br){
+    public CPL(ArrayList<FileReader> input, FileWriter audit, BufferedReader br){
         super.input = input;
         super.audit = audit;
         this.br = br;
@@ -89,17 +87,36 @@ public class CPL extends Election {
     * Processes the input file to count votes for each party and writes the record to the audit file
     */
     public void processFile(){
-        String ballot = "";
-        for(int i = 0; i < voteTotal; i++) {
-            try {
-                ballot = br.readLine();
+        int maxPartyLength = 0;
+        for(int i = 0; i < parties.length; i++) {
+            if (parties[i].getCandidates().length > maxPartyLength) {
+                maxPartyLength = parties[i].getCandidates().length;
+            }
+        }
+        for(int j = 0; j < input.size(); j++) {
+            String ballot = "";
+            for (int i = 0; i < voteTotal; i++) {
+                try {
+                    ballot = br.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                parties[ballot.indexOf("1")].incrementVoteCount();
+                globalVotes[ballot.indexOf("1")] = globalVotes[ballot.indexOf("1")] + 1;
+                String[] announcement = {"Ballot " + ballot + " increments vote count of the '" + parties[ballot.indexOf("1")].getName() + "' party"};
+                writeToAudit(announcement);
+            }
+            try{
+                br.close();
+                if(j+1 < input.size()) {
+                    br = new BufferedReader(input.get(j + 1));
+                    for(int i = 0; i < 4 + maxPartyLength; i++) {
+                        br.readLine();
+                    }
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            parties[ballot.indexOf("1")].incrementVoteCount();
-            globalVotes[ballot.indexOf("1")] = globalVotes[ballot.indexOf("1")] + 1;
-            String[] announcement = {"Ballot " + ballot + " increments vote count of the '" + parties[ballot.indexOf("1")].getName() + "' party"};
-            writeToAudit(announcement);
         }
     }
 

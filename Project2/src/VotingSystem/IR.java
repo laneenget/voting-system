@@ -26,7 +26,7 @@ public class IR extends Election{
      * @param input A FileReader that represents the election input file to process
      * @param audit A FileWriter that represents the audit file to write to
      */
-    public IR(FileReader input, FileWriter audit, BufferedReader br){
+    public IR(ArrayList<FileReader> input, FileWriter audit, BufferedReader br){
         super.input = input;
         super.audit = audit;
         this.br = br;
@@ -190,29 +190,41 @@ public class IR extends Election{
     public void processFile(){
         String [] nextBallot;
         String ballotString;
-        try {
-            while ((ballotString = br.readLine()) != null) {
-                nextBallot = ballotString.split(",",-1);
-                writeToAudit(nextBallot); // Write the ballot to the audit file
-                ArrayList<Integer> ballot = new ArrayList<Integer>(); // Arraylist to hold ballot
-                int specialIndex =-1; // Variable to hold index of candidate with rank 1
-                for(int i = 0; i < nextBallot.length; i++){ // Loop through ballot
-                    int curRank = 0; // Set default rank to 0, will be overwritten if not empty
-                    if(!nextBallot[i].equals("")){ // If the rank is not empty
-                        curRank = Integer.parseInt(nextBallot[i]); // Parse the rank
-                        if(curRank == 1){
-                            specialIndex = i;
+        for(int j = 0; j < input.size(); j++ ) {
+            try {
+                while ((ballotString = br.readLine()) != null) {
+                    nextBallot = ballotString.split(",", -1);
+                    writeToAudit(nextBallot); // Write the ballot to the audit file
+                    ArrayList<Integer> ballot = new ArrayList<Integer>(); // Arraylist to hold ballot
+                    int specialIndex = -1; // Variable to hold index of candidate with rank 1
+                    for (int i = 0; i < nextBallot.length; i++) { // Loop through ballot
+                        int curRank = 0; // Set default rank to 0, will be overwritten if not empty
+                        if (!nextBallot[i].equals("")) { // If the rank is not empty
+                            curRank = Integer.parseInt(nextBallot[i]); // Parse the rank
+                            if (curRank == 1) {
+                                specialIndex = i;
+                            }
                         }
-                    }
                         ballot.add(curRank); // Add the rank to the ballot
                     }
 
-                Tree candidateTree = this.candidates[specialIndex].getBallots(); // Get tree of candidate with rank 1
-                candidateTree.insert(ballot); // Insert the ballot into the tree
+                    Tree candidateTree = this.candidates[specialIndex].getBallots(); // Get tree of candidate with rank 1
+                    candidateTree.insert(ballot); // Insert the ballot into the tree
+                }
+            } catch (NumberFormatException | IOException e) {
+                e.printStackTrace();
             }
-        }
-        catch (NumberFormatException | IOException e) {
-            e.printStackTrace();
+            if(j < input.size() - 1){
+                try {
+                    br.close();
+                    br = new BufferedReader(input.get(j + 1));
+                    for(int k = 0; k < 3; k++){
+                        br.readLine();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

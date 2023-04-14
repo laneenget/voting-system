@@ -151,7 +151,7 @@ public class RunElection {
      * Helper function for the start() function. Creates an IR election and runs its main methods to complete the program.
      */
     void runIR(){
-        IR Election = new IR(input.get(0), audit, br);
+        IR Election = new IR(input, audit, br);
         Election.parseHeader();
         Election.processFile();
         Election.conductAlgorithm();
@@ -162,7 +162,7 @@ public class RunElection {
      * Helper function for the start() function. Creates a CPL election and runs its main methods to complete the program.
      */
     void runCPL(){
-        CPL Election = new CPL(input.get(0), audit, br);
+        CPL Election = new CPL(input, audit, br);
         Election.parseHeader();
         Election.processFile();
         Election.conductAlgorithm();

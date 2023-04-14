@@ -12,7 +12,7 @@ import java.security.SecureRandom;
  */
 public abstract class Election {
     protected FileWriter audit;
-    protected FileReader input;
+    protected ArrayList<FileReader> input;
 
     abstract public void processFile();
     /**
