@@ -110,9 +110,10 @@ public class CPL extends Election {
                 br.close();
                 if(j+1 < input.size()) {
                     br = new BufferedReader(input.get(j + 1));
-                    for(int i = 0; i < 4 + maxPartyLength; i++) {
+                    for(int i = 0; i < 3 + maxPartyLength; i++) {
                         br.readLine();
                     }
+                    voteTotal += Integer.parseInt(br.readLine());
                 }
             } catch (IOException e) {
                 e.printStackTrace();

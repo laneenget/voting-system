@@ -218,8 +218,14 @@ public class IR extends Election{
                 try {
                     br.close();
                     br = new BufferedReader(input.get(j + 1));
+                    int x;
                     for(int k = 0; k < 3; k++){
-                        br.readLine();
+                        if(k == 2){
+                            this.numBallots += Integer.parseInt(br.readLine());
+                        }
+                        else{
+                            br.readLine();
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
