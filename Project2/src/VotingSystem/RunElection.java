@@ -47,12 +47,17 @@ public class RunElection {
         }
         boolean breakCond = false;
         while(!breakCond) {
-            promptUser("Here are the files you currently have: ");
-            for (int i = 0; i < input.size(); i++) {
-                promptUser(i + ": " + input.get(i) + "\n");
+            if(input != null) {
+                promptUser("Here are the file(s) you currently have: ");
+                for (int i = 0; i < input.size(); i++) {
+                    promptUser(i + ": " + input.get(i) + "\n");
+                }
+                promptUser("To Proceed with processing type P, otherwise enter" +
+                        "additional files to process\n");
             }
-            promptUser("To Proceed with processing type P, otherwise enter" +
-                    "additional files to process\n");
+            else {
+                input = new ArrayList<FileReader>();
+            }
             boolean validFile = false;
             String hold = null;
             while (!validFile) {
@@ -62,17 +67,19 @@ public class RunElection {
                     Scanner sc = new Scanner(System.in);
 
                     hold = sc.nextLine();
-                    if (hold.equals("P")) {
+                    if (hold.equals("P") && input != null) {
                         breakCond = true;
                         break;
                     }
                 }
                 try {
+                    System.out.println(hold);
                     URL path = RunElection.class.getResource(hold);
                     File f = new File(path.getFile());
                     FileReader i = new FileReader(f);
                     input.add(i);
                 } catch (Exception e) {
+                    System.out.println(e.getMessage());
                     validFile = false;
                     promptUser("Error, File not found" +
                             "\nPlease ensure the file is in the same directory as the program\n" +
