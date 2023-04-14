@@ -219,8 +219,8 @@ public class IR extends Election{
                     br.close();
                     br = new BufferedReader(input.get(j + 1));
                     int x;
-                    for(int k = 0; k < 3; k++){
-                        if(k == 2){
+                    for(int k = 0; k < 4; k++){
+                        if(k == 3){
                             this.numBallots += Integer.parseInt(br.readLine());
                         }
                         else{
