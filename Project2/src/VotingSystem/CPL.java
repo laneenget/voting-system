@@ -17,7 +17,7 @@ public class CPL extends Election {
     private int voteTotal;
     private int totalSeats;
     private BufferedReader br;
-
+    private int currFileVotes;
     private int[] globalVotes;
     private int globalSeats;
 
@@ -93,27 +93,37 @@ public class CPL extends Election {
                 maxPartyLength = parties[i].getCandidates().length;
             }
         }
+        currFileVotes = voteTotal;
         for(int j = 0; j < input.size(); j++) {
             String ballot = "";
-            for (int i = 0; i < voteTotal; i++) {
+            for (int i = 0; i < currFileVotes; i++) {
                 try {
                     ballot = br.readLine();
+                    if (ballot == null) {
+                        break;
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                parties[ballot.indexOf("1")].incrementVoteCount();
-                globalVotes[ballot.indexOf("1")] = globalVotes[ballot.indexOf("1")] + 1;
-                String[] announcement = {"Ballot " + ballot + " increments vote count of the '" + parties[ballot.indexOf("1")].getName() + "' party"};
-                writeToAudit(announcement);
+                for(int k = 0; k < ballot.length(); k++) {
+                    if(ballot.charAt(k) == '1') {
+                        parties[k].incrementVoteCount();
+                        globalVotes[k] = globalVotes[k] + 1;
+                        String[] announcement = {"Ballot " + ballot + " increments vote count of the '" + parties[k].getName() + "' party"};
+                        writeToAudit(announcement);
+                        break;
+                    }
+                }
             }
             try{
                 br.close();
                 if(j+1 < input.size()) {
                     br = new BufferedReader(input.get(j + 1));
-                    for(int i = 0; i < 3 + parties.length; i++) {
+                    for(int i = 0; i < 4 + parties.length; i++) {
                         br.readLine();
                     }
-                    voteTotal += Integer.parseInt(br.readLine());
+                    currFileVotes = Integer.parseInt(br.readLine());
+                    voteTotal += currFileVotes;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -287,6 +297,8 @@ public class CPL extends Election {
      */
     public void printResults(){
         System.out.println("-------------------------   ELECTION RESULTS   -------------------------");
+        System.out.println("Total Votes" + voteTotal);
+        System.out.println("Total Seats" + globalSeats);
         ArrayList<Party> partyArrayList = new ArrayList<Party>();
         
         for (int i = 0; i < this.parties.length; i++) {
