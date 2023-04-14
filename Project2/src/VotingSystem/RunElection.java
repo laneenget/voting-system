@@ -17,8 +17,8 @@ import java.util.*;
 * @author Noreen Si
 */
 public class RunElection {
-    public String filename;
-    private FileReader input;
+    public ArrayList<String> filenames;
+    private ArrayList<FileReader> input;
     private FileWriter audit;
     private BufferedReader br;
 
@@ -26,8 +26,8 @@ public class RunElection {
      * Contructor for this class. The input can be null, as it will later be filled by the user in the start() function.
      * @param filename String that represents the name of the file that contains the voting information.
      */
-    public RunElection(String filename){
-        this.filename = filename;
+    public RunElection(ArrayList<String> filenames){
+        this.filenames = filenames;
     }
 
     /**
@@ -35,42 +35,72 @@ public class RunElection {
      * creating the audit file, initializes the proper election class and runs it. Invoked in Main.java
      */
     public void start(){
-        boolean validFile = false;
-        while (!validFile) {
-            validFile = true;
-            if(filename == null){
-                promptUser("Enter the name of the file containing the election data: ");
-                Scanner sc = new Scanner(System.in);
-
-                filename = sc.nextLine();
-            }
+        for(String filename : filenames){
             try {
                 URL path = RunElection.class.getResource(filename);
                 File f = new File(path.getFile());
-                input = new FileReader(f);
+                FileReader i = new FileReader(f);
+                input.add(i);
             } catch (Exception e) {
-                validFile = false;
-                promptUser("Error, File not found" + 
-                    "\nPlease ensure the file is in the same directory as the program\n" +
-                    "The expected input is filename.csv, please try again\n");
                 filename = null;
             }
         }
-        String elecType = parseElectType();
-        String auditFileName = generateAuditFileName(elecType);
-        try {
-            String path = System.getProperty("user.dir");
-            File f = new File(path, auditFileName);
-            audit = new FileWriter(f);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        boolean breakCond = false;
+        while(!breakCond) {
+            promptUser("Here are the files you currently have: ");
+            for (int i = 0; i < input.size(); i++) {
+                promptUser(i + ": " + input.get(i) + "\n");
+            }
+            promptUser("To Proceed with processing type P, otherwise enter" +
+                    "additional files to process\n");
+            boolean validFile = false;
+            String hold = null;
+            while (!validFile) {
+                validFile = true;
+                if (hold == null) {
+                    promptUser("Enter the name of the file containing the election data: ");
+                    Scanner sc = new Scanner(System.in);
+
+                    hold = sc.nextLine();
+                    if (hold.equals("P")) {
+                        breakCond = true;
+                        break;
+                    }
+                }
+                try {
+                    URL path = RunElection.class.getResource(hold);
+                    File f = new File(path.getFile());
+                    FileReader i = new FileReader(f);
+                    input.add(i);
+                } catch (Exception e) {
+                    validFile = false;
+                    promptUser("Error, File not found" +
+                            "\nPlease ensure the file is in the same directory as the program\n" +
+                            "The expected input is filename.csv, please try again\n");
+                    hold = null;
+                }
+            }
+            }
+            String elecType = parseElectType();
+            String auditFileName = generateAuditFileName(elecType);
+            try {
+                String path = System.getProperty("user.dir");
+                File f = new File(path, auditFileName);
+                audit = new FileWriter(f);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+
         if(elecType.equals("IR")){
             runIR();
         }
         else if(elecType.equals("CPL")){
             runCPL();
+        }
+        else if(elecType.equals("PO")){
+            runPO();
         }
         else{
             promptUser("FILE READ ERROR\n");
@@ -106,7 +136,7 @@ public class RunElection {
      */
     String parseElectType(){
         String line = "";
-        this.br = new BufferedReader(input);
+        this.br = new BufferedReader(input.get(0));
         try {
             line = br.readLine();
         } catch (IOException e) {
@@ -121,7 +151,7 @@ public class RunElection {
      * Helper function for the start() function. Creates an IR election and runs its main methods to complete the program.
      */
     void runIR(){
-        IR Election = new IR(input, audit, br);
+        IR Election = new IR(input.get(0), audit, br);
         Election.parseHeader();
         Election.processFile();
         Election.conductAlgorithm();
@@ -132,29 +162,32 @@ public class RunElection {
      * Helper function for the start() function. Creates a CPL election and runs its main methods to complete the program.
      */
     void runCPL(){
-        CPL Election = new CPL(input, audit, br);
+        CPL Election = new CPL(input.get(0), audit, br);
         Election.parseHeader();
         Election.processFile();
         Election.conductAlgorithm();
         Election.printResults();
     }
+    void runPO(){
+       System.out.println("Election Not Setup Yet");
+    }
 
     // Only for running tests
-    /**
-     * Setter for input
-     * @param input A FileReader that serves as the input
-     */
-    public void setInput(FileReader input) {this.input = input;}
-
-    /**
-     * Setter for audit
-     * @param audit FileWriter that represents the audit
-     */
-    public void setAudit(FileWriter audit) {this.audit = audit;}
-
-    /**
-     * setter for br
-     * @param br BufferedReader that represents the br to read the file
-     */
-    public void setBr(BufferedReader br) {this.br = br;}
+//    /**
+//     * Setter for input
+//     * @param input A FileReader that serves as the input
+//     */
+//    public void setInput(FileReader input) {this.input = input;}
+//
+//    /**
+//     * Setter for audit
+//     * @param audit FileWriter that represents the audit
+//     */
+//    public void setAudit(FileWriter audit) {this.audit = audit;}
+//
+//    /**
+//     * setter for br
+//     * @param br BufferedReader that represents the br to read the file
+//     */
+//    public void setBr(BufferedReader br) {this.br = br;}
 }

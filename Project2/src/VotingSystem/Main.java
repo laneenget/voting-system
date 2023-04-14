@@ -1,5 +1,5 @@
 package VotingSystem;
-
+import java.util.ArrayList;
 /**
  * This is what a user uses to run our Voting System program
  * It then hands off control to the RunElection instance
@@ -12,11 +12,12 @@ public class Main {
  * @param args The command line arguments.
  */
 public static void main(String args[]) {
-    String holder = null;
+    ArrayList<String> holder = new ArrayList<String>();
 
     // Check if command line argument(s) are provided
     if (args.length > 0) {
-        holder = args[0];
+        for(int i = 0; i < args.length; i++)
+            holder.add(args[i]);
     }
 
     // Create a new RunElection object and start the election
