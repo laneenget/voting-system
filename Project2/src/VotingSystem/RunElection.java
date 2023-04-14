@@ -18,6 +18,7 @@ import java.util.*;
 */
 public class RunElection {
     public ArrayList<String> filenames;
+    private ArrayList<String> verifiedFiles;
     private ArrayList<FileReader> input;
     private FileWriter audit;
     private BufferedReader br;
@@ -35,6 +36,7 @@ public class RunElection {
      * creating the audit file, initializes the proper election class and runs it. Invoked in Main.java
      */
     public void start(){
+        verifiedFiles = new ArrayList<String>();
         for(String filename : filenames){
             try {
                 URL path = RunElection.class.getResource(filename);
@@ -43,14 +45,17 @@ public class RunElection {
                 input.add(i);
             } catch (Exception e) {
                 filename = null;
+                break;
             }
+            verifiedFiles.add(filename);
+
         }
         boolean breakCond = false;
         while(!breakCond) {
             if(input != null) {
                 promptUser("Here are the file(s) you currently have: ");
                 for (int i = 0; i < input.size(); i++) {
-                    promptUser(i + ": " + input.get(i) + "\n");
+                    promptUser((i + 1) + ": " + verifiedFiles.get(i) + "\n");
                 }
                 promptUser("To Proceed with processing type P, otherwise enter" +
                         "additional files to process\n");
@@ -78,6 +83,7 @@ public class RunElection {
                     File f = new File(path.getFile());
                     FileReader i = new FileReader(f);
                     input.add(i);
+                    verifiedFiles.add(hold);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                     validFile = false;
